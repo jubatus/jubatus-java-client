@@ -1,10 +1,33 @@
+/*
+ * 
+ * Copyright (c) 2012 Preferred Infrastructure, inc.
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ * 
+ */
 
-// This file is auto-generated from ../src/server/regression.idl
+// This file is auto-generated from ./jubatus/jubatus.github/src/server//regression.idl
 // *** DO NOT EDIT ***
 
 
-
 package us.jubat.regression;
+
 import java.util.HashMap;
 import java.util.ArrayList;
 import org.msgpack.rpc.Client;
@@ -20,8 +43,8 @@ public class RegressionClient {
   public static interface RPCInterface {
     boolean set_config(String name, ConfigData  c);
     ConfigData  get_config(String name);
-    int train(String arg0, ArrayList<Tuple<Float, Datum  > > arg1);
-    ArrayList<Float > estimate(String arg0, ArrayList<Datum  > arg1);
+    int train(String name, ArrayList<TupleFloatDatum > train_data);
+    ArrayList<Float > estimate(String name, ArrayList<Datum  > estimate_data);
     boolean save(String name, String arg1);
     boolean load(String name, String arg1);
     HashMap<String, HashMap<String, String > > get_status(String name);
@@ -37,12 +60,12 @@ public class RegressionClient {
     return iface_.get_config(name);
   }
 
-  public int train(String arg0, ArrayList<Tuple<Float, Datum  > > arg1) {
-    return iface_.train(arg0, arg1);
+  public int train(String name, ArrayList<TupleFloatDatum > train_data) {
+    return iface_.train(name, train_data);
   }
 
-  public ArrayList<Float > estimate(String arg0, ArrayList<Datum  > arg1) {
-    return iface_.estimate(arg0, arg1);
+  public ArrayList<Float > estimate(String name, ArrayList<Datum  > estimate_data) {
+    return iface_.estimate(name, estimate_data);
   }
 
   public boolean save(String name, String arg1) {

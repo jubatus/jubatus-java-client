@@ -22,11 +22,11 @@
  * 
  */
 
-// This file is auto-generated from ./jubatus/jubatus.github/src/server//classifier.idl
+// This file is auto-generated from ./jubatus/jubatus.github/src/server//graph.idl
 // *** DO NOT EDIT ***
 
 
-package us.jubat.classifier;
+package us.jubat.graph;
 
 
 
@@ -34,12 +34,14 @@ import org.msgpack.MessagePack;
 import org.msgpack.annotation.Message;
 
 @Message
-public class ConfigData  {
+public class ShortestPathReq  {
 
-  public String method;
-  public String config;
+  public String src;
+  public String tgt;
+  public int max_hop;
+  public PresetQuery  q;
 
-  public ConfigData() {
+  public ShortestPathReq() {
   
   }
 };

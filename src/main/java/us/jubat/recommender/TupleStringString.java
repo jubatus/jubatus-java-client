@@ -22,26 +22,19 @@
  * 
  */
 
-// This file is auto-generated from ./jubatus/jubatus.github/src/server//classifier.idl
+// This file is auto-generated from ./jubatus/jubatus.github/src/server//recommender.idl
 // *** DO NOT EDIT ***
 
 
-package us.jubat.classifier;
-
-
+package us.jubat.recommender;
 
 import org.msgpack.MessagePack;
 import org.msgpack.annotation.Message;
 
 @Message
-public class ConfigData  {
-
-  public String method;
-  public String config;
-
-  public ConfigData() {
-  
-  }
+public class TupleStringString {
+  public String first;
+  public String second;
 };
-
+ 
 

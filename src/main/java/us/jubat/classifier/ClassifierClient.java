@@ -1,13 +1,35 @@
+/*
+ * 
+ * Copyright (c) 2012 Preferred Infrastructure, inc.
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ * 
+ */
 
-// This file is auto-generated from ../src/server/classifier.idl
+// This file is auto-generated from ./jubatus/jubatus.github/src/server//classifier.idl
 // *** DO NOT EDIT ***
 
 
-
 package us.jubat.classifier;
+
 import java.util.HashMap;
 import java.util.ArrayList;
-
 import org.msgpack.rpc.Client;
 import org.msgpack.rpc.loop.EventLoop;
 
@@ -21,10 +43,10 @@ public class ClassifierClient {
   public static interface RPCInterface {
     boolean set_config(String name, ConfigData  c);
     ConfigData  get_config(String name);
-    int train(String name, ArrayList<Tuple<String, Datum  > > data);
+    int train(String name, ArrayList<TupleStringDatum > data);
     ArrayList<ArrayList<EstimateResult  > > classify(String name, ArrayList<Datum  > data);
-    boolean save(String name, String arg1);
-    boolean load(String name, String arg1);
+    boolean save(String name, String id);
+    boolean load(String name, String id);
     HashMap<String, HashMap<String, String > > get_status(String name);
 
   }
@@ -38,7 +60,7 @@ public class ClassifierClient {
     return iface_.get_config(name);
   }
 
-  public int train(String name, ArrayList<Tuple<String, Datum  > > data) {
+  public int train(String name, ArrayList<TupleStringDatum > data) {
     return iface_.train(name, data);
   }
 
@@ -46,12 +68,12 @@ public class ClassifierClient {
     return iface_.classify(name, data);
   }
 
-  public boolean save(String name, String arg1) {
-    return iface_.save(name, arg1);
+  public boolean save(String name, String id) {
+    return iface_.save(name, id);
   }
 
-  public boolean load(String name, String arg1) {
-    return iface_.load(name, arg1);
+  public boolean load(String name, String id) {
+    return iface_.load(name, id);
   }
 
   public HashMap<String, HashMap<String, String > > get_status(String name) {

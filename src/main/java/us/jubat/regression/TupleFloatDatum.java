@@ -22,26 +22,19 @@
  * 
  */
 
-// This file is auto-generated from ./jubatus/jubatus.github/src/server//classifier.idl
+// This file is auto-generated from ./jubatus/jubatus.github/src/server//regression.idl
 // *** DO NOT EDIT ***
 
 
-package us.jubat.classifier;
-
-
+package us.jubat.regression;
 
 import org.msgpack.MessagePack;
 import org.msgpack.annotation.Message;
 
 @Message
-public class ConfigData  {
-
-  public String method;
-  public String config;
-
-  public ConfigData() {
-  
-  }
+public class TupleFloatDatum {
+  public float first;
+  public Datum  second;
 };
-
+ 
 

@@ -1,7 +1,29 @@
+/*
+ * 
+ * Copyright (c) 2012 Preferred Infrastructure, inc.
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ * 
+ */
 
-// This file is auto-generated from ../src/server/recommender.idl
+// This file is auto-generated from ./jubatus/jubatus.github/src/server//recommender.idl
 // *** DO NOT EDIT ***
-
 
 
 package us.jubat.recommender;
@@ -22,18 +44,18 @@ public class RecommenderClient {
     boolean set_config(String name, ConfigData  c);
     ConfigData  get_config(String name);
     boolean clear_row(String name, String id);
-    boolean update_row(String name, String id, Datum  arg2);
+    boolean update_row(String name, String id, Datum  d);
     boolean clear(String name);
     Datum  complete_row_from_id(String name, String id);
-    Datum  complete_row_from_data(String name, Datum  arg1);
-    ArrayList<Tuple<String, Float > > similar_row_from_id(String name, String id, int size);
-    ArrayList<Tuple<String, Float > > similar_row_from_data(String name, Datum  data, int size);
+    Datum  complete_row_from_data(String name, Datum  d);
+    ArrayList<TupleStringFloat > similar_row_from_id(String name, String id, int size);
+    ArrayList<TupleStringFloat > similar_row_from_data(String name, Datum  data, int size);
     Datum  decode_row(String name, String id);
     ArrayList<String > get_all_rows(String name);
     float similarity(String name, Datum  lhs, Datum  rhs);
-    float l2norm(String name, Datum  arg1);
-    boolean save(String name, String arg1);
-    boolean load(String name, String arg1);
+    float l2norm(String name, Datum  d);
+    boolean save(String name, String id);
+    boolean load(String name, String id);
     HashMap<String, HashMap<String, String > > get_status(String name);
 
   }
@@ -51,8 +73,8 @@ public class RecommenderClient {
     return iface_.clear_row(name, id);
   }
 
-  public boolean update_row(String name, String id, Datum  arg2) {
-    return iface_.update_row(name, id, arg2);
+  public boolean update_row(String name, String id, Datum  d) {
+    return iface_.update_row(name, id, d);
   }
 
   public boolean clear(String name) {
@@ -63,15 +85,15 @@ public class RecommenderClient {
     return iface_.complete_row_from_id(name, id);
   }
 
-  public Datum  complete_row_from_data(String name, Datum  arg1) {
-    return iface_.complete_row_from_data(name, arg1);
+  public Datum  complete_row_from_data(String name, Datum  d) {
+    return iface_.complete_row_from_data(name, d);
   }
 
-  public ArrayList<Tuple<String, Float > > similar_row_from_id(String name, String id, int size) {
+  public ArrayList<TupleStringFloat > similar_row_from_id(String name, String id, int size) {
     return iface_.similar_row_from_id(name, id, size);
   }
 
-  public ArrayList<Tuple<String, Float > > similar_row_from_data(String name, Datum  data, int size) {
+  public ArrayList<TupleStringFloat > similar_row_from_data(String name, Datum  data, int size) {
     return iface_.similar_row_from_data(name, data, size);
   }
 
@@ -87,16 +109,16 @@ public class RecommenderClient {
     return iface_.similarity(name, lhs, rhs);
   }
 
-  public float l2norm(String name, Datum  arg1) {
-    return iface_.l2norm(name, arg1);
+  public float l2norm(String name, Datum  d) {
+    return iface_.l2norm(name, d);
   }
 
-  public boolean save(String name, String arg1) {
-    return iface_.save(name, arg1);
+  public boolean save(String name, String id) {
+    return iface_.save(name, id);
   }
 
-  public boolean load(String name, String arg1) {
-    return iface_.load(name, arg1);
+  public boolean load(String name, String id) {
+    return iface_.load(name, id);
   }
 
   public HashMap<String, HashMap<String, String > > get_status(String name) {

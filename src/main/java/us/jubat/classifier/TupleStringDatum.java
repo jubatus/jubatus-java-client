@@ -28,20 +28,13 @@
 
 package us.jubat.classifier;
 
-
-
 import org.msgpack.MessagePack;
 import org.msgpack.annotation.Message;
 
 @Message
-public class ConfigData  {
-
-  public String method;
-  public String config;
-
-  public ConfigData() {
-  
-  }
+public class TupleStringDatum {
+  public String first;
+  public Datum  second;
 };
-
+ 
 

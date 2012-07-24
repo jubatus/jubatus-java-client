@@ -22,24 +22,25 @@
  * 
  */
 
-// This file is auto-generated from ./jubatus/jubatus.github/src/server//classifier.idl
+// This file is auto-generated from ./jubatus/jubatus.github/src/server//graph.idl
 // *** DO NOT EDIT ***
 
 
-package us.jubat.classifier;
+package us.jubat.graph;
 
-
+import java.util.HashMap;
 
 import org.msgpack.MessagePack;
 import org.msgpack.annotation.Message;
 
 @Message
-public class ConfigData  {
+public class EdgeInfo  {
 
-  public String method;
-  public String config;
+  public HashMap<String, String > p;
+  public String src;
+  public String tgt;
 
-  public ConfigData() {
+  public EdgeInfo() {
   
   }
 };

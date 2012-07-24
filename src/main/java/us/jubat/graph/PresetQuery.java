@@ -22,24 +22,24 @@
  * 
  */
 
-// This file is auto-generated from ./jubatus/jubatus.github/src/server//classifier.idl
+// This file is auto-generated from ./jubatus/jubatus.github/src/server//graph.idl
 // *** DO NOT EDIT ***
 
 
-package us.jubat.classifier;
+package us.jubat.graph;
 
 
-
+import java.util.ArrayList;
 import org.msgpack.MessagePack;
 import org.msgpack.annotation.Message;
 
 @Message
-public class ConfigData  {
+public class PresetQuery  {
 
-  public String method;
-  public String config;
+  public ArrayList<TupleStringString > edge_query;
+  public ArrayList<TupleStringString > node_query;
 
-  public ConfigData() {
+  public PresetQuery() {
   
   }
 };
