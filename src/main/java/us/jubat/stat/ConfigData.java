@@ -26,7 +26,7 @@
 // *** DO NOT EDIT ***
 
 
-package us.jubatu.stat;
+package us.jubat.stat;
 
 import org.msgpack.MessagePack;
 import org.msgpack.annotation.Message;
