@@ -28,8 +28,8 @@
 
 package us.jubat.classifier;
 
-import java.util.HashMap;
-import java.util.ArrayList;
+import java.util.Map;
+import java.util.List;
 import org.msgpack.rpc.Client;
 import org.msgpack.rpc.loop.EventLoop;
 
@@ -43,11 +43,11 @@ public class ClassifierClient {
   public static interface RPCInterface {
     boolean set_config(String name, ConfigData  c);
     ConfigData  get_config(String name);
-    int train(String name, ArrayList<TupleStringDatum > data);
-    ArrayList<ArrayList<EstimateResult  > > classify(String name, ArrayList<Datum  > data);
+    int train(String name, List<TupleStringDatum > data);
+    List<List<EstimateResult  > > classify(String name, List<Datum  > data);
     boolean save(String name, String id);
     boolean load(String name, String id);
-    HashMap<String, HashMap<String, String > > get_status(String name);
+    Map<String, Map<String, String > > get_status(String name);
 
   }
 
@@ -60,11 +60,11 @@ public class ClassifierClient {
     return iface_.get_config(name);
   }
 
-  public int train(String name, ArrayList<TupleStringDatum > data) {
+  public int train(String name, List<TupleStringDatum > data) {
     return iface_.train(name, data);
   }
 
-  public ArrayList<ArrayList<EstimateResult  > > classify(String name, ArrayList<Datum  > data) {
+  public List<List<EstimateResult  > > classify(String name, List<Datum  > data) {
     return iface_.classify(name, data);
   }
 
@@ -76,7 +76,7 @@ public class ClassifierClient {
     return iface_.load(name, id);
   }
 
-  public HashMap<String, HashMap<String, String > > get_status(String name) {
+  public Map<String, Map<String, String > > get_status(String name) {
     return iface_.get_status(name);
   }
 

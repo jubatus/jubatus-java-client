@@ -28,8 +28,8 @@
 
 package us.jubat.graph;
 
-import java.util.HashMap;
-import java.util.ArrayList;
+import java.util.Map;
+import java.util.List;
 import org.msgpack.rpc.Client;
 import org.msgpack.rpc.loop.EventLoop;
 
@@ -43,7 +43,7 @@ public class GraphClient {
   public static interface RPCInterface {
     String create_node(String name);
     int remove_node(String name, String nid);
-    int update_node(String name, String nid, HashMap<String, String > p);
+    int update_node(String name, String nid, Map<String, String > p);
     long create_edge(String name, String nid, EdgeInfo  ei);
     int update_edge(String name, String nid, long eid, EdgeInfo  ei);
     int remove_edge(String name, String nid, long e);
@@ -52,14 +52,14 @@ public class GraphClient {
     boolean add_shortest_path_query(String name, PresetQuery  q);
     boolean remove_centrality_query(String name, PresetQuery  q);
     boolean remove_shortest_path_query(String name, PresetQuery  q);
-    ArrayList<String > shortest_path(String name, ShortestPathReq  r);
+    List<String > shortest_path(String name, ShortestPathReq  r);
     int update_index(String name);
     int clear(String name);
     NodeInfo  get_node(String name, String nid);
     EdgeInfo  get_edge(String name, String nid, long e);
     boolean save(String name, String arg1);
     boolean load(String name, String arg1);
-    HashMap<String, HashMap<String, String > > get_status(String name);
+    Map<String, Map<String, String > > get_status(String name);
     int create_node_here(String name, String nid);
     int create_global_node(String name, String nid);
     int remove_global_node(String name, String nid);
@@ -76,7 +76,7 @@ public class GraphClient {
     return iface_.remove_node(name, nid);
   }
 
-  public int update_node(String name, String nid, HashMap<String, String > p) {
+  public int update_node(String name, String nid, Map<String, String > p) {
     return iface_.update_node(name, nid, p);
   }
 
@@ -112,7 +112,7 @@ public class GraphClient {
     return iface_.remove_shortest_path_query(name, q);
   }
 
-  public ArrayList<String > shortest_path(String name, ShortestPathReq  r) {
+  public List<String > shortest_path(String name, ShortestPathReq  r) {
     return iface_.shortest_path(name, r);
   }
 
@@ -140,7 +140,7 @@ public class GraphClient {
     return iface_.load(name, arg1);
   }
 
-  public HashMap<String, HashMap<String, String > > get_status(String name) {
+  public Map<String, Map<String, String > > get_status(String name) {
     return iface_.get_status(name);
   }
 
