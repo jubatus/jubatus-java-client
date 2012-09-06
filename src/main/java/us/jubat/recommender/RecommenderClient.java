@@ -28,8 +28,8 @@
 
 package us.jubat.recommender;
 
-import java.util.HashMap;
-import java.util.ArrayList;
+import java.util.Map;
+import java.util.List;
 import org.msgpack.rpc.Client;
 import org.msgpack.rpc.loop.EventLoop;
 
@@ -48,15 +48,15 @@ public class RecommenderClient {
     boolean clear(String name);
     Datum  complete_row_from_id(String name, String id);
     Datum  complete_row_from_data(String name, Datum  d);
-    ArrayList<TupleStringFloat > similar_row_from_id(String name, String id, int size);
-    ArrayList<TupleStringFloat > similar_row_from_data(String name, Datum  data, int size);
+    List<TupleStringFloat > similar_row_from_id(String name, String id, int size);
+    List<TupleStringFloat > similar_row_from_data(String name, Datum  data, int size);
     Datum  decode_row(String name, String id);
-    ArrayList<String > get_all_rows(String name);
+    List<String > get_all_rows(String name);
     float similarity(String name, Datum  lhs, Datum  rhs);
     float l2norm(String name, Datum  d);
     boolean save(String name, String id);
     boolean load(String name, String id);
-    HashMap<String, HashMap<String, String > > get_status(String name);
+    Map<String, Map<String, String > > get_status(String name);
 
   }
 
@@ -89,11 +89,11 @@ public class RecommenderClient {
     return iface_.complete_row_from_data(name, d);
   }
 
-  public ArrayList<TupleStringFloat > similar_row_from_id(String name, String id, int size) {
+  public List<TupleStringFloat > similar_row_from_id(String name, String id, int size) {
     return iface_.similar_row_from_id(name, id, size);
   }
 
-  public ArrayList<TupleStringFloat > similar_row_from_data(String name, Datum  data, int size) {
+  public List<TupleStringFloat > similar_row_from_data(String name, Datum  data, int size) {
     return iface_.similar_row_from_data(name, data, size);
   }
 
@@ -101,7 +101,7 @@ public class RecommenderClient {
     return iface_.decode_row(name, id);
   }
 
-  public ArrayList<String > get_all_rows(String name) {
+  public List<String > get_all_rows(String name) {
     return iface_.get_all_rows(name);
   }
 
@@ -121,7 +121,7 @@ public class RecommenderClient {
     return iface_.load(name, id);
   }
 
-  public HashMap<String, HashMap<String, String > > get_status(String name) {
+  public Map<String, Map<String, String > > get_status(String name) {
     return iface_.get_status(name);
   }
 

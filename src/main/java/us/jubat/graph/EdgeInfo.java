@@ -28,7 +28,7 @@
 
 package us.jubat.graph;
 
-import java.util.HashMap;
+import java.util.Map;
 
 import org.msgpack.MessagePack;
 import org.msgpack.annotation.Message;
@@ -36,7 +36,7 @@ import org.msgpack.annotation.Message;
 @Message
 public class EdgeInfo  {
 
-  public HashMap<String, String > p;
+  public Map<String, String > p;
   public String src;
   public String tgt;
 

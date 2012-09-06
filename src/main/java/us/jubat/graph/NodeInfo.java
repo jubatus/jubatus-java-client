@@ -28,17 +28,17 @@
 
 package us.jubat.graph;
 
-import java.util.HashMap;
-import java.util.ArrayList;
+import java.util.Map;
+import java.util.List;
 import org.msgpack.MessagePack;
 import org.msgpack.annotation.Message;
 
 @Message
 public class NodeInfo  {
 
-  public HashMap<String, String > p;
-  public ArrayList<Long > in_edges;
-  public ArrayList<Long > out_edges;
+  public Map<String, String > p;
+  public List<Long > in_edges;
+  public List<Long > out_edges;
 
   public NodeInfo() {
   
