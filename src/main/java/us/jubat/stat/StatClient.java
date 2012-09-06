@@ -28,7 +28,7 @@
 
 package us.jubat.stat;
 
-import java.util.HashMap;
+import java.util.Map;
 
 import org.msgpack.rpc.Client;
 import org.msgpack.rpc.loop.EventLoop;
@@ -52,7 +52,7 @@ public class StatClient {
     double moment(String name, String key, int n, double c);
     boolean save(String name, String id);
     boolean load(String name, String id);
-    HashMap<String, HashMap<String, String > > get_status(String name);
+    Map<String, Map<String, String > > get_status(String name);
 
   }
 
@@ -101,7 +101,7 @@ public class StatClient {
     return iface_.load(name, id);
   }
 
-  public HashMap<String, HashMap<String, String > > get_status(String name) {
+  public Map<String, Map<String, String > > get_status(String name) {
     return iface_.get_status(name);
   }
 

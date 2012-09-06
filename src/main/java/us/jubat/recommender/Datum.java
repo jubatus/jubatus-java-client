@@ -29,15 +29,15 @@
 package us.jubat.recommender;
 
 
-import java.util.ArrayList;
+import java.util.List;
 import org.msgpack.MessagePack;
 import org.msgpack.annotation.Message;
 
 @Message
 public class Datum  {
 
-  public ArrayList<TupleStringString > string_values;
-  public ArrayList<TupleStringDouble > num_values;
+  public List<TupleStringString > string_values;
+  public List<TupleStringDouble > num_values;
 
   public Datum() {
   

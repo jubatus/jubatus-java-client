@@ -29,15 +29,15 @@
 package us.jubat.graph;
 
 
-import java.util.ArrayList;
+import java.util.List;
 import org.msgpack.MessagePack;
 import org.msgpack.annotation.Message;
 
 @Message
 public class PresetQuery  {
 
-  public ArrayList<TupleStringString > edge_query;
-  public ArrayList<TupleStringString > node_query;
+  public List<TupleStringString > edge_query;
+  public List<TupleStringString > node_query;
 
   public PresetQuery() {
   

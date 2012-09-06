@@ -28,8 +28,8 @@
 
 package us.jubat.regression;
 
-import java.util.HashMap;
-import java.util.ArrayList;
+import java.util.Map;
+import java.util.List;
 import org.msgpack.rpc.Client;
 import org.msgpack.rpc.loop.EventLoop;
 
@@ -43,11 +43,11 @@ public class RegressionClient {
   public static interface RPCInterface {
     boolean set_config(String name, ConfigData  c);
     ConfigData  get_config(String name);
-    int train(String name, ArrayList<TupleFloatDatum > train_data);
-    ArrayList<Float > estimate(String name, ArrayList<Datum  > estimate_data);
+    int train(String name, List<TupleFloatDatum > train_data);
+    List<Float > estimate(String name, List<Datum  > estimate_data);
     boolean save(String name, String arg1);
     boolean load(String name, String arg1);
-    HashMap<String, HashMap<String, String > > get_status(String name);
+    Map<String, Map<String, String > > get_status(String name);
 
   }
 
@@ -60,11 +60,11 @@ public class RegressionClient {
     return iface_.get_config(name);
   }
 
-  public int train(String name, ArrayList<TupleFloatDatum > train_data) {
+  public int train(String name, List<TupleFloatDatum > train_data) {
     return iface_.train(name, train_data);
   }
 
-  public ArrayList<Float > estimate(String name, ArrayList<Datum  > estimate_data) {
+  public List<Float > estimate(String name, List<Datum  > estimate_data) {
     return iface_.estimate(name, estimate_data);
   }
 
@@ -76,7 +76,7 @@ public class RegressionClient {
     return iface_.load(name, arg1);
   }
 
-  public HashMap<String, HashMap<String, String > > get_status(String name) {
+  public Map<String, Map<String, String > > get_status(String name) {
     return iface_.get_status(name);
   }
 
