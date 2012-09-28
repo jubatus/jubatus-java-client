@@ -15,6 +15,11 @@
       <url>http://www.opensource.org/licenses/mit-license.php</url>
     </license>
   </licenses>
+	
+  <scm>
+    <connection>scm:git:git@github.com:jubatus/jubatus-java-client.git</connection>
+    <url>scm:git:git@github.com:jubatus/jubatus-java-client.git</url>
+  </scm>
 
   <repositories>
     <repository>
@@ -35,6 +40,17 @@
           <target>1.5</target>
         </configuration>
       </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-release-plugin</artifactId>
+        <version>2.3.2</version>
+        <configuration>
+          <goals>deploy</goals>
+          <pushChanges>false</pushChanges>
+          <localCheckout>true</localCheckout>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
 
@@ -52,4 +68,12 @@
       <version>0.7.0</version>
     </dependency>
   </dependencies>
+
+  <distributionManagement>
+    <repository>
+      <id>repository</id>
+      <url>file://${user.home}/public_html/maven/</url>
+    </repository>
+  </distributionManagement>
+
 </project>
