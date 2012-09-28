@@ -3,9 +3,19 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>us.jubat</groupId>
   <artifactId>jubatus</artifactId>
+  <name>Jubatus Java Client</name>
+  <description>Jubatus is a distributed processing framework and streaming machine learning library. This is a Jubatus Client in Java.</description>
+  <url>http://jubat.us</url>
   <packaging>jar</packaging>
   <version>0.3.1</version>
- 
+
+  <licenses>
+    <license>
+      <name>MIT license</name>
+      <url>http://www.opensource.org/licenses/mit-license.php</url>
+    </license>
+  </licenses>
+
   <repositories>
     <repository>
       <id>msgpack.org</id>
