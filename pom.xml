@@ -51,6 +51,28 @@
           <localCheckout>true</localCheckout>
         </configuration>
       </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>2.10</version>
+        <configuration>
+          <systemProperties>
+            <property>
+              <name>jubatus.base</name>
+              <value>${user.home}/local/bin</value>
+            </property>
+            <property>
+              <name>jubatus.port</name>
+              <value>22001</value>
+            </property>
+            <property>
+              <name>jubatus.name</name>
+              <value>test</value>
+            </property>
+          </systemProperties>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
 
@@ -58,7 +80,14 @@
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>4.8.2</version>
+      <version>4.10</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.hamcrest</groupId>
+      <artifactId>hamcrest-library</artifactId>
+      <version>1.1</version>
       <scope>test</scope>
     </dependency>
 
