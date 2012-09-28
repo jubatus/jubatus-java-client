@@ -1,6 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
- 
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
   <modelVersion>4.0.0</modelVersion>
   <groupId>us.jubat</groupId>
   <artifactId>jubatus</artifactId>
@@ -9,9 +8,9 @@
  
   <repositories>
     <repository>
-    <id>msgpack.org</id>
-    <name>MessagePack Repository for Maven</name>
-    <url>http://msgpack.org/maven2</url>
+      <id>msgpack.org</id>
+      <name>MessagePack Repository for Maven</name>
+      <url>http://msgpack.org/maven2</url>
     </repository>
   </repositories>
  
@@ -27,6 +26,7 @@
       </plugin>
     </plugins>
   </build>
+
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
@@ -39,6 +39,6 @@
       <groupId>org.msgpack</groupId>
       <artifactId>msgpack-rpc</artifactId>
       <version>0.7.0</version>
-      </dependency>
+    </dependency>
   </dependencies>
 </project>
