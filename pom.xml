@@ -7,7 +7,7 @@
   <description>Jubatus is a distributed processing framework and streaming machine learning library. This is a Jubatus Client in Java.</description>
   <url>http://jubat.us</url>
   <packaging>jar</packaging>
-  <version>0.3.2</version>
+  <version>0.3.3-SNAPSHOT</version>
 
   <licenses>
     <license>
@@ -19,6 +19,7 @@
   <scm>
     <connection>scm:git:git@github.com:jubatus/jubatus-java-client.git</connection>
     <url>scm:git:git@github.com:jubatus/jubatus-java-client.git</url>
+    <tag>HEAD</tag>
   </scm>
 
   <repositories>
