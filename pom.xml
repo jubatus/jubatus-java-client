@@ -4,10 +4,17 @@
   <groupId>us.jubat</groupId>
   <artifactId>jubatus</artifactId>
   <name>Jubatus Java Client</name>
-  <description>Jubatus is a distributed processing framework and streaming machine learning library. This is a Jubatus Client in Java.</description>
+  <description>Jubatus is a distributed processing framework and streaming machine learning library. This is a Jubatus Client for Java.</description>
   <url>http://jubat.us</url>
   <packaging>jar</packaging>
   <version>0.3.3-SNAPSHOT</version>
+
+  <developers>
+    <developer>
+      <name>PFI &amp; NTT</name>
+      <email>jubatus@googlegroups.com</email>
+    </developer>
+  </developers>
 
   <licenses>
     <license>
@@ -15,7 +22,7 @@
       <url>http://www.opensource.org/licenses/mit-license.php</url>
     </license>
   </licenses>
-	
+
   <scm>
     <connection>scm:git:git@github.com:jubatus/jubatus-java-client.git</connection>
     <url>scm:git:git@github.com:jubatus/jubatus-java-client.git</url>
