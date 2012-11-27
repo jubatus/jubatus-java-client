@@ -4,7 +4,7 @@
   <groupId>us.jubat</groupId>
   <artifactId>jubatus</artifactId>
   <name>Jubatus Java Client</name>
-  <description>Jubatus is a distributed processing framework and streaming machine learning library. This is a Jubatus Client for Java.</description>
+  <description>Jubatus is a distributed processing framework and streaming machine learning library. This is the Jubatus client in Java.</description>
   <url>http://jubat.us</url>
   <packaging>jar</packaging>
   <version>0.3.3-SNAPSHOT</version>
