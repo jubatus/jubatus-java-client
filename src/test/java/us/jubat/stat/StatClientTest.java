@@ -27,7 +27,7 @@ public class StatClientTest {
 	public void setUp() throws Exception {
 		server = new JubaServer(Engine.stat);
 		server.start();
-		client = new StatClient(HOST, JubaServer.PORT, TIMEOUT_SEC);
+		client = new StatClient(HOST, Engine.stat.getPort(), TIMEOUT_SEC);
 		ConfigData config_data = new ConfigData();
 		config_data.window_size = WINDOW_SIZE;
 		client.set_config(NAME, config_data);

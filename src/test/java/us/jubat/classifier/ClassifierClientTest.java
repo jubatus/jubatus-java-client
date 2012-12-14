@@ -37,7 +37,7 @@ public class ClassifierClientTest {
 	public void setUp() throws Exception {
 		server = new JubaServer(Engine.classifier);
 		server.start();
-		client = new ClassifierClient(HOST, JubaServer.PORT, TIMEOUT_SEC);
+		client = new ClassifierClient(HOST, Engine.classifier.getPort(), TIMEOUT_SEC);
 		ConfigData config_data = new ConfigData();
 		config_data.method = METHOD;
 		config_data.config = CONFIG;

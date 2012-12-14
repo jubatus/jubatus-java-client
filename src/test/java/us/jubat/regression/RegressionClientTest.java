@@ -37,7 +37,7 @@ public class RegressionClientTest {
 	public void setUp() throws Exception {
 		server = new JubaServer(Engine.regression);
 		server.start();
-		client = new RegressionClient(HOST, JubaServer.PORT, TIMEOUT_SEC);
+		client = new RegressionClient(HOST, Engine.regression.getPort(), TIMEOUT_SEC);
 		ConfigData config_data = new ConfigData();
 		config_data.method = METHOD;
 		config_data.config = CONFIG;

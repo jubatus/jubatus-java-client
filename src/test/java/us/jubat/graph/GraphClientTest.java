@@ -28,7 +28,7 @@ public class GraphClientTest {
 	public void setUp() throws Exception {
 		server = new JubaServer(Engine.graph);
 		server.start();
-		client = new GraphClient(HOST, JubaServer.PORT, TIMEOUT_SEC);
+		client = new GraphClient(HOST, Engine.graph.getPort(), TIMEOUT_SEC);
 	}
 
 	@After

@@ -37,7 +37,7 @@ public class RecommenderClientTest {
 	public void setUp() throws Exception {
 		server = new JubaServer(Engine.recommender);
 		server.start();
-		client = new RecommenderClient(HOST, JubaServer.PORT, TIMEOUT_SEC);
+		client = new RecommenderClient(HOST, Engine.recommender.getPort(), TIMEOUT_SEC);
 		ConfigData config_data = new ConfigData();
 		config_data.method = METHOD;
 		config_data.converter = CONVERTER;

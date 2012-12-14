@@ -67,11 +67,7 @@
         <configuration>
           <systemProperties>
             <property>
-              <name>jubatus.base</name>
-              <value>${user.home}/local/bin</value>
-            </property>
-            <property>
-              <name>jubatus.port</name>
+              <name>jubatus.baseport</name>
               <value>22001</value>
             </property>
             <property>

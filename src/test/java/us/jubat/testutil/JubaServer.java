@@ -8,9 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class JubaServer {
-
-	public static final int PORT = Integer.parseInt(System
-			.getProperty("jubatus.port"));
 	public static final String NAME = System.getProperty("jubatus.name");
 
 	private List<String> command = new ArrayList<String>();
@@ -18,9 +15,9 @@ public class JubaServer {
 	private StdoutReader stdout_reader;
 
 	public JubaServer(Engine engine) {
-		command.add(engine.toPath());
+		command.add(engine.getCommandName());
 		command.add("-p");
-		command.add(String.valueOf(PORT));
+		command.add(String.valueOf(engine.getPort()));
 		command.add("-n");
 		command.add(NAME == null ? "" : NAME);
 	}
@@ -77,14 +74,17 @@ public class JubaServer {
 	}
 
 	public enum Engine {
-
 		classifier, recommender, regression, stat, graph;
 
-		public static final String BASEDIR = System.getProperty("jubatus.base");
+		public static final int BASEPORT = Integer.parseInt(System
+				.getProperty("jubatus.baseport"));
 
-		public String toPath() {
-			return BASEDIR + "/" + "juba" + toString();
+		public String getCommandName() {
+			return "juba" + this.name();
+		}
+
+		public int getPort() {
+			return BASEPORT + this.ordinal();
 		}
 	}
-
 }
