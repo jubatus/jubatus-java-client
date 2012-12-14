@@ -1,10 +1,12 @@
 package us.jubat.classifier;
 
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
+import static org.hamcrest.Matchers.closeTo;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertThat;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.junit.After;
@@ -12,36 +14,20 @@ import org.junit.Before;
 import org.junit.Test;
 
 import us.jubat.testutil.JubaServer;
-import us.jubat.testutil.JubaServer.Engine;
+import us.jubat.testutil.JubatusClientTest;
 
-public class ClassifierClientTest {
-
-	private static final String HOST = "localhost";
-	public static final String NAME = JubaServer.NAME;
-	private static final double TIMEOUT_SEC = 10;
-
-	private static final String METHOD = "PA";
-	private static final String CONFIG = "{" + "\"string_filter_types\" : {},"
-			+ "\"string_filter_rules\" : []," + "\"num_filter_types\" : {},"
-			+ "\"num_filter_rules\" : []," + "\"string_types\" : {},"
-			+ "\"string_rules\" : [" + "{" + "\"key\" : \"*\","
-			+ "\"type\" : \"space\"," + "\"sample_weight\" : \"bin\","
-			+ "\"global_weight\" : \"bin\"" + "}" + "],"
-			+ "\"num_types\" : {}," + "\"num_rules\" : [" + "{"
-			+ "\"key\" : \"*\"," + "\"type\" : \"num\"" + "}" + "]" + "}";
-
+public class ClassifierClientTest extends JubatusClientTest {
 	private ClassifierClient client;
-	private JubaServer server;
+
+	public ClassifierClientTest() {
+		super(JubaServer.classifier);
+	}
 
 	@Before
 	public void setUp() throws Exception {
-		server = new JubaServer(Engine.classifier);
-		server.start();
-		client = new ClassifierClient(HOST, Engine.classifier.getPort(), TIMEOUT_SEC);
-		ConfigData config_data = new ConfigData();
-		config_data.method = METHOD;
-		config_data.config = CONFIG;
-		client.set_config(NAME, config_data);
+		server.start(server.getConfigPath());
+		client = new ClassifierClient(server.getHost(), server.getPort(),
+				TIMEOUT_SEC);
 	}
 
 	@After
@@ -51,9 +37,9 @@ public class ClassifierClientTest {
 
 	@Test
 	public void testGet_config() {
-		ConfigData config_data = client.get_config(NAME);
-		assertThat(config_data.method, is(METHOD));
-		assertThat(config_data.config, is(CONFIG));
+		String config = client.get_config(NAME);
+		assertThat(formatAsJson(config),
+				is(formatAsJson(server.getConfigData())));
 	}
 
 	@Test

@@ -1,7 +1,10 @@
 package us.jubat.graph;
 
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
+import static org.junit.Assert.assertThat;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,22 +16,20 @@ import org.junit.Before;
 import org.junit.Test;
 
 import us.jubat.testutil.JubaServer;
-import us.jubat.testutil.JubaServer.Engine;
+import us.jubat.testutil.JubatusClientTest;
 
-public class GraphClientTest {
-
-	private static final String HOST = "localhost";
-	public static final String NAME = JubaServer.NAME;
-	private static final double TIMEOUT_SEC = 10;
-
+public class GraphClientTest extends JubatusClientTest {
 	private GraphClient client;
-	private JubaServer server;
+
+	public GraphClientTest() {
+		super(JubaServer.graph);
+	}
 
 	@Before
 	public void setUp() throws Exception {
-		server = new JubaServer(Engine.graph);
-		server.start();
-		client = new GraphClient(HOST, Engine.graph.getPort(), TIMEOUT_SEC);
+		server.start(server.getConfigPath());
+		client = new GraphClient(server.getHost(), server.getPort(),
+				TIMEOUT_SEC);
 	}
 
 	@After
@@ -168,7 +169,7 @@ public class GraphClientTest {
 		r.q = q;
 		r.max_hop = 0;
 
-		List<String> result = client.shortest_path(HOST, r);
+		List<String> result = client.shortest_path(NAME, r);
 		assertThat(result, is(notNullValue()));
 		assertThat(result.size(), is(0));
 	}

@@ -7,28 +7,31 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JubaServer {
-	public static final String NAME = System.getProperty("jubatus.name");
+public enum JubaServer {
+	classifier, recommender, regression, stat, graph;
 
-	private List<String> command = new ArrayList<String>();
+	public static final int BASEPORT = Integer.parseInt(System
+			.getProperty("jubatus.baseport"));
+
 	private Process process;
 	private StdoutReader stdout_reader;
 
-	public JubaServer(Engine engine) {
-		command.add(engine.getCommandName());
-		command.add("-p");
-		command.add(String.valueOf(engine.getPort()));
-		command.add("-n");
-		command.add(NAME == null ? "" : NAME);
-	}
+	public void start(String config) throws IOException, InterruptedException {
+		String[] command = new String[] { //
+		this.getCommandName(), //
+				"--rpc-port", String.valueOf(this.getPort()), //
+				"--configpath", config, //
+				"--thread", "100", //
+				"--tmpdir", "." //
+		};
 
-	public void start() throws IOException, InterruptedException {
 		ProcessBuilder pb = new ProcessBuilder(command);
 		pb.redirectErrorStream(true);
 		process = pb.start();
 		stdout_reader = new StdoutReader(process.getInputStream());
 		stdout_reader.setDaemon(true);
 		stdout_reader.start();
+
 		// sleep　1 second.
 		Thread.sleep(1000);
 	}
@@ -74,18 +77,38 @@ public class JubaServer {
 		}
 	}
 
-	public enum Engine {
-		classifier, recommender, regression, stat, graph;
+	public String getCommandName() {
+		return "juba" + this.name();
+	}
 
-		public static final int BASEPORT = Integer.parseInt(System
-				.getProperty("jubatus.baseport"));
+	public String getHost() {
+		return "127.0.0.1";
+	}
 
-		public String getCommandName() {
-			return "juba" + this.name();
+	public int getPort() {
+		return BASEPORT + this.ordinal();
+	}
+
+	private String getConfigFileName() {
+		return "config_" + this.name() + ".json";
+	}
+
+	public String getConfigPath() {
+		return getClass().getResource(getConfigFileName()).getPath();
+	}
+
+	public String getConfigData() throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(getClass()
+				.getResourceAsStream(getConfigFileName())));
+		StringBuilder sb = new StringBuilder();
+
+		String line;
+		while ((line = br.readLine()) != null) {
+			sb.append(line);
+			sb.append('\n');
 		}
+		br.close();
 
-		public int getPort() {
-			return BASEPORT + this.ordinal();
-		}
+		return sb.toString();
 	}
 }
