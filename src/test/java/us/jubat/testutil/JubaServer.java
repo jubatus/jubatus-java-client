@@ -39,6 +39,7 @@ public class JubaServer {
 		process.getErrorStream().close();
 		process.getOutputStream().close();
 		process.destroy();
+		process.waitFor();
 	}
 
 	private class StdoutReader extends Thread {
