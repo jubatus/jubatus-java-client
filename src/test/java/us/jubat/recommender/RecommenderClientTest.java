@@ -44,6 +44,11 @@ public class RecommenderClientTest extends JubatusClientTest {
 	}
 
 	@Test
+	public void testUpdate_row() {
+		assertThat(client.update_row(NAME, Integer.toString(1), generateDatum()), is(true));
+	}
+
+	@Test
 	public void testDecode_row() {
 		update_row(1);
 		Datum datum = client.decode_row(NAME, Integer.toString(1));
@@ -53,8 +58,7 @@ public class RecommenderClientTest extends JubatusClientTest {
 	@Test
 	public void testClear_row() {
 		update_row(1);
-		// FIXME: return false
-		assertThat(client.clear_row(NAME, Integer.toString(1)), is(false));
+		assertThat(client.clear_row(NAME, Integer.toString(1)), is(true));
 
 		Datum datum = client.decode_row(NAME, Integer.toString(1));
 		assertThat(datum.string_values.size(), is(0));
@@ -64,8 +68,7 @@ public class RecommenderClientTest extends JubatusClientTest {
 	@Test
 	public void testClear_and_Get_all_rows() {
 		update_row(3);
-		// FIXME: return false
-		assertThat(client.clear(NAME), is(false));
+		assertThat(client.clear(NAME), is(true));
 
 		List<String> rows = client.get_all_rows(NAME);
 		assertThat(rows.size(), is(0));

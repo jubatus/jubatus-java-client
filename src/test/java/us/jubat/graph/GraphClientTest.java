@@ -50,7 +50,7 @@ public class GraphClientTest extends JubatusClientTest {
 			String value = "value" + Integer.toString(i);
 			property.put(key, value);
 		}
-		assertThat(client.update_node(NAME, nid, property), is(0));
+		assertThat(client.update_node(NAME, nid, property), is(true));
 
 		// get
 		NodeInfo node_info = client.get_node(NAME, nid);
@@ -61,10 +61,10 @@ public class GraphClientTest extends JubatusClientTest {
 		assertThat(node_info.p, is(property));
 
 		// create here
-		assertThat(client.create_node_here(NAME, nid + 1), is(0));
+		assertThat(client.create_node_here(NAME, nid + 1), is(true));
 
 		// remove
-		assertThat(client.remove_node(NAME, nid), is(0));
+		assertThat(client.remove_node(NAME, nid), is(true));
 	}
 
 	@Test
@@ -88,7 +88,7 @@ public class GraphClientTest extends JubatusClientTest {
 		assertThat(Long.valueOf(eid), is(2L));
 
 		// update
-		assertThat(client.update_edge(NAME, src, eid, ei), is(0));
+		assertThat(client.update_edge(NAME, src, eid, ei), is(true));
 
 		// get
 		EdgeInfo edge_info = client.get_edge(NAME, tgt, eid);
@@ -97,10 +97,10 @@ public class GraphClientTest extends JubatusClientTest {
 		assertThat(edge_info.p, is(property));
 
 		// create here
-		assertThat(client.create_edge_here(NAME, eid + 1, ei), is(0));
+		assertThat(client.create_edge_here(NAME, eid + 1, ei), is(true));
 
 		// remove
-		assertThat(client.remove_edge(NAME, src, eid), is(0));
+		assertThat(client.remove_edge(NAME, src, eid), is(true));
 	}
 
 	@Test
@@ -176,12 +176,12 @@ public class GraphClientTest extends JubatusClientTest {
 
 	@Test
 	public void testUpdate_index() {
-		assertThat(client.update_index(NAME), is(0));
+		assertThat(client.update_index(NAME), is(true));
 	}
 
 	@Test
 	public void testClear() {
-		assertThat(client.clear(NAME), is(0));
+		assertThat(client.clear(NAME), is(true));
 	}
 
 	@Test
@@ -202,7 +202,7 @@ public class GraphClientTest extends JubatusClientTest {
 	@Test
 	public void testGlobal_node() {
 		String nid = client.create_node(NAME);
-		assertThat(client.remove_global_node(NAME, nid), is(0));
+		assertThat(client.remove_global_node(NAME, nid), is(true));
 	}
 
 }
