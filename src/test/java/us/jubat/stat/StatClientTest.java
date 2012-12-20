@@ -45,8 +45,7 @@ public class StatClientTest extends JubatusClientTest {
 		for (int i = 1; i <= 10; i++) {
 			String key = "key" + i;
 			for (int val = 1; val <= 50; val++) {
-				// FIXME: return false
-				assertThat(client.push(NAME, key, val), is(false));
+				assertThat(client.push(NAME, key, val), is(true));
 			}
 			assertThat(client.sum(NAME, key), is(1275.0));
 		}
