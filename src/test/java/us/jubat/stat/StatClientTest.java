@@ -5,13 +5,13 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
+import java.io.IOException;
 import java.util.Map;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import us.jubat.regression.RegressionClient;
 import us.jubat.testutil.JubaServer;
 import us.jubat.testutil.JubatusClientTest;
 
@@ -34,7 +34,7 @@ public class StatClientTest extends JubatusClientTest {
 	}
 
 	@Test
-	public void testGet_config() {
+	public void testGet_config() throws IOException {
 		String config = client.get_config(NAME);
 		assertThat(formatAsJson(config),
 				is(formatAsJson(server.getConfigData())));
