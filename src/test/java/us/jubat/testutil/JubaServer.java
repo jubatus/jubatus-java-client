@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public enum JubaServer {
-	classifier, recommender, regression, stat, graph;
+	classifier, recommender, regression, stat, graph, anomaly;
 
 	public static final int BASEPORT = Integer.parseInt(System
 			.getProperty("jubatus.baseport"));
