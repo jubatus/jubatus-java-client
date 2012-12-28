@@ -90,7 +90,7 @@ public enum JubaServer {
 	}
 
 	private String getConfigFileName() {
-		return "config_" + this.name() + ".json";
+		return "/config_" + this.name() + ".json";
 	}
 
 	public String getConfigPath() {
