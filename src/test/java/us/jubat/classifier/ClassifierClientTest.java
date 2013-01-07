@@ -85,7 +85,7 @@ public class ClassifierClientTest extends JubatusClientTest {
 		assertThat(result.get(0), is(notNullValue()));
 		assertThat(result.get(0).size(), is(1));
 		assertThat(result.get(0).get(0).label, is("label"));
-		assertThat(result.get(0).get(0).prob, is(closeTo(1.0, 0.00001)));
+		assertThat(result.get(0).get(0).score, is(closeTo(1.0, 0.00001)));
 	}
 
 	@Test

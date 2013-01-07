@@ -85,9 +85,9 @@ public class RecommenderClientTest extends JubatusClientTest {
 	}
 
 	@Test
-	public void testComplete_row_from_data() {
+	public void testComplete_row_from_datum() {
 		update_row(1);
-		Datum result = client.complete_row_from_data(NAME, generateDatum());
+		Datum result = client.complete_row_from_datum(NAME, generateDatum());
 
 		Datum row = client.decode_row(NAME, Integer.toString(1));
 		assertDatum(row, result);
@@ -105,9 +105,9 @@ public class RecommenderClientTest extends JubatusClientTest {
 	}
 
 	@Test
-	public void testSimilar_row_from_data() {
+	public void testSimilar_row_from_datum() {
 		update_row(1);
-		List<TupleStringFloat> result = client.similar_row_from_data(NAME,
+		List<TupleStringFloat> result = client.similar_row_from_datum(NAME,
 				generateDatum(), 1);
 		assertThat(result, is(notNullValue()));
 		assertThat(result.size(), is(1));
@@ -116,14 +116,14 @@ public class RecommenderClientTest extends JubatusClientTest {
 	}
 
 	@Test
-	public void testSimilarity() {
-		assertThat(client.similarity(NAME, generateDatum(), generateDatum()),
+	public void testCalcSimilarity() {
+		assertThat(client.calc_similarity(NAME, generateDatum(), generateDatum()),
 				is(1f));
 	}
 
 	@Test
-	public void testL2norm() {
-		double norm = client.l2norm(NAME, generateDatum());
+	public void testCalcL2norm() {
+		double norm = client.calc_l2norm(NAME, generateDatum());
 		assertThat(norm, is(closeTo(19.874607, 0.00001)));
 	}
 

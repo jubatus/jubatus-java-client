@@ -53,12 +53,12 @@ public class GraphClientTest extends JubatusClientTest {
 		assertThat(client.update_node(NAME, nid, property), is(true));
 
 		// get
-		NodeInfo node_info = client.get_node(NAME, nid);
-		assertThat(node_info.in_edges, is(notNullValue()));
-		assertThat(node_info.in_edges.size(), is(0));
-		assertThat(node_info.out_edges, is(notNullValue()));
-		assertThat(node_info.out_edges.size(), is(0));
-		assertThat(node_info.p, is(property));
+		Node node = client.get_node(NAME, nid);
+		assertThat(node.in_edges, is(notNullValue()));
+		assertThat(node.in_edges.size(), is(0));
+		assertThat(node.out_edges, is(notNullValue()));
+		assertThat(node.out_edges.size(), is(0));
+		assertThat(node.property, is(property));
 
 		// create here
 		assertThat(client.create_node_here(NAME, nid + 1), is(true));
@@ -80,24 +80,24 @@ public class GraphClientTest extends JubatusClientTest {
 		}
 		client.update_node(NAME, src, property);
 		client.update_node(NAME, tgt, property);
-		EdgeInfo ei = new EdgeInfo();
-		ei.src = src;
-		ei.tgt = tgt;
-		ei.p = property;
-		long eid = client.create_edge(NAME, src, ei);
+		Edge e = new Edge();
+		e.source = src;
+		e.target = tgt;
+		e.property = property;
+		long eid = client.create_edge(NAME, src, e);
 		assertThat(Long.valueOf(eid), is(2L));
 
 		// update
-		assertThat(client.update_edge(NAME, src, eid, ei), is(true));
+		assertThat(client.update_edge(NAME, src, eid, e), is(true));
 
 		// get
-		EdgeInfo edge_info = client.get_edge(NAME, tgt, eid);
-		assertThat(edge_info.src, is(src));
-		assertThat(edge_info.tgt, is(tgt));
-		assertThat(edge_info.p, is(property));
+		Edge edge = client.get_edge(NAME, tgt, eid);
+		assertThat(edge.source, is(src));
+		assertThat(edge.target, is(tgt));
+		assertThat(edge.property, is(property));
 
 		// create here
-		assertThat(client.create_edge_here(NAME, eid + 1, ei), is(true));
+		assertThat(client.create_edge_here(NAME, eid + 1, e), is(true));
 
 		// remove
 		assertThat(client.remove_edge(NAME, src, eid), is(true));
@@ -163,13 +163,13 @@ public class GraphClientTest extends JubatusClientTest {
 
 		String src = client.create_node(NAME);
 		String tgt = client.create_node(NAME);
-		ShortestPathReq r = new ShortestPathReq();
-		r.src = src;
-		r.tgt = tgt;
-		r.q = q;
+		ShortestPathQuery r = new ShortestPathQuery();
+		r.source = src;
+		r.target = tgt;
+		r.query = q;
 		r.max_hop = 0;
 
-		List<String> result = client.shortest_path(NAME, r);
+		List<String> result = client.get_shortest_path(NAME, r);
 		assertThat(result, is(notNullValue()));
 		assertThat(result.size(), is(0));
 	}
