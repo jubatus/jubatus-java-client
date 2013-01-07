@@ -104,7 +104,7 @@ public class GraphClientTest extends JubatusClientTest {
 	}
 
 	@Test
-	public void testCentrality() {
+	public void testGetCentrality() {
 		PresetQuery q = new PresetQuery();
 		q.edge_query = new ArrayList<TupleStringString>();
 		q.node_query = new ArrayList<TupleStringString>();
@@ -113,7 +113,7 @@ public class GraphClientTest extends JubatusClientTest {
 		String nid = client.create_node(NAME);
 		client.update_index(NAME);
 
-		assertThat(client.centrality(NAME, nid, 0, q), is(1.0));
+		assertThat(client.get_centrality(NAME, nid, 0, q), is(1.0));
 	}
 
 	@Test
