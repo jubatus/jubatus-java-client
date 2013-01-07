@@ -1,20 +1,159 @@
---- src/main/java/Tuple.java	2012-10-05 11:05:31.249919678 +0900
+--- src/main/java/Tuple.java	2013-01-07 19:01:31.653491489 +0900
 +++ src/main/java/Tuple.java	1970-01-01 09:00:00.000000000 +0900
 @@ -1,12 +0,0 @@
 -
--// This file is auto-generated from jubatus/src/server/stat.idl
+-// This file is auto-generated from ../src/server/recommender.idl
 -// *** DO NOT EDIT ***
 -
 -
--package us.jubat.stat;
+-package us.jubat.recommender;
 -public class Tuple<T, U> {
 -  public T a;
 -  public U b;
 -};
 -
 -
---- src/main/java/us/jubat/classifier/ClassifierClient.java	2012-10-05 11:05:31.193919676 +0900
-+++ src/main/java/us/jubat/classifier/ClassifierClient.java	2012-10-05 10:59:19.305907776 +0900
+--- src/main/java/us/jubat/anomaly/AnomalyClient.java	2013-01-07 19:01:31.653491489 +0900
++++ src/main/java/us/jubat/anomaly/AnomalyClient.java	2013-01-07 18:10:56.841393859 +0900
+@@ -5,8 +5,8 @@
+ 
+ package us.jubat.anomaly;
+ 
+-import java.util.HashMap;
+-import java.util.ArrayList;
++import java.util.Map;
++import java.util.List;
+ import org.msgpack.rpc.Client;
+ import org.msgpack.rpc.loop.EventLoop;
+ 
+@@ -20,14 +20,14 @@
+   public static interface RPCInterface {
+     String get_config(String name);
+     boolean clear_row(String name, String id);
+-    Tuple<String, Float > add(String name, Datum  row);
++    TupleStringFloat add(String name, Datum  row);
+     float update(String name, String id, Datum  row);
+     boolean clear(String name);
+     float calc_score(String name, Datum  row);
+-    ArrayList<String > get_all_rows(String name);
++    List<String > get_all_rows(String name);
+     boolean save(String name, String id);
+     boolean load(String name, String id);
+-    HashMap<String, HashMap<String, String > > get_status(String name);
++    Map<String, Map<String, String > > get_status(String name);
+ 
+   }
+ 
+@@ -40,7 +40,7 @@
+     return iface_.clear_row(name, id);
+   }
+ 
+-  public Tuple<String, Float > add(String name, Datum  row) {
++  public TupleStringFloat add(String name, Datum  row) {
+     return iface_.add(name, row);
+   }
+ 
+@@ -56,7 +56,7 @@
+     return iface_.calc_score(name, row);
+   }
+ 
+-  public ArrayList<String > get_all_rows(String name) {
++  public List<String > get_all_rows(String name) {
+     return iface_.get_all_rows(name);
+   }
+ 
+@@ -68,7 +68,7 @@
+     return iface_.load(name, id);
+   }
+ 
+-  public HashMap<String, HashMap<String, String > > get_status(String name) {
++  public Map<String, Map<String, String > > get_status(String name) {
+     return iface_.get_status(name);
+   }
+ 
+--- src/main/java/us/jubat/anomaly/Datum.java	2013-01-07 19:01:31.653491489 +0900
++++ src/main/java/us/jubat/anomaly/Datum.java	2013-01-07 18:14:41.797401115 +0900
+@@ -6,15 +6,15 @@
+ package us.jubat.anomaly;
+ 
+ 
+-import java.util.ArrayList;
++import java.util.List;
+ import org.msgpack.MessagePack;
+ import org.msgpack.annotation.Message;
+ 
+ @Message
+ public class Datum  {
+ 
+-  public ArrayList<Tuple<String, String > > string_values;
+-  public ArrayList<Tuple<String, Double > > num_values;
++  public List<TupleStringString > string_values;
++  public List<TupleStringDouble > num_values;
+ 
+   public Datum() {
+   
+--- src/main/java/us/jubat/anomaly/TupleStringDouble.java	1970-01-01 09:00:00.000000000 +0900
++++ src/main/java/us/jubat/anomaly/TupleStringDouble.java	2013-01-07 18:15:54.649404321 +0900
+@@ -0,0 +1,17 @@
++
++// This file is auto-generated from jubatus/src/server/anomaly.idl
++// *** DO NOT EDIT ***
++
++
++package us.jubat.anomaly;
++
++import org.msgpack.MessagePack;
++import org.msgpack.annotation.Message;
++
++@Message
++public class TupleStringDouble {
++  public String first;
++  public double second;
++};
++ 
++
+--- src/main/java/us/jubat/anomaly/TupleStringFloat.java	1970-01-01 09:00:00.000000000 +0900
++++ src/main/java/us/jubat/anomaly/TupleStringFloat.java	2013-01-07 18:16:20.693404692 +0900
+@@ -0,0 +1,17 @@
++
++// This file is auto-generated from jubatus/src/server/anomaly.idl
++// *** DO NOT EDIT ***
++
++
++package us.jubat.anomaly;
++
++import org.msgpack.MessagePack;
++import org.msgpack.annotation.Message;
++
++@Message
++public class TupleStringFloat {
++  public String first;
++  public float second;
++};
++ 
++
+--- src/main/java/us/jubat/anomaly/TupleStringString.java	1970-01-01 09:00:00.000000000 +0900
++++ src/main/java/us/jubat/anomaly/TupleStringString.java	2013-01-07 18:16:40.029405769 +0900
+@@ -0,0 +1,17 @@
++
++// This file is auto-generated from jubatus/src/server/anomaly.idl
++// *** DO NOT EDIT ***
++
++
++package us.jubat.anomaly;
++
++import org.msgpack.MessagePack;
++import org.msgpack.annotation.Message;
++
++@Message
++public class TupleStringString {
++  public String first;
++  public String second;
++};
++ 
++
+--- src/main/java/us/jubat/classifier/ClassifierClient.java	2013-01-07 19:01:31.653491489 +0900
++++ src/main/java/us/jubat/classifier/ClassifierClient.java	2013-01-07 18:08:13.133389227 +0900
 @@ -5,8 +5,8 @@
  
  package us.jubat.classifier;
@@ -26,10 +165,10 @@
  import org.msgpack.rpc.Client;
  import org.msgpack.rpc.loop.EventLoop;
  
-@@ -20,11 +20,11 @@
+@@ -19,11 +19,11 @@
+ 
    public static interface RPCInterface {
-     boolean set_config(String name, ConfigData  c);
-     ConfigData  get_config(String name);
+     String get_config(String name);
 -    int train(String name, ArrayList<Tuple<String, Datum  > > data);
 -    ArrayList<ArrayList<EstimateResult  > > classify(String name, ArrayList<Datum  > data);
 +    int train(String name, List<TupleStringDatum > data);
@@ -41,7 +180,7 @@
  
    }
  
-@@ -37,11 +37,11 @@
+@@ -32,11 +32,11 @@
      return iface_.get_config(name);
    }
  
@@ -55,7 +194,7 @@
      return iface_.classify(name, data);
    }
  
-@@ -53,7 +53,7 @@
+@@ -48,7 +48,7 @@
      return iface_.load(name, id);
    }
  
@@ -64,8 +203,8 @@
      return iface_.get_status(name);
    }
  
---- src/main/java/us/jubat/classifier/Datum.java	2012-10-05 11:05:31.193919676 +0900
-+++ src/main/java/us/jubat/classifier/Datum.java	2012-10-05 10:59:19.305907776 +0900
+--- src/main/java/us/jubat/classifier/Datum.java	2013-01-07 19:01:31.653491489 +0900
++++ src/main/java/us/jubat/classifier/Datum.java	2013-01-07 17:54:23.769361631 +0900
 @@ -6,15 +6,15 @@
  package us.jubat.classifier;
  
@@ -86,7 +225,7 @@
    public Datum() {
    
 --- src/main/java/us/jubat/classifier/TupleStringDatum.java	1970-01-01 09:00:00.000000000 +0900
-+++ src/main/java/us/jubat/classifier/TupleStringDatum.java	2012-10-05 10:59:19.301907775 +0900
++++ src/main/java/us/jubat/classifier/TupleStringDatum.java	2013-01-07 17:54:23.769361631 +0900
 @@ -0,0 +1,17 @@
 +
 +// This file is auto-generated from jubatus/src/server/classifier.idl
@@ -106,7 +245,7 @@
 + 
 +
 --- src/main/java/us/jubat/classifier/TupleStringDouble.java	1970-01-01 09:00:00.000000000 +0900
-+++ src/main/java/us/jubat/classifier/TupleStringDouble.java	2012-10-05 10:59:19.301907775 +0900
++++ src/main/java/us/jubat/classifier/TupleStringDouble.java	2013-01-07 17:54:23.769361631 +0900
 @@ -0,0 +1,17 @@
 +
 +// This file is auto-generated from jubatus/src/server/classifier.idl
@@ -126,7 +265,7 @@
 + 
 +
 --- src/main/java/us/jubat/classifier/TupleStringString.java	1970-01-01 09:00:00.000000000 +0900
-+++ src/main/java/us/jubat/classifier/TupleStringString.java	2012-10-05 10:59:19.301907775 +0900
++++ src/main/java/us/jubat/classifier/TupleStringString.java	2013-01-07 17:54:23.769361631 +0900
 @@ -0,0 +1,17 @@
 +
 +// This file is auto-generated from jubatus/src/server/classifier.idl
@@ -145,8 +284,8 @@
 +};
 + 
 +
---- src/main/java/us/jubat/graph/EdgeInfo.java	2012-10-05 11:05:31.213919677 +0900
-+++ src/main/java/us/jubat/graph/EdgeInfo.java	2012-10-05 10:59:19.321907776 +0900
+--- src/main/java/us/jubat/graph/Edge.java	2013-01-07 19:01:31.653491489 +0900
++++ src/main/java/us/jubat/graph/Edge.java	2013-01-07 18:27:08.705425932 +0900
 @@ -5,7 +5,7 @@
  
  package us.jubat.graph;
@@ -158,15 +297,15 @@
  import org.msgpack.annotation.Message;
 @@ -13,7 +13,7 @@
  @Message
- public class EdgeInfo  {
+ public class Edge  {
  
--  public HashMap<String, String > p;
-+  public Map<String, String > p;
-   public String src;
-   public String tgt;
+-  public HashMap<String, String > property;
++  public Map<String, String > property;
+   public String source;
+   public String target;
  
---- src/main/java/us/jubat/graph/GraphClient.java	2012-10-05 11:05:31.213919677 +0900
-+++ src/main/java/us/jubat/graph/GraphClient.java	2012-10-05 10:59:19.321907776 +0900
+--- src/main/java/us/jubat/graph/GraphClient.java	2013-01-07 19:01:31.653491489 +0900
++++ src/main/java/us/jubat/graph/GraphClient.java	2013-01-07 17:58:40.205370070 +0900
 @@ -5,8 +5,8 @@
  
  package us.jubat.graph;
@@ -181,49 +320,49 @@
 @@ -20,7 +20,7 @@
    public static interface RPCInterface {
      String create_node(String name);
-     int remove_node(String name, String nid);
--    int update_node(String name, String nid, HashMap<String, String > p);
-+    int update_node(String name, String nid, Map<String, String > p);
-     long create_edge(String name, String nid, EdgeInfo  ei);
-     int update_edge(String name, String nid, long eid, EdgeInfo  ei);
-     int remove_edge(String name, String nid, long e);
+     boolean remove_node(String name, String node_id);
+-    boolean update_node(String name, String node_id, HashMap<String, String > property);
++    boolean update_node(String name, String node_id, Map<String, String > property);
+     long create_edge(String name, String node_id, Edge  e);
+     boolean update_edge(String name, String node_id, long edge_id, Edge  e);
+     boolean remove_edge(String name, String node_id, long edge_id);
 @@ -29,14 +29,14 @@
-     boolean add_shortest_path_query(String name, PresetQuery  q);
-     boolean remove_centrality_query(String name, PresetQuery  q);
-     boolean remove_shortest_path_query(String name, PresetQuery  q);
--    ArrayList<String > shortest_path(String name, ShortestPathReq  r);
-+    List<String > shortest_path(String name, ShortestPathReq  r);
-     int update_index(String name);
-     int clear(String name);
-     NodeInfo  get_node(String name, String nid);
-     EdgeInfo  get_edge(String name, String nid, long e);
-     boolean save(String name, String arg1);
-     boolean load(String name, String arg1);
+     boolean add_shortest_path_query(String name, PresetQuery  query);
+     boolean remove_centrality_query(String name, PresetQuery  query);
+     boolean remove_shortest_path_query(String name, PresetQuery  query);
+-    ArrayList<String > get_shortest_path(String name, ShortestPathQuery  query);
++    List<String > get_shortest_path(String name, ShortestPathQuery  query);
+     boolean update_index(String name);
+     boolean clear(String name);
+     Node  get_node(String name, String node_id);
+     Edge  get_edge(String name, String node_id, long edge_id);
+     boolean save(String name, String id);
+     boolean load(String name, String id);
 -    HashMap<String, HashMap<String, String > > get_status(String name);
 +    Map<String, Map<String, String > > get_status(String name);
-     int create_node_here(String name, String nid);
-     int remove_global_node(String name, String nid);
-     int create_edge_here(String name, long eid, EdgeInfo  ei);
+     boolean create_node_here(String name, String node_id);
+     boolean remove_global_node(String name, String node_id);
+     boolean create_edge_here(String name, long edge_id, Edge  e);
 @@ -52,7 +52,7 @@
-     return iface_.remove_node(name, nid);
+     return iface_.remove_node(name, node_id);
    }
  
--  public int update_node(String name, String nid, HashMap<String, String > p) {
-+  public int update_node(String name, String nid, Map<String, String > p) {
-     return iface_.update_node(name, nid, p);
+-  public boolean update_node(String name, String node_id, HashMap<String, String > property) {
++  public boolean update_node(String name, String node_id, Map<String, String > property) {
+     return iface_.update_node(name, node_id, property);
    }
  
 @@ -88,7 +88,7 @@
-     return iface_.remove_shortest_path_query(name, q);
+     return iface_.remove_shortest_path_query(name, query);
    }
  
--  public ArrayList<String > shortest_path(String name, ShortestPathReq  r) {
-+  public List<String > shortest_path(String name, ShortestPathReq  r) {
-     return iface_.shortest_path(name, r);
+-  public ArrayList<String > get_shortest_path(String name, ShortestPathQuery  query) {
++  public List<String > get_shortest_path(String name, ShortestPathQuery  query) {
+     return iface_.get_shortest_path(name, query);
    }
  
 @@ -116,7 +116,7 @@
-     return iface_.load(name, arg1);
+     return iface_.load(name, id);
    }
  
 -  public HashMap<String, HashMap<String, String > > get_status(String name) {
@@ -231,8 +370,8 @@
      return iface_.get_status(name);
    }
  
---- src/main/java/us/jubat/graph/NodeInfo.java	2012-10-05 11:05:31.213919677 +0900
-+++ src/main/java/us/jubat/graph/NodeInfo.java	2012-10-05 10:59:19.321907776 +0900
+--- src/main/java/us/jubat/graph/Node.java	2013-01-07 19:01:31.653491489 +0900
++++ src/main/java/us/jubat/graph/Node.java	2013-01-07 18:26:40.693424349 +0900
 @@ -5,17 +5,17 @@
  
  package us.jubat.graph;
@@ -245,19 +384,19 @@
  import org.msgpack.annotation.Message;
  
  @Message
- public class NodeInfo  {
+ public class Node  {
  
--  public HashMap<String, String > p;
+-  public HashMap<String, String > property;
 -  public ArrayList<Long > in_edges;
 -  public ArrayList<Long > out_edges;
-+  public Map<String, String > p;
++  public Map<String, String > property;
 +  public List<Long > in_edges;
 +  public List<Long > out_edges;
  
-   public NodeInfo() {
+   public Node() {
    
---- src/main/java/us/jubat/graph/PresetQuery.java	2012-10-05 11:05:31.213919677 +0900
-+++ src/main/java/us/jubat/graph/PresetQuery.java	2012-10-05 10:59:19.321907776 +0900
+--- src/main/java/us/jubat/graph/PresetQuery.java	2013-01-07 19:01:31.653491489 +0900
++++ src/main/java/us/jubat/graph/PresetQuery.java	2013-01-07 17:54:25.873362574 +0900
 @@ -6,15 +6,15 @@
  package us.jubat.graph;
  
@@ -278,7 +417,7 @@
    public PresetQuery() {
    
 --- src/main/java/us/jubat/graph/TupleStringString.java	1970-01-01 09:00:00.000000000 +0900
-+++ src/main/java/us/jubat/graph/TupleStringString.java	2012-10-05 10:59:19.321907776 +0900
++++ src/main/java/us/jubat/graph/TupleStringString.java	2013-01-07 17:54:25.873362574 +0900
 @@ -0,0 +1,17 @@
 +
 +// This file is auto-generated from jubatus/src/server/graph.idl
@@ -297,8 +436,8 @@
 +};
 + 
 +
---- src/main/java/us/jubat/recommender/Datum.java	2012-10-05 11:05:31.225919677 +0900
-+++ src/main/java/us/jubat/recommender/Datum.java	2012-10-05 10:59:19.337907777 +0900
+--- src/main/java/us/jubat/recommender/Datum.java	2013-01-07 19:01:31.653491489 +0900
++++ src/main/java/us/jubat/recommender/Datum.java	2013-01-07 17:54:25.873362574 +0900
 @@ -6,15 +6,15 @@
  package us.jubat.recommender;
  
@@ -318,8 +457,8 @@
  
    public Datum() {
    
---- src/main/java/us/jubat/recommender/RecommenderClient.java	2012-10-05 11:05:31.225919677 +0900
-+++ src/main/java/us/jubat/recommender/RecommenderClient.java	2012-10-05 10:59:19.337907777 +0900
+--- src/main/java/us/jubat/recommender/RecommenderClient.java	2013-01-07 19:01:31.653491489 +0900
++++ src/main/java/us/jubat/recommender/RecommenderClient.java	2013-01-07 18:07:42.817388415 +0900
 @@ -5,8 +5,8 @@
  
  package us.jubat.recommender;
@@ -331,19 +470,19 @@
  import org.msgpack.rpc.Client;
  import org.msgpack.rpc.loop.EventLoop;
  
-@@ -25,15 +25,15 @@
+@@ -24,15 +24,15 @@
      boolean clear(String name);
      Datum  complete_row_from_id(String name, String id);
-     Datum  complete_row_from_data(String name, Datum  d);
+     Datum  complete_row_from_datum(String name, Datum  row);
 -    ArrayList<Tuple<String, Float > > similar_row_from_id(String name, String id, int size);
--    ArrayList<Tuple<String, Float > > similar_row_from_data(String name, Datum  data, int size);
+-    ArrayList<Tuple<String, Float > > similar_row_from_datum(String name, Datum  row, int size);
 +    List<TupleStringFloat > similar_row_from_id(String name, String id, int size);
-+    List<TupleStringFloat > similar_row_from_data(String name, Datum  data, int size);
++    List<TupleStringFloat > similar_row_from_datum(String name, Datum  row, int size);
      Datum  decode_row(String name, String id);
 -    ArrayList<String > get_all_rows(String name);
 +    List<String > get_all_rows(String name);
-     float similarity(String name, Datum  lhs, Datum  rhs);
-     float l2norm(String name, Datum  d);
+     float calc_similarity(String name, Datum  lhs, Datum  rhs);
+     float calc_l2norm(String name, Datum  row);
      boolean save(String name, String id);
      boolean load(String name, String id);
 -    HashMap<String, HashMap<String, String > > get_status(String name);
@@ -351,8 +490,8 @@
  
    }
  
-@@ -66,11 +66,11 @@
-     return iface_.complete_row_from_data(name, d);
+@@ -61,11 +61,11 @@
+     return iface_.complete_row_from_datum(name, row);
    }
  
 -  public ArrayList<Tuple<String, Float > > similar_row_from_id(String name, String id, int size) {
@@ -360,12 +499,12 @@
      return iface_.similar_row_from_id(name, id, size);
    }
  
--  public ArrayList<Tuple<String, Float > > similar_row_from_data(String name, Datum  data, int size) {
-+  public List<TupleStringFloat > similar_row_from_data(String name, Datum  data, int size) {
-     return iface_.similar_row_from_data(name, data, size);
+-  public ArrayList<Tuple<String, Float > > similar_row_from_datum(String name, Datum  row, int size) {
++  public List<TupleStringFloat > similar_row_from_datum(String name, Datum  row, int size) {
+     return iface_.similar_row_from_datum(name, row, size);
    }
  
-@@ -78,7 +78,7 @@
+@@ -73,7 +73,7 @@
      return iface_.decode_row(name, id);
    }
  
@@ -374,7 +513,7 @@
      return iface_.get_all_rows(name);
    }
  
-@@ -98,7 +98,7 @@
+@@ -93,7 +93,7 @@
      return iface_.load(name, id);
    }
  
@@ -384,7 +523,7 @@
    }
  
 --- src/main/java/us/jubat/recommender/TupleStringDouble.java	1970-01-01 09:00:00.000000000 +0900
-+++ src/main/java/us/jubat/recommender/TupleStringDouble.java	2012-10-05 10:59:19.337907777 +0900
++++ src/main/java/us/jubat/recommender/TupleStringDouble.java	2013-01-07 17:54:25.873362576 +0900
 @@ -0,0 +1,17 @@
 +
 +// This file is auto-generated from jubatus/src/server/recommender.idl
@@ -404,7 +543,7 @@
 + 
 +
 --- src/main/java/us/jubat/recommender/TupleStringFloat.java	1970-01-01 09:00:00.000000000 +0900
-+++ src/main/java/us/jubat/recommender/TupleStringFloat.java	2012-10-05 10:59:19.337907777 +0900
++++ src/main/java/us/jubat/recommender/TupleStringFloat.java	2013-01-07 17:54:25.873362576 +0900
 @@ -0,0 +1,17 @@
 +
 +// This file is auto-generated from jubatus/src/server/recommender.idl
@@ -424,7 +563,7 @@
 + 
 +
 --- src/main/java/us/jubat/recommender/TupleStringString.java	1970-01-01 09:00:00.000000000 +0900
-+++ src/main/java/us/jubat/recommender/TupleStringString.java	2012-10-05 10:59:19.337907777 +0900
++++ src/main/java/us/jubat/recommender/TupleStringString.java	2013-01-07 17:54:25.873362576 +0900
 @@ -0,0 +1,17 @@
 +
 +// This file is auto-generated from jubatus/src/server/recommender.idl
@@ -443,8 +582,8 @@
 +};
 + 
 +
---- src/main/java/us/jubat/regression/Datum.java	2012-10-05 11:05:31.237919677 +0900
-+++ src/main/java/us/jubat/regression/Datum.java	2012-10-05 10:59:19.349907777 +0900
+--- src/main/java/us/jubat/regression/Datum.java	2013-01-07 19:01:31.653491489 +0900
++++ src/main/java/us/jubat/regression/Datum.java	2013-01-07 17:54:25.873362576 +0900
 @@ -6,15 +6,15 @@
  package us.jubat.regression;
  
@@ -464,8 +603,8 @@
  
    public Datum() {
    
---- src/main/java/us/jubat/regression/RegressionClient.java	2012-10-05 11:05:31.237919677 +0900
-+++ src/main/java/us/jubat/regression/RegressionClient.java	2012-10-05 10:59:19.349907777 +0900
+--- src/main/java/us/jubat/regression/RegressionClient.java	2013-01-07 19:01:31.653491489 +0900
++++ src/main/java/us/jubat/regression/RegressionClient.java	2013-01-07 18:08:47.801389774 +0900
 @@ -5,8 +5,8 @@
  
  package us.jubat.regression;
@@ -477,22 +616,22 @@
  import org.msgpack.rpc.Client;
  import org.msgpack.rpc.loop.EventLoop;
  
-@@ -20,11 +20,11 @@
+@@ -19,11 +19,11 @@
+ 
    public static interface RPCInterface {
-     boolean set_config(String name, ConfigData  c);
-     ConfigData  get_config(String name);
+     String get_config(String name);
 -    int train(String name, ArrayList<Tuple<Float, Datum  > > train_data);
 -    ArrayList<Float > estimate(String name, ArrayList<Datum  > estimate_data);
 +    int train(String name, List<TupleFloatDatum > train_data);
 +    List<Float > estimate(String name, List<Datum  > estimate_data);
-     boolean save(String name, String arg1);
-     boolean load(String name, String arg1);
+     boolean save(String name, String id);
+     boolean load(String name, String id);
 -    HashMap<String, HashMap<String, String > > get_status(String name);
 +    Map<String, Map<String, String > > get_status(String name);
  
    }
  
-@@ -37,11 +37,11 @@
+@@ -32,11 +32,11 @@
      return iface_.get_config(name);
    }
  
@@ -506,8 +645,8 @@
      return iface_.estimate(name, estimate_data);
    }
  
-@@ -53,7 +53,7 @@
-     return iface_.load(name, arg1);
+@@ -48,7 +48,7 @@
+     return iface_.load(name, id);
    }
  
 -  public HashMap<String, HashMap<String, String > > get_status(String name) {
@@ -516,7 +655,7 @@
    }
  
 --- src/main/java/us/jubat/regression/TupleFloatDatum.java	1970-01-01 09:00:00.000000000 +0900
-+++ src/main/java/us/jubat/regression/TupleFloatDatum.java	2012-10-05 10:59:19.349907777 +0900
++++ src/main/java/us/jubat/regression/TupleFloatDatum.java	2013-01-07 17:54:25.873362576 +0900
 @@ -0,0 +1,17 @@
 +
 +// This file is auto-generated from jubatus/src/server/regression.idl
@@ -536,7 +675,7 @@
 + 
 +
 --- src/main/java/us/jubat/regression/TupleStringDouble.java	1970-01-01 09:00:00.000000000 +0900
-+++ src/main/java/us/jubat/regression/TupleStringDouble.java	2012-10-05 10:59:19.349907777 +0900
++++ src/main/java/us/jubat/regression/TupleStringDouble.java	2013-01-07 17:54:25.873362576 +0900
 @@ -0,0 +1,17 @@
 +
 +// This file is auto-generated from jubatus/src/server/regression.idl
@@ -556,7 +695,7 @@
 + 
 +
 --- src/main/java/us/jubat/regression/TupleStringString.java	1970-01-01 09:00:00.000000000 +0900
-+++ src/main/java/us/jubat/regression/TupleStringString.java	2012-10-05 10:59:19.349907777 +0900
++++ src/main/java/us/jubat/regression/TupleStringString.java	2013-01-07 17:54:25.873362576 +0900
 @@ -0,0 +1,17 @@
 +
 +// This file is auto-generated from jubatus/src/server/regression.idl
@@ -575,8 +714,8 @@
 +};
 + 
 +
---- src/main/java/us/jubat/stat/StatClient.java	2012-10-05 11:05:31.253919678 +0900
-+++ src/main/java/us/jubat/stat/StatClient.java	2012-10-05 10:59:19.361907777 +0900
+--- src/main/java/us/jubat/stat/StatClient.java	2013-01-07 19:01:31.653491489 +0900
++++ src/main/java/us/jubat/stat/StatClient.java	2013-01-07 17:54:25.873362576 +0900
 @@ -5,7 +5,7 @@
  
  package us.jubat.stat;
@@ -586,8 +725,8 @@
  
  import org.msgpack.rpc.Client;
  import org.msgpack.rpc.loop.EventLoop;
-@@ -29,7 +29,7 @@
-     double moment(String name, String key, int n, double c);
+@@ -28,7 +28,7 @@
+     double moment(String name, String key, int degree, double center);
      boolean save(String name, String id);
      boolean load(String name, String id);
 -    HashMap<String, HashMap<String, String > > get_status(String name);
@@ -595,7 +734,7 @@
  
    }
  
-@@ -78,7 +78,7 @@
+@@ -73,7 +73,7 @@
      return iface_.load(name, id);
    }
  
