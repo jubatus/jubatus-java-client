@@ -6,6 +6,7 @@ import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.junit.After;
@@ -38,14 +39,15 @@ public class AnomalyClientTest extends JubatusClientTest {
 	public void testClear_row() {
 		String key = addTestDatum(1).first;
 		assertThat(client.clear_row(NAME, key), is(true));
+		assertThat(client.get_all_rows(NAME).size(), is(0));
 	}
 
 	@Test
 	public void testAdd() {
 		Datum d = generateDatum();
 		TupleStringFloat result = client.add(NAME, d);
-		assertThat(result.first, notNullValue());
-		assertThat(result.second, notNullValue());
+		assertThat(result.first, is("0"));
+		assertThat(result.second, is(Float.POSITIVE_INFINITY)); // Is it good to be INF ?
 	}
 
 	@Test
@@ -53,7 +55,14 @@ public class AnomalyClientTest extends JubatusClientTest {
 		Datum d = generateDatum();
 		TupleStringFloat added = client.add(NAME, d);
 		assertThat(client.update(NAME, added.first, generateDatum()),
-				is((float) 1.0));
+				is(Float.POSITIVE_INFINITY)); // Is it good to be INF ?
+	}
+
+	@Test
+	public void testCalc_score() {
+		Datum d = generateDatum();
+		assertThat(client.calc_score(NAME, generateDatum()),
+				is(Float.POSITIVE_INFINITY)); // Is it good to be INF ?
 	}
 
 	@Test
@@ -81,6 +90,7 @@ public class AnomalyClientTest extends JubatusClientTest {
 	@Test
 	public void testGet_status() {
 		Map<String, Map<String, String>> status = client.get_status(NAME);
+		assertThat(status, is(notNullValue()));
 		assertThat(status.size(), is(1));
 	}
 
@@ -102,7 +112,7 @@ public class AnomalyClientTest extends JubatusClientTest {
 	private Datum generateDatum() {
 		Datum datum = new Datum();
 
-		ArrayList<TupleStringString> string_values = new ArrayList<TupleStringString>();
+		List<TupleStringString> string_values = new ArrayList<TupleStringString>();
 		for (int i = 1; i <= 10; i++) {
 			TupleStringString string_value = new TupleStringString();
 			string_value.first = "key/str" + Integer.toString(i);
@@ -111,7 +121,7 @@ public class AnomalyClientTest extends JubatusClientTest {
 		}
 		datum.string_values = string_values;
 
-		ArrayList<TupleStringDouble> num_values = new ArrayList<TupleStringDouble>();
+		List<TupleStringDouble> num_values = new ArrayList<TupleStringDouble>();
 		for (int i = 1; i <= 10; i++) {
 			TupleStringDouble num_value = new TupleStringDouble();
 			num_value.first = "key/num" + Integer.toString(i);
