@@ -104,7 +104,7 @@ public class GraphClientTest extends JubatusClientTest {
 	}
 
 	@Test
-	public void testGetCentrality() {
+	public void testGet_centrality() {
 		PresetQuery q = new PresetQuery();
 		q.edge_query = new ArrayList<TupleStringString>();
 		q.node_query = new ArrayList<TupleStringString>();
@@ -154,7 +154,7 @@ public class GraphClientTest extends JubatusClientTest {
 	}
 
 	@Test
-	public void testShortest_path() {
+	public void testGet_shortest_path() {
 		PresetQuery q = new PresetQuery();
 		q.node_query = new ArrayList<TupleStringString>();
 		q.edge_query = new ArrayList<TupleStringString>();

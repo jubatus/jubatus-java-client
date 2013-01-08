@@ -69,10 +69,9 @@ public class RecommenderClientTest extends JubatusClientTest {
 	@Test
 	public void testClear_and_Get_all_rows() {
 		update_row(3);
+		assertThat(client.get_all_rows(NAME).size(), is(3));
 		assertThat(client.clear(NAME), is(true));
-
-		List<String> rows = client.get_all_rows(NAME);
-		assertThat(rows.size(), is(0));
+		assertThat(client.get_all_rows(NAME).size(), is(0));
 	}
 
 	@Test
@@ -116,13 +115,13 @@ public class RecommenderClientTest extends JubatusClientTest {
 	}
 
 	@Test
-	public void testCalcSimilarity() {
+	public void testCalc_Similarity() {
 		assertThat(client.calc_similarity(NAME, generateDatum(), generateDatum()),
 				is(1f));
 	}
 
 	@Test
-	public void testCalcL2norm() {
+	public void testCalc_L2norm() {
 		double norm = client.calc_l2norm(NAME, generateDatum());
 		assertThat(norm, is(closeTo(19.874607, 0.00001)));
 	}
