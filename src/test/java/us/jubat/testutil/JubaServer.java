@@ -22,7 +22,7 @@ public enum JubaServer {
 				"--rpc-port", String.valueOf(this.getPort()), //
 				"--configpath", config, //
 				"--thread", "100", //
-				"--tmpdir", "." //
+				"--datadir", "." //
 		};
 
 		ProcessBuilder pb = new ProcessBuilder(command);
