@@ -6,6 +6,7 @@ import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,6 +36,13 @@ public class GraphClientTest extends JubatusClientTest {
 	@After
 	public void tearDown() throws Exception {
 		server.stop();
+	}
+
+	@Test
+	public void testGet_config() throws IOException {
+		String config = client.get_config(NAME);
+		assertThat(formatAsJson(config),
+				is(formatAsJson(server.getConfigData())));
 	}
 
 	@Test
