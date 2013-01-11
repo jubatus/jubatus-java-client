@@ -1,8 +1,12 @@
 package us.jubat.recommender;
 
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
+import static org.hamcrest.Matchers.closeTo;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.isIn;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertThat;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -12,36 +16,20 @@ import org.junit.Before;
 import org.junit.Test;
 
 import us.jubat.testutil.JubaServer;
-import us.jubat.testutil.JubaServer.Engine;
+import us.jubat.testutil.JubatusClientTest;
 
-public class RecommenderClientTest {
-
-	private static final String HOST = "localhost";
-	public static final String NAME = JubaServer.NAME;
-	private static final double TIMEOUT_SEC = 10;
-
-	private static final String METHOD = "minhash";
-	private static final String CONVERTER = "{"
-			+ "\"string_filter_types\" : {}," + "\"string_filter_rules\" : [],"
-			+ "\"num_filter_types\" : {}," + "\"num_filter_rules\" : [],"
-			+ "\"string_types\" : {}," + "\"string_rules\" : [" + "{"
-			+ "\"key\" : \"*\"," + "\"type\" : \"str\","
-			+ "\"sample_weight\" : \"bin\"," + "\"global_weight\" : \"bin\""
-			+ "}" + "]," + "\"num_types\" : {}," + "\"num_rules\" : [" + "{"
-			+ "\"key\" : \"*\"," + "\"type\" : \"num\"" + "}" + "]" + "}";
-
+public class RecommenderClientTest extends JubatusClientTest {
 	private RecommenderClient client;
-	private JubaServer server;
+
+	public RecommenderClientTest() {
+		super(JubaServer.recommender);
+	}
 
 	@Before
 	public void setUp() throws Exception {
-		server = new JubaServer(Engine.recommender);
-		server.start();
-		client = new RecommenderClient(HOST, Engine.recommender.getPort(), TIMEOUT_SEC);
-		ConfigData config_data = new ConfigData();
-		config_data.method = METHOD;
-		config_data.converter = CONVERTER;
-		client.set_config(NAME, config_data);
+		server.start(server.getConfigPath());
+		client = new RecommenderClient(server.getHost(), server.getPort(),
+				TIMEOUT_SEC);
 	}
 
 	@After
@@ -50,24 +38,28 @@ public class RecommenderClientTest {
 	}
 
 	@Test
-	public void testGet_config() {
-		ConfigData config_data = client.get_config(NAME);
-		assertThat(config_data.method, is(METHOD));
-		assertThat(config_data.converter, is(CONVERTER));
+	public void testGet_config() throws IOException {
+		String config = client.get_config(NAME);
+		assertThat(formatAsJson(config),
+				is(formatAsJson(server.getConfigData())));
 	}
 
-        @Test
-        public void testDecode_row() {
-                update_row(1);
-                Datum datum = client.decode_row(NAME, Integer.toString(1));
-                assertDatum(generateDatum(), datum);
-        }
+	@Test
+	public void testUpdate_row() {
+		assertThat(client.update_row(NAME, Integer.toString(1), generateDatum()), is(true));
+	}
+
+	@Test
+	public void testDecode_row() {
+		update_row(1);
+		Datum datum = client.decode_row(NAME, Integer.toString(1));
+		assertDatum(generateDatum(), datum);
+	}
 
 	@Test
 	public void testClear_row() {
 		update_row(1);
-		// FIXME: return false
-		assertThat(client.clear_row(NAME, Integer.toString(1)), is(false));
+		assertThat(client.clear_row(NAME, Integer.toString(1)), is(true));
 
 		Datum datum = client.decode_row(NAME, Integer.toString(1));
 		assertThat(datum.string_values.size(), is(0));
@@ -77,11 +69,9 @@ public class RecommenderClientTest {
 	@Test
 	public void testClear_and_Get_all_rows() {
 		update_row(3);
-		// FIXME: return false
-		assertThat(client.clear(NAME), is(false));
-
-		List<String> rows = client.get_all_rows(NAME);
-		assertThat(rows.size(), is(0));
+		assertThat(client.get_all_rows(NAME).size(), is(3));
+		assertThat(client.clear(NAME), is(true));
+		assertThat(client.get_all_rows(NAME).size(), is(0));
 	}
 
 	@Test
@@ -94,9 +84,9 @@ public class RecommenderClientTest {
 	}
 
 	@Test
-	public void testComplete_row_from_data() {
+	public void testComplete_row_from_datum() {
 		update_row(1);
-		Datum result = client.complete_row_from_data(NAME, generateDatum());
+		Datum result = client.complete_row_from_datum(NAME, generateDatum());
 
 		Datum row = client.decode_row(NAME, Integer.toString(1));
 		assertDatum(row, result);
@@ -114,9 +104,9 @@ public class RecommenderClientTest {
 	}
 
 	@Test
-	public void testSimilar_row_from_data() {
+	public void testSimilar_row_from_datum() {
 		update_row(1);
-		List<TupleStringFloat> result = client.similar_row_from_data(NAME,
+		List<TupleStringFloat> result = client.similar_row_from_datum(NAME,
 				generateDatum(), 1);
 		assertThat(result, is(notNullValue()));
 		assertThat(result.size(), is(1));
@@ -125,15 +115,15 @@ public class RecommenderClientTest {
 	}
 
 	@Test
-	public void testSimilarity() {
-		assertThat(client.similarity(NAME, generateDatum(), generateDatum()),
+	public void testCalc_Similarity() {
+		assertThat(client.calc_similarity(NAME, generateDatum(), generateDatum()),
 				is(1f));
 	}
 
 	@Test
-	public void testL2norm() {
-		double norm = client.l2norm(NAME, generateDatum());
-                assertThat(norm, is(closeTo(19.874607, 0.00001)));
+	public void testCalc_L2norm() {
+		double norm = client.calc_l2norm(NAME, generateDatum());
+		assertThat(norm, is(closeTo(19.874607, 0.00001)));
 	}
 
 	@Test

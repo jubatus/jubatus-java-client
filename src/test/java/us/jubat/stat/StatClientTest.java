@@ -1,8 +1,11 @@
 package us.jubat.stat;
 
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
+import static org.hamcrest.Matchers.closeTo;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertThat;
 
+import java.io.IOException;
 import java.util.Map;
 
 import org.junit.After;
@@ -10,27 +13,19 @@ import org.junit.Before;
 import org.junit.Test;
 
 import us.jubat.testutil.JubaServer;
-import us.jubat.testutil.JubaServer.Engine;
+import us.jubat.testutil.JubatusClientTest;
 
-public class StatClientTest {
-
-	private static final String HOST = "localhost";
-	public static final String NAME = JubaServer.NAME;
-	private static final double TIMEOUT_SEC = 10;
-
-	private static final int WINDOW_SIZE = 100;
-
+public class StatClientTest extends JubatusClientTest {
 	private StatClient client;
-	private JubaServer server;
+
+	public StatClientTest() {
+		super(JubaServer.stat);
+	}
 
 	@Before
 	public void setUp() throws Exception {
-		server = new JubaServer(Engine.stat);
-		server.start();
-		client = new StatClient(HOST, Engine.stat.getPort(), TIMEOUT_SEC);
-		ConfigData config_data = new ConfigData();
-		config_data.window_size = WINDOW_SIZE;
-		client.set_config(NAME, config_data);
+		server.start(server.getConfigPath());
+		client = new StatClient(server.getHost(), server.getPort(), TIMEOUT_SEC);
 	}
 
 	@After
@@ -39,9 +34,10 @@ public class StatClientTest {
 	}
 
 	@Test
-	public void testGet_config() {
-		ConfigData config_data = client.get_config(NAME);
-		assertThat(config_data.window_size, is(WINDOW_SIZE));
+	public void testGet_config() throws IOException {
+		String config = client.get_config(NAME);
+		assertThat(formatAsJson(config),
+				is(formatAsJson(server.getConfigData())));
 	}
 
 	@Test
@@ -49,8 +45,7 @@ public class StatClientTest {
 		for (int i = 1; i <= 10; i++) {
 			String key = "key" + i;
 			for (int val = 1; val <= 50; val++) {
-				// FIXME: return false
-				assertThat(client.push(NAME, key, val), is(false));
+				assertThat(client.push(NAME, key, val), is(true));
 			}
 			assertThat(client.sum(NAME, key), is(1275.0));
 		}

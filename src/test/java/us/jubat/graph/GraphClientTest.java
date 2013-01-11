@@ -1,8 +1,12 @@
 package us.jubat.graph;
 
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
+import static org.junit.Assert.assertThat;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -13,27 +17,32 @@ import org.junit.Before;
 import org.junit.Test;
 
 import us.jubat.testutil.JubaServer;
-import us.jubat.testutil.JubaServer.Engine;
+import us.jubat.testutil.JubatusClientTest;
 
-public class GraphClientTest {
-
-	private static final String HOST = "localhost";
-	public static final String NAME = JubaServer.NAME;
-	private static final double TIMEOUT_SEC = 10;
-
+public class GraphClientTest extends JubatusClientTest {
 	private GraphClient client;
-	private JubaServer server;
+
+	public GraphClientTest() {
+		super(JubaServer.graph);
+	}
 
 	@Before
 	public void setUp() throws Exception {
-		server = new JubaServer(Engine.graph);
-		server.start();
-		client = new GraphClient(HOST, Engine.graph.getPort(), TIMEOUT_SEC);
+		server.start(server.getConfigPath());
+		client = new GraphClient(server.getHost(), server.getPort(),
+				TIMEOUT_SEC);
 	}
 
 	@After
 	public void tearDown() throws Exception {
 		server.stop();
+	}
+
+	@Test
+	public void testGet_config() throws IOException {
+		String config = client.get_config(NAME);
+		assertThat(formatAsJson(config),
+				is(formatAsJson(server.getConfigData())));
 	}
 
 	@Test
@@ -49,21 +58,21 @@ public class GraphClientTest {
 			String value = "value" + Integer.toString(i);
 			property.put(key, value);
 		}
-		assertThat(client.update_node(NAME, nid, property), is(0));
+		assertThat(client.update_node(NAME, nid, property), is(true));
 
 		// get
-		NodeInfo node_info = client.get_node(NAME, nid);
-		assertThat(node_info.in_edges, is(notNullValue()));
-		assertThat(node_info.in_edges.size(), is(0));
-		assertThat(node_info.out_edges, is(notNullValue()));
-		assertThat(node_info.out_edges.size(), is(0));
-		assertThat(node_info.p, is(property));
+		Node node = client.get_node(NAME, nid);
+		assertThat(node.in_edges, is(notNullValue()));
+		assertThat(node.in_edges.size(), is(0));
+		assertThat(node.out_edges, is(notNullValue()));
+		assertThat(node.out_edges.size(), is(0));
+		assertThat(node.property, is(property));
 
 		// create here
-		assertThat(client.create_node_here(NAME, nid + 1), is(0));
+		assertThat(client.create_node_here(NAME, nid + 1), is(true));
 
 		// remove
-		assertThat(client.remove_node(NAME, nid), is(0));
+		assertThat(client.remove_node(NAME, nid), is(true));
 	}
 
 	@Test
@@ -79,31 +88,31 @@ public class GraphClientTest {
 		}
 		client.update_node(NAME, src, property);
 		client.update_node(NAME, tgt, property);
-		EdgeInfo ei = new EdgeInfo();
-		ei.src = src;
-		ei.tgt = tgt;
-		ei.p = property;
-		long eid = client.create_edge(NAME, src, ei);
+		Edge e = new Edge();
+		e.source = src;
+		e.target = tgt;
+		e.property = property;
+		long eid = client.create_edge(NAME, src, e);
 		assertThat(Long.valueOf(eid), is(2L));
 
 		// update
-		assertThat(client.update_edge(NAME, src, eid, ei), is(0));
+		assertThat(client.update_edge(NAME, src, eid, e), is(true));
 
 		// get
-		EdgeInfo edge_info = client.get_edge(NAME, tgt, eid);
-		assertThat(edge_info.src, is(src));
-		assertThat(edge_info.tgt, is(tgt));
-		assertThat(edge_info.p, is(property));
+		Edge edge = client.get_edge(NAME, tgt, eid);
+		assertThat(edge.source, is(src));
+		assertThat(edge.target, is(tgt));
+		assertThat(edge.property, is(property));
 
 		// create here
-		assertThat(client.create_edge_here(NAME, eid + 1, ei), is(0));
+		assertThat(client.create_edge_here(NAME, eid + 1, e), is(true));
 
 		// remove
-		assertThat(client.remove_edge(NAME, src, eid), is(0));
+		assertThat(client.remove_edge(NAME, src, eid), is(true));
 	}
 
 	@Test
-	public void testCentrality() {
+	public void testGet_centrality() {
 		PresetQuery q = new PresetQuery();
 		q.edge_query = new ArrayList<TupleStringString>();
 		q.node_query = new ArrayList<TupleStringString>();
@@ -112,7 +121,7 @@ public class GraphClientTest {
 		String nid = client.create_node(NAME);
 		client.update_index(NAME);
 
-		assertThat(client.centrality(NAME, nid, 0, q), is(1.0));
+		assertThat(client.get_centrality(NAME, nid, 0, q), is(1.0));
 	}
 
 	@Test
@@ -153,7 +162,7 @@ public class GraphClientTest {
 	}
 
 	@Test
-	public void testShortest_path() {
+	public void testGet_shortest_path() {
 		PresetQuery q = new PresetQuery();
 		q.node_query = new ArrayList<TupleStringString>();
 		q.edge_query = new ArrayList<TupleStringString>();
@@ -162,25 +171,25 @@ public class GraphClientTest {
 
 		String src = client.create_node(NAME);
 		String tgt = client.create_node(NAME);
-		ShortestPathReq r = new ShortestPathReq();
-		r.src = src;
-		r.tgt = tgt;
-		r.q = q;
+		ShortestPathQuery r = new ShortestPathQuery();
+		r.source = src;
+		r.target = tgt;
+		r.query = q;
 		r.max_hop = 0;
 
-		List<String> result = client.shortest_path(HOST, r);
+		List<String> result = client.get_shortest_path(NAME, r);
 		assertThat(result, is(notNullValue()));
 		assertThat(result.size(), is(0));
 	}
 
 	@Test
 	public void testUpdate_index() {
-		assertThat(client.update_index(NAME), is(0));
+		assertThat(client.update_index(NAME), is(true));
 	}
 
 	@Test
 	public void testClear() {
-		assertThat(client.clear(NAME), is(0));
+		assertThat(client.clear(NAME), is(true));
 	}
 
 	@Test
@@ -201,7 +210,7 @@ public class GraphClientTest {
 	@Test
 	public void testGlobal_node() {
 		String nid = client.create_node(NAME);
-		assertThat(client.remove_global_node(NAME, nid), is(0));
+		assertThat(client.remove_global_node(NAME, nid), is(true));
 	}
 
 }
