@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public enum JubaServer {
@@ -37,17 +38,18 @@ public enum JubaServer {
 	}
 
 	public void stop() throws IOException, InterruptedException {
-		stdout_reader.dump();
 		process.getInputStream().close();
 		process.getErrorStream().close();
 		process.getOutputStream().close();
 		process.destroy();
 		process.waitFor();
+		stdout_reader.dump();
 	}
 
 	private class StdoutReader extends Thread {
-		private BufferedReader br;
-		private List<String> stdout = new ArrayList<String>();
+		private final BufferedReader br;
+		private final List<String> stdout = Collections
+				.synchronizedList(new ArrayList<String>());
 
 		public StdoutReader(InputStream is) {
 			br = new BufferedReader(new InputStreamReader(is));
@@ -71,8 +73,10 @@ public enum JubaServer {
 
 		// for debug
 		public void dump() {
-			for (String line : stdout) {
-				System.out.println(line);
+			synchronized (stdout) {
+				for (String line : stdout) {
+					System.out.println(line);
+				}
 			}
 		}
 	}
