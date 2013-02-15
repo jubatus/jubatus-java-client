@@ -43,8 +43,8 @@ git clone https://github.com/rimms/msgpack-haskell.git "${MPIDL_JUBATUS_DIR}"
 build_mpidl_and_generate_code "${MPIDL_JUBATUS_DIR}" "for_jubatus"
 
 # generate patch
-diff -uNr ${MPIDL_ORIGIN_DIR}/src ${MPIDL_JUBATUS_DIR}/src > patch.tmp
-sed -e "s#${MPIDL_ORIGIN_DIR}/##g" patch.tmp | sed -e "s#${MPIDL_JUBATUS_DIR}/##g" | sed "/^diff /d" > msgpack-idl.patch
+diff -uNr ${MPIDL_ORIGIN_DIR}/src ${MPIDL_JUBATUS_DIR}/src | \
+    sed -e "s#${MPIDL_ORIGIN_DIR}/##g" -e "s#${MPIDL_JUBATUS_DIR}/##g" | sed "/^diff /d" > msgpack-idl.patch
 
 rm -f patch.tmp
 rm -rf "${JUBATUS_DIR}"
