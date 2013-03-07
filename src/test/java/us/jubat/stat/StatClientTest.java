@@ -2,6 +2,7 @@ package us.jubat.stat;
 
 import static org.hamcrest.Matchers.closeTo;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
@@ -122,4 +123,15 @@ public class StatClientTest extends JubatusClientTest {
 		assertThat(status.size(), is(1));
 	}
 
+	@Test
+	public void testClear() {
+		client.push(NAME, "key", 1);
+		assertThat(client.max(NAME, "key"), is(1.0));
+
+		client.clear(NAME);
+
+		client.push(NAME, "key", 1);
+		assertThat(client.max(NAME, "key"), is(not(2.0)));
+		assertThat(client.max(NAME, "key"), is(1.0));
+	}
 }
