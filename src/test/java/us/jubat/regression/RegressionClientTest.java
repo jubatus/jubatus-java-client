@@ -2,6 +2,7 @@ package us.jubat.regression;
 
 import static org.hamcrest.Matchers.closeTo;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
@@ -97,5 +98,44 @@ public class RegressionClientTest extends JubatusClientTest {
 		Map<String, Map<String, String>> status = client.get_status(NAME);
 		assertThat(status, is(notNullValue()));
 		assertThat(status.size(), is(1));
+	}
+
+	@Test
+	public void testClear() {
+		Datum datum = new Datum();
+
+		List<TupleStringString> string_values = new ArrayList<TupleStringString>();
+		TupleStringString string_value = new TupleStringString();
+		string_value.first = "key/str";
+		string_value.second = "val/str";
+		string_values.add(string_value);
+		datum.string_values = string_values;
+
+		List<TupleStringDouble> num_values = new ArrayList<TupleStringDouble>();
+		TupleStringDouble num_value = new TupleStringDouble();
+		num_value.first = "key/str";
+		num_value.second = 1;
+		num_values.add(num_value);
+		datum.num_values = num_values;
+
+		TupleFloatDatum train_datum = new TupleFloatDatum();
+		train_datum.first = 1f;
+		train_datum.second = datum;
+
+		List<TupleFloatDatum> train_data = new ArrayList<TupleFloatDatum>();
+		train_data.add(train_datum);
+
+		client.train(NAME, train_data);
+
+		Map<String, Map<String, String>> before = client.get_status(NAME);
+		String node_name = (String) before.keySet().iterator().next();
+		assertThat(before.get(node_name).get("num_classes"), is(not("0")));
+		assertThat(before.get(node_name).get("num_features"), is(not("0")));
+
+		client.clear(NAME);
+
+		Map<String, Map<String, String>> after = client.get_status(NAME);
+		assertThat(after.get(node_name).get("num_classes"), is("0"));
+		assertThat(after.get(node_name).get("num_features"), is("0"));
 	}
 }
