@@ -1,5 +1,6 @@
 package us.jubat.graph;
 
+import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
@@ -15,6 +16,8 @@ import java.util.Map;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import org.msgpack.rpc.Client;
 
 import us.jubat.testutil.JubaServer;
 import us.jubat.testutil.JubatusClientTest;
@@ -213,4 +216,9 @@ public class GraphClientTest extends JubatusClientTest {
 		assertThat(client.remove_global_node(NAME, nid), is(true));
 	}
 
+	@Test
+	public void testGet_client() {
+		assertThat(client.get_client(), is(instanceOf(Client.class)));
+		assertThat(client.get_client(), is(notNullValue()));
+	}
 }

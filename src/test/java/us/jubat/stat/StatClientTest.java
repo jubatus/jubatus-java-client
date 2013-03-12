@@ -1,6 +1,7 @@
 package us.jubat.stat;
 
 import static org.hamcrest.Matchers.closeTo;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
@@ -12,6 +13,8 @@ import java.util.Map;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import org.msgpack.rpc.Client;
 
 import us.jubat.testutil.JubaServer;
 import us.jubat.testutil.JubatusClientTest;
@@ -133,5 +136,11 @@ public class StatClientTest extends JubatusClientTest {
 		client.push(NAME, "key", 1);
 		assertThat(client.max(NAME, "key"), is(not(2.0)));
 		assertThat(client.max(NAME, "key"), is(1.0));
+	}
+
+	@Test
+	public void testGet_client() {
+		assertThat(client.get_client(), is(instanceOf(Client.class)));
+		assertThat(client.get_client(), is(notNullValue()));
 	}
 }

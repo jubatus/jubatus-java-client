@@ -1,5 +1,6 @@
 package us.jubat.anomaly;
 
+import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
@@ -12,6 +13,8 @@ import java.util.Map;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import org.msgpack.rpc.Client;
 
 import us.jubat.testutil.JubaServer;
 import us.jubat.testutil.JubatusClientTest;
@@ -92,6 +95,12 @@ public class AnomalyClientTest extends JubatusClientTest {
 		Map<String, Map<String, String>> status = client.get_status(NAME);
 		assertThat(status, is(notNullValue()));
 		assertThat(status.size(), is(1));
+	}
+
+	@Test
+	public void testGet_client() {
+		assertThat(client.get_client(), is(instanceOf(Client.class)));
+		assertThat(client.get_client(), is(notNullValue()));
 	}
 
 	/**
