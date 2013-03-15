@@ -8,7 +8,7 @@ JUBATUS_BRANCH="master"
 
 build_mpidl_and_generate_code() {
   TARGET_DIR="${1}"
-  pushd "${TARGET_DIR}/msgpack-idl"
+  pushd "${BASE_DIR}/${TARGET_DIR}/msgpack-idl"
   if [ -n "${2}" ]; then
     git checkout "${2}"
   fi
@@ -16,10 +16,12 @@ build_mpidl_and_generate_code() {
   cabal build
   popd
 
-  for IDL in "${JUBATUS_DIR}/src/server"/*.idl; do
+  pushd "${BASE_DIR}/${JUBATUS_DIR}/src/server"
+  for IDL in *.idl; do
     NAMESPACE="us.jubat.$(basename "${IDL}" ".idl")"
-    ${TARGET_DIR}/msgpack-idl/dist/build/mpidl/mpidl java "${IDL}" -p "${NAMESPACE}" -o "${TARGET_DIR}/src/main/java"
+    ${BASE_DIR}/${TARGET_DIR}/msgpack-idl/dist/build/mpidl/mpidl java "${IDL}" -p "${NAMESPACE}" -o "${BASE_DIR}/${TARGET_DIR}/src/main/java"
   done
+  popd
 }
 
 

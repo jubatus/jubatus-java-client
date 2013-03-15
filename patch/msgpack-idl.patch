@@ -1,8 +1,8 @@
---- src/main/java/Tuple.java	2013-02-13 14:50:24.305042539 +0900
+--- src/main/java/Tuple.java	2013-03-12 13:22:08.429042539 +0900
 +++ src/main/java/Tuple.java	1970-01-01 09:00:00.000000000 +0900
 @@ -1,12 +0,0 @@
 -
--// This file is auto-generated from jubatus/src/server/stat.idl
+-// This file is auto-generated from stat.idl
 -// *** DO NOT EDIT ***
 -
 -
@@ -13,8 +13,8 @@
 -};
 -
 -
---- src/main/java/us/jubat/anomaly/AnomalyClient.java	2013-02-13 14:50:24.249042541 +0900
-+++ src/main/java/us/jubat/anomaly/AnomalyClient.java	2013-02-13 14:52:30.789035263 +0900
+--- src/main/java/us/jubat/anomaly/AnomalyClient.java	2013-03-12 13:22:08.377042540 +0900
++++ src/main/java/us/jubat/anomaly/AnomalyClient.java	2013-03-12 13:22:44.353042539 +0900
 @@ -5,8 +5,8 @@
  
  package us.jubat.anomaly;
@@ -69,7 +69,7 @@
      return iface_.get_all_rows(name);
    }
  
-@@ -68,7 +69,7 @@
+@@ -68,10 +69,14 @@
      return iface_.load(name, id);
    }
  
@@ -78,8 +78,15 @@
      return iface_.get_status(name);
    }
  
---- src/main/java/us/jubat/anomaly/Datum.java	2013-02-13 14:50:24.253042541 +0900
-+++ src/main/java/us/jubat/anomaly/Datum.java	2013-02-13 14:52:30.789035263 +0900
++  public Client get_client() {
++    return c_;
++  }
++
+   private Client c_;
+   private RPCInterface iface_;
+ };
+--- src/main/java/us/jubat/anomaly/Datum.java	2013-03-12 13:22:08.377042540 +0900
++++ src/main/java/us/jubat/anomaly/Datum.java	2013-03-12 13:22:44.353042539 +0900
 @@ -6,15 +6,15 @@
  package us.jubat.anomaly;
  
@@ -100,10 +107,10 @@
    public Datum() {
    
 --- src/main/java/us/jubat/anomaly/TupleStringDouble.java	1970-01-01 09:00:00.000000000 +0900
-+++ src/main/java/us/jubat/anomaly/TupleStringDouble.java	2013-02-13 14:52:30.789035211 +0900
++++ src/main/java/us/jubat/anomaly/TupleStringDouble.java	2013-03-12 13:22:44.353042539 +0900
 @@ -0,0 +1,17 @@
 +
-+// This file is auto-generated from jubatus/src/server/anomaly.idl
++// This file is auto-generated from anomaly.idl
 +// *** DO NOT EDIT ***
 +
 +
@@ -120,10 +127,10 @@
 + 
 +
 --- src/main/java/us/jubat/anomaly/TupleStringFloat.java	1970-01-01 09:00:00.000000000 +0900
-+++ src/main/java/us/jubat/anomaly/TupleStringFloat.java	2013-02-13 14:52:30.789035211 +0900
++++ src/main/java/us/jubat/anomaly/TupleStringFloat.java	2013-03-12 13:22:44.353042539 +0900
 @@ -0,0 +1,17 @@
 +
-+// This file is auto-generated from jubatus/src/server/anomaly.idl
++// This file is auto-generated from anomaly.idl
 +// *** DO NOT EDIT ***
 +
 +
@@ -140,10 +147,10 @@
 + 
 +
 --- src/main/java/us/jubat/anomaly/TupleStringString.java	1970-01-01 09:00:00.000000000 +0900
-+++ src/main/java/us/jubat/anomaly/TupleStringString.java	2013-02-13 14:52:30.789035211 +0900
++++ src/main/java/us/jubat/anomaly/TupleStringString.java	2013-03-12 13:22:44.353042539 +0900
 @@ -0,0 +1,17 @@
 +
-+// This file is auto-generated from jubatus/src/server/anomaly.idl
++// This file is auto-generated from anomaly.idl
 +// *** DO NOT EDIT ***
 +
 +
@@ -159,8 +166,8 @@
 +};
 + 
 +
---- src/main/java/us/jubat/classifier/ClassifierClient.java	2013-02-13 14:50:24.257042540 +0900
-+++ src/main/java/us/jubat/classifier/ClassifierClient.java	2013-02-13 14:52:30.801036665 +0900
+--- src/main/java/us/jubat/classifier/ClassifierClient.java	2013-03-12 13:22:08.385042539 +0900
++++ src/main/java/us/jubat/classifier/ClassifierClient.java	2013-03-12 13:22:44.361042540 +0900
 @@ -5,8 +5,8 @@
  
  package us.jubat.classifier;
@@ -172,7 +179,7 @@
  import org.msgpack.rpc.Client;
  import org.msgpack.rpc.loop.EventLoop;
  
-@@ -14,16 +14,17 @@
+@@ -14,17 +14,18 @@
    public ClassifierClient(String host, int port, double timeout_sec) throws Exception {
      EventLoop loop = EventLoop.defaultEventLoop();
      c_ = new Client(host, port, loop);
@@ -186,6 +193,7 @@
 -    ArrayList<ArrayList<EstimateResult  > > classify(String name, ArrayList<Datum  > data);
 +    int train(String name, List<TupleStringDatum > data);
 +    List<List<EstimateResult  > > classify(String name, List<Datum  > data);
+     boolean clear(String name);
      boolean save(String name, String id);
      boolean load(String name, String id);
 -    HashMap<String, HashMap<String, String > > get_status(String name);
@@ -193,7 +201,7 @@
  
    }
  
-@@ -32,11 +33,11 @@
+@@ -33,11 +34,11 @@
      return iface_.get_config(name);
    }
  
@@ -207,7 +215,7 @@
      return iface_.classify(name, data);
    }
  
-@@ -48,7 +49,7 @@
+@@ -53,10 +54,14 @@
      return iface_.load(name, id);
    }
  
@@ -216,8 +224,15 @@
      return iface_.get_status(name);
    }
  
---- src/main/java/us/jubat/classifier/Datum.java	2013-02-13 14:50:24.257042540 +0900
-+++ src/main/java/us/jubat/classifier/Datum.java	2013-02-13 14:52:30.801036665 +0900
++  public Client get_client() {
++    return c_;
++  }
++
+   private Client c_;
+   private RPCInterface iface_;
+ };
+--- src/main/java/us/jubat/classifier/Datum.java	2013-03-12 13:22:08.385042539 +0900
++++ src/main/java/us/jubat/classifier/Datum.java	2013-03-12 13:22:44.361042540 +0900
 @@ -6,15 +6,15 @@
  package us.jubat.classifier;
  
@@ -238,10 +253,10 @@
    public Datum() {
    
 --- src/main/java/us/jubat/classifier/TupleStringDatum.java	1970-01-01 09:00:00.000000000 +0900
-+++ src/main/java/us/jubat/classifier/TupleStringDatum.java	2013-02-13 14:52:30.801036665 +0900
++++ src/main/java/us/jubat/classifier/TupleStringDatum.java	2013-03-12 13:22:44.361042540 +0900
 @@ -0,0 +1,17 @@
 +
-+// This file is auto-generated from jubatus/src/server/classifier.idl
++// This file is auto-generated from classifier.idl
 +// *** DO NOT EDIT ***
 +
 +
@@ -258,10 +273,10 @@
 + 
 +
 --- src/main/java/us/jubat/classifier/TupleStringDouble.java	1970-01-01 09:00:00.000000000 +0900
-+++ src/main/java/us/jubat/classifier/TupleStringDouble.java	2013-02-13 14:52:30.801036665 +0900
++++ src/main/java/us/jubat/classifier/TupleStringDouble.java	2013-03-12 13:22:44.361042540 +0900
 @@ -0,0 +1,17 @@
 +
-+// This file is auto-generated from jubatus/src/server/classifier.idl
++// This file is auto-generated from classifier.idl
 +// *** DO NOT EDIT ***
 +
 +
@@ -278,10 +293,10 @@
 + 
 +
 --- src/main/java/us/jubat/classifier/TupleStringString.java	1970-01-01 09:00:00.000000000 +0900
-+++ src/main/java/us/jubat/classifier/TupleStringString.java	2013-02-13 14:52:30.801036665 +0900
++++ src/main/java/us/jubat/classifier/TupleStringString.java	2013-03-12 13:22:44.361042540 +0900
 @@ -0,0 +1,17 @@
 +
-+// This file is auto-generated from jubatus/src/server/classifier.idl
++// This file is auto-generated from classifier.idl
 +// *** DO NOT EDIT ***
 +
 +
@@ -297,8 +312,8 @@
 +};
 + 
 +
---- src/main/java/us/jubat/graph/Edge.java	2013-02-13 14:50:24.273042540 +0900
-+++ src/main/java/us/jubat/graph/Edge.java	2013-02-13 14:52:30.813037793 +0900
+--- src/main/java/us/jubat/graph/Edge.java	2013-03-12 13:22:08.405042539 +0900
++++ src/main/java/us/jubat/graph/Edge.java	2013-03-12 13:22:44.373042540 +0900
 @@ -5,7 +5,7 @@
  
  package us.jubat.graph;
@@ -317,8 +332,8 @@
    public String source;
    public String target;
  
---- src/main/java/us/jubat/graph/GraphClient.java	2013-02-13 14:50:24.273042540 +0900
-+++ src/main/java/us/jubat/graph/GraphClient.java	2013-02-13 14:52:30.813037793 +0900
+--- src/main/java/us/jubat/graph/GraphClient.java	2013-03-12 13:22:08.405042539 +0900
++++ src/main/java/us/jubat/graph/GraphClient.java	2013-03-12 13:22:44.373042540 +0900
 @@ -5,8 +5,8 @@
  
  package us.jubat.graph;
@@ -391,8 +406,19 @@
      return iface_.get_status(name);
    }
  
---- src/main/java/us/jubat/graph/Node.java	2013-02-13 14:50:24.273042540 +0900
-+++ src/main/java/us/jubat/graph/Node.java	2013-02-13 14:52:30.813037793 +0900
+@@ -137,6 +138,10 @@
+     return iface_.create_edge_here(name, edge_id, e);
+   }
+ 
++  public Client get_client() {
++    return c_;
++  }
++
+   private Client c_;
+   private RPCInterface iface_;
+ };
+--- src/main/java/us/jubat/graph/Node.java	2013-03-12 13:22:08.405042539 +0900
++++ src/main/java/us/jubat/graph/Node.java	2013-03-12 13:22:44.373042540 +0900
 @@ -5,17 +5,17 @@
  
  package us.jubat.graph;
@@ -416,8 +442,8 @@
  
    public Node() {
    
---- src/main/java/us/jubat/graph/PresetQuery.java	2013-02-13 14:50:24.273042540 +0900
-+++ src/main/java/us/jubat/graph/PresetQuery.java	2013-02-13 14:52:30.813037793 +0900
+--- src/main/java/us/jubat/graph/PresetQuery.java	2013-03-12 13:22:08.405042539 +0900
++++ src/main/java/us/jubat/graph/PresetQuery.java	2013-03-12 13:22:44.373042540 +0900
 @@ -6,15 +6,15 @@
  package us.jubat.graph;
  
@@ -438,10 +464,10 @@
    public PresetQuery() {
    
 --- src/main/java/us/jubat/graph/TupleStringString.java	1970-01-01 09:00:00.000000000 +0900
-+++ src/main/java/us/jubat/graph/TupleStringString.java	2013-02-13 14:52:30.813037793 +0900
++++ src/main/java/us/jubat/graph/TupleStringString.java	2013-03-12 13:22:44.373042540 +0900
 @@ -0,0 +1,17 @@
 +
-+// This file is auto-generated from jubatus/src/server/graph.idl
++// This file is auto-generated from graph.idl
 +// *** DO NOT EDIT ***
 +
 +
@@ -457,8 +483,8 @@
 +};
 + 
 +
---- src/main/java/us/jubat/recommender/Datum.java	2013-02-13 14:50:24.289042540 +0900
-+++ src/main/java/us/jubat/recommender/Datum.java	2013-02-13 14:52:30.821038295 +0900
+--- src/main/java/us/jubat/recommender/Datum.java	2013-03-12 13:22:08.413042539 +0900
++++ src/main/java/us/jubat/recommender/Datum.java	2013-03-12 13:22:44.381042539 +0900
 @@ -6,15 +6,15 @@
  package us.jubat.recommender;
  
@@ -478,8 +504,8 @@
  
    public Datum() {
    
---- src/main/java/us/jubat/recommender/RecommenderClient.java	2013-02-13 14:50:24.289042540 +0900
-+++ src/main/java/us/jubat/recommender/RecommenderClient.java	2013-02-13 14:52:30.821038295 +0900
+--- src/main/java/us/jubat/recommender/RecommenderClient.java	2013-03-12 13:22:08.413042539 +0900
++++ src/main/java/us/jubat/recommender/RecommenderClient.java	2013-03-12 13:22:44.381042539 +0900
 @@ -5,8 +5,8 @@
  
  package us.jubat.recommender;
@@ -542,7 +568,7 @@
      return iface_.get_all_rows(name);
    }
  
-@@ -93,7 +94,7 @@
+@@ -93,10 +94,14 @@
      return iface_.load(name, id);
    }
  
@@ -551,11 +577,18 @@
      return iface_.get_status(name);
    }
  
++  public Client get_client() {
++    return c_;
++  }
++
+   private Client c_;
+   private RPCInterface iface_;
+ };
 --- src/main/java/us/jubat/recommender/TupleStringDouble.java	1970-01-01 09:00:00.000000000 +0900
-+++ src/main/java/us/jubat/recommender/TupleStringDouble.java	2013-02-13 14:52:30.821038295 +0900
++++ src/main/java/us/jubat/recommender/TupleStringDouble.java	2013-03-12 13:22:44.381042539 +0900
 @@ -0,0 +1,17 @@
 +
-+// This file is auto-generated from jubatus/src/server/recommender.idl
++// This file is auto-generated from recommender.idl
 +// *** DO NOT EDIT ***
 +
 +
@@ -572,10 +605,10 @@
 + 
 +
 --- src/main/java/us/jubat/recommender/TupleStringFloat.java	1970-01-01 09:00:00.000000000 +0900
-+++ src/main/java/us/jubat/recommender/TupleStringFloat.java	2013-02-13 14:52:30.821038295 +0900
++++ src/main/java/us/jubat/recommender/TupleStringFloat.java	2013-03-12 13:22:44.381042539 +0900
 @@ -0,0 +1,17 @@
 +
-+// This file is auto-generated from jubatus/src/server/recommender.idl
++// This file is auto-generated from recommender.idl
 +// *** DO NOT EDIT ***
 +
 +
@@ -592,10 +625,10 @@
 + 
 +
 --- src/main/java/us/jubat/recommender/TupleStringString.java	1970-01-01 09:00:00.000000000 +0900
-+++ src/main/java/us/jubat/recommender/TupleStringString.java	2013-02-13 14:52:30.821038295 +0900
++++ src/main/java/us/jubat/recommender/TupleStringString.java	2013-03-12 13:22:44.381042539 +0900
 @@ -0,0 +1,17 @@
 +
-+// This file is auto-generated from jubatus/src/server/recommender.idl
++// This file is auto-generated from recommender.idl
 +// *** DO NOT EDIT ***
 +
 +
@@ -611,8 +644,8 @@
 +};
 + 
 +
---- src/main/java/us/jubat/regression/Datum.java	2013-02-13 14:50:24.301042538 +0900
-+++ src/main/java/us/jubat/regression/Datum.java	2013-02-13 14:52:30.829039151 +0900
+--- src/main/java/us/jubat/regression/Datum.java	2013-03-12 13:22:08.421042540 +0900
++++ src/main/java/us/jubat/regression/Datum.java	2013-03-12 13:22:44.389042540 +0900
 @@ -6,15 +6,15 @@
  package us.jubat.regression;
  
@@ -632,8 +665,8 @@
  
    public Datum() {
    
---- src/main/java/us/jubat/regression/RegressionClient.java	2013-02-13 14:50:24.301042538 +0900
-+++ src/main/java/us/jubat/regression/RegressionClient.java	2013-02-13 14:52:30.825038654 +0900
+--- src/main/java/us/jubat/regression/RegressionClient.java	2013-03-12 13:22:08.421042540 +0900
++++ src/main/java/us/jubat/regression/RegressionClient.java	2013-03-12 13:22:44.389042540 +0900
 @@ -5,8 +5,8 @@
  
  package us.jubat.regression;
@@ -645,7 +678,7 @@
  import org.msgpack.rpc.Client;
  import org.msgpack.rpc.loop.EventLoop;
  
-@@ -14,16 +14,17 @@
+@@ -14,17 +14,18 @@
    public RegressionClient(String host, int port, double timeout_sec) throws Exception {
      EventLoop loop = EventLoop.defaultEventLoop();
      c_ = new Client(host, port, loop);
@@ -659,6 +692,7 @@
 -    ArrayList<Float > estimate(String name, ArrayList<Datum  > estimate_data);
 +    int train(String name, List<TupleFloatDatum > train_data);
 +    List<Float > estimate(String name, List<Datum  > estimate_data);
+     boolean clear(String name);
      boolean save(String name, String id);
      boolean load(String name, String id);
 -    HashMap<String, HashMap<String, String > > get_status(String name);
@@ -666,7 +700,7 @@
  
    }
  
-@@ -32,11 +33,11 @@
+@@ -33,11 +34,11 @@
      return iface_.get_config(name);
    }
  
@@ -680,7 +714,7 @@
      return iface_.estimate(name, estimate_data);
    }
  
-@@ -48,7 +49,7 @@
+@@ -53,10 +54,14 @@
      return iface_.load(name, id);
    }
  
@@ -689,11 +723,18 @@
      return iface_.get_status(name);
    }
  
++  public Client get_client() {
++    return c_;
++  }
++
+   private Client c_;
+   private RPCInterface iface_;
+ };
 --- src/main/java/us/jubat/regression/TupleFloatDatum.java	1970-01-01 09:00:00.000000000 +0900
-+++ src/main/java/us/jubat/regression/TupleFloatDatum.java	2013-02-13 14:52:30.825038654 +0900
++++ src/main/java/us/jubat/regression/TupleFloatDatum.java	2013-03-12 13:22:44.389042540 +0900
 @@ -0,0 +1,17 @@
 +
-+// This file is auto-generated from jubatus/src/server/regression.idl
++// This file is auto-generated from regression.idl
 +// *** DO NOT EDIT ***
 +
 +
@@ -710,10 +751,10 @@
 + 
 +
 --- src/main/java/us/jubat/regression/TupleStringDouble.java	1970-01-01 09:00:00.000000000 +0900
-+++ src/main/java/us/jubat/regression/TupleStringDouble.java	2013-02-13 14:52:30.825038654 +0900
++++ src/main/java/us/jubat/regression/TupleStringDouble.java	2013-03-12 13:22:44.389042540 +0900
 @@ -0,0 +1,17 @@
 +
-+// This file is auto-generated from jubatus/src/server/regression.idl
++// This file is auto-generated from regression.idl
 +// *** DO NOT EDIT ***
 +
 +
@@ -730,10 +771,10 @@
 + 
 +
 --- src/main/java/us/jubat/regression/TupleStringString.java	1970-01-01 09:00:00.000000000 +0900
-+++ src/main/java/us/jubat/regression/TupleStringString.java	2013-02-13 14:52:30.825038654 +0900
++++ src/main/java/us/jubat/regression/TupleStringString.java	2013-03-12 13:22:44.389042540 +0900
 @@ -0,0 +1,17 @@
 +
-+// This file is auto-generated from jubatus/src/server/regression.idl
++// This file is auto-generated from regression.idl
 +// *** DO NOT EDIT ***
 +
 +
@@ -749,8 +790,8 @@
 +};
 + 
 +
---- src/main/java/us/jubat/stat/StatClient.java	2013-02-13 14:50:24.305042539 +0900
-+++ src/main/java/us/jubat/stat/StatClient.java	2013-02-13 14:52:30.833039644 +0900
+--- src/main/java/us/jubat/stat/StatClient.java	2013-03-12 13:22:08.429042539 +0900
++++ src/main/java/us/jubat/stat/StatClient.java	2013-03-12 13:22:44.397042539 +0900
 @@ -5,7 +5,7 @@
  
  package us.jubat.stat;
@@ -768,8 +809,8 @@
      iface_ = c_.proxy(RPCInterface.class);
    }
  
-@@ -28,7 +29,7 @@
-     double moment(String name, String key, int degree, double center);
+@@ -29,7 +30,7 @@
+     boolean clear(String name);
      boolean save(String name, String id);
      boolean load(String name, String id);
 -    HashMap<String, HashMap<String, String > > get_status(String name);
@@ -777,7 +818,7 @@
  
    }
  
-@@ -73,7 +74,7 @@
+@@ -78,10 +79,14 @@
      return iface_.load(name, id);
    }
  
@@ -786,3 +827,10 @@
      return iface_.get_status(name);
    }
  
++  public Client get_client() {
++    return c_;
++  }
++
+   private Client c_;
+   private RPCInterface iface_;
+ };

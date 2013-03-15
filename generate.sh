@@ -1,8 +1,8 @@
 #!/bin/bash -ue
 
-JUBATUS_DIR="jubatus"
+JUBATUS_DIR="jubatus-generate"
 JUBATUS_BRANCH="master"
-CLIENT_DIR="$(dirname "${0}")"
+CLIENT_DIR="$(cd $(dirname ${0}) && echo ${PWD})"
 
 [ $# -eq 0 ] || JUBATUS_BRANCH="${1}"
 
@@ -14,13 +14,15 @@ popd
 
 # Java
 rm -rf "${CLIENT_DIR}/src/main/java/"*
-for IDL in "${JUBATUS_DIR}/src/server"/*.idl; do
+pushd "${JUBATUS_DIR}/src/server"
+for IDL in *.idl; do
   NAMESPACE="us.jubat.$(basename "${IDL}" ".idl")"
   mpidl java "${IDL}" -p "${NAMESPACE}" -o "${CLIENT_DIR}/src/main/java"
 done
+popd
 
 for PATCH in "${CLIENT_DIR}/patch"/*.patch; do
-  patch -p0 < "${PATCH}"
+  patch --no-backup-if-mismatch -p0 < "${PATCH}"
 done
 
 rm -rf "${JUBATUS_DIR}"

@@ -50,7 +50,8 @@ git add src/main/*
 git commit -a -m "generate code"
 
 # release
-mvn release:prepare -DreleaseVersion="${VERSION}" -DscmCommentPrefix="" -DtagNameFormat="@{project.version}"
+BASEPORT="22200"  # avoid confriction with Jenkins
+mvn release:prepare -DreleaseVersion="${VERSION}" -DscmCommentPrefix="" -DtagNameFormat="@{project.version}" -Darguments="-Djubatus.baseport=${BASEPORT}"
 mvn release:perform
 
 # remove generated code
