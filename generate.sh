@@ -14,7 +14,7 @@ popd
 
 # Java
 rm -rf "${CLIENT_DIR}/src/main/java/"*
-pushd "${JUBATUS_DIR}/src/server"
+pushd "${JUBATUS_DIR}/jubatus/server/server"
 for IDL in *.idl; do
   NAMESPACE="us.jubat.$(basename "${IDL}" ".idl")"
   mpidl java "${IDL}" -p "${NAMESPACE}" -o "${CLIENT_DIR}/src/main/java"
