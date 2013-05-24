@@ -95,8 +95,9 @@ public class StatClientTest extends JubatusClientTest {
 			for (int val = 1; val <= 50; val++) {
 				client.push(NAME, key, val);
 			}
-			// FIXME: [mixable] got 0.0
-			assertThat(client.entropy(NAME, key), is(0.0));
+			double prob = 1.0 / i;
+			double entropy = -1 * i * prob * Math.log(prob);
+			assertThat(client.entropy(NAME, key), is(closeTo(entropy, 0.00001)));
 		}
 	}
 
