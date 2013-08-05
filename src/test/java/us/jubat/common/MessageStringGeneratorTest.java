@@ -25,10 +25,10 @@ package us.jubat.common;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
-public class StringGeneratorTest {
+public class MessageStringGeneratorTest {
 	@Test
 	public void testEmpty() {
-		StringGenerator gen = new StringGenerator();
+		MessageStringGenerator gen = new MessageStringGenerator();
 		gen.open("test");
 		gen.close();
 		assertEquals("test{}", gen.toString());
@@ -36,7 +36,7 @@ public class StringGeneratorTest {
 
 	@Test
 	public void testOne() {
-		StringGenerator gen = new StringGenerator();
+		MessageStringGenerator gen = new MessageStringGenerator();
 		gen.open("test");
 		gen.add("var", "val");
 		gen.close();
@@ -45,7 +45,7 @@ public class StringGeneratorTest {
 
 	@Test
 	public void testTwo() {
-		StringGenerator gen = new StringGenerator();
+		MessageStringGenerator gen = new MessageStringGenerator();
 		gen.open("test");
 		gen.add("var1", "val1");
 		gen.add("var2", "val2");
@@ -55,7 +55,7 @@ public class StringGeneratorTest {
 
 	@Test
 	public void testMany() {
-		StringGenerator gen = new StringGenerator();
+		MessageStringGenerator gen = new MessageStringGenerator();
 		gen.open("test");
 		gen.add("var1", "val1");
 		gen.add("var2", "val2");

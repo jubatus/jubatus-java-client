@@ -24,7 +24,7 @@ package us.jubat.common;
 
 import java.lang.StringBuilder;
 
-class StringGenerator {
+class MessageStringGenerator {
 	public static final String OPEN = "{";
 	public static final String CLOSE = "}";
 	public static final String DELIMITER = ", ";
