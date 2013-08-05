@@ -65,4 +65,13 @@ public class MessageStringGeneratorTest {
 		assertEquals("test{var1: val1, var2: val2, var3: val3, var4: val4}",
 				gen.toString());
 	}
+
+	@Test
+	public void testNull() {
+		MessageStringGenerator gen = new MessageStringGenerator();
+		gen.open("test");
+		gen.add("var", null);
+		gen.close();
+		assertEquals("test{var: null}", gen.toString());
+	}
 }

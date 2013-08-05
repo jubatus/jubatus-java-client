@@ -24,11 +24,12 @@ package us.jubat.common;
 
 import java.lang.StringBuilder;
 
-class MessageStringGenerator {
+public class MessageStringGenerator {
 	public static final String OPEN = "{";
 	public static final String CLOSE = "}";
 	public static final String DELIMITER = ", ";
 	public static final String SPLITTER = ": ";
+	public static final String NULL_STRING = "null";
 
 	private StringBuilder builder = new StringBuilder();
 	private boolean first = true;
@@ -50,7 +51,11 @@ class MessageStringGenerator {
 		}
 		builder.append(key);
 		builder.append(SPLITTER);
-		builder.append(value.toString());
+		if (value == null) {
+			builder.append(NULL_STRING);
+		} else {
+			builder.append(value.toString());
+		}
 	}
 
 	public String toString() {
