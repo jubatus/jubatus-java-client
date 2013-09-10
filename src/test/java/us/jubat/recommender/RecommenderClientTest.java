@@ -15,9 +15,9 @@ import java.util.Map;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
 import org.msgpack.rpc.Client;
 
+import us.jubat.common.Datum;
 import us.jubat.testutil.JubaServer;
 import us.jubat.testutil.JubatusClientTest;
 
@@ -49,7 +49,9 @@ public class RecommenderClientTest extends JubatusClientTest {
 
 	@Test
 	public void testUpdate_row() {
-		assertThat(client.update_row(NAME, Integer.toString(1), generateDatum()), is(true));
+		assertThat(
+				client.update_row(NAME, Integer.toString(1), generateDatum()),
+				is(true));
 	}
 
 	@Test
@@ -65,8 +67,8 @@ public class RecommenderClientTest extends JubatusClientTest {
 		assertThat(client.clear_row(NAME, Integer.toString(1)), is(true));
 
 		Datum datum = client.decode_row(NAME, Integer.toString(1));
-		assertThat(datum.string_values.size(), is(0));
-		assertThat(datum.num_values.size(), is(0));
+		assertThat(datum.stringValues.size(), is(0));
+		assertThat(datum.numValues.size(), is(0));
 	}
 
 	@Test
@@ -119,7 +121,8 @@ public class RecommenderClientTest extends JubatusClientTest {
 
 	@Test
 	public void testCalc_Similarity() {
-		assertThat(client.calc_similarity(NAME, generateDatum(), generateDatum()),
+		assertThat(
+				client.calc_similarity(NAME, generateDatum(), generateDatum()),
 				is(1f));
 	}
 
@@ -152,23 +155,14 @@ public class RecommenderClientTest extends JubatusClientTest {
 	private Datum generateDatum() {
 		Datum datum = new Datum();
 
-		ArrayList<TupleStringString> string_values = new ArrayList<TupleStringString>();
 		for (int i = 1; i <= 10; i++) {
-			TupleStringString string_value = new TupleStringString();
-			string_value.first = "key/str" + Integer.toString(i);
-			string_value.second = "val/str" + Integer.toString(i);
-			string_values.add(string_value);
+			datum.addString("key/str" + Integer.toString(i), "val/str"
+					+ Integer.toString(i));
 		}
-		datum.string_values = string_values;
 
-		ArrayList<TupleStringDouble> num_values = new ArrayList<TupleStringDouble>();
 		for (int i = 1; i <= 10; i++) {
-			TupleStringDouble num_value = new TupleStringDouble();
-			num_value.first = "key/num" + Integer.toString(i);
-			num_value.second = i;
-			num_values.add(num_value);
+			datum.addNumber("key/num" + Integer.toString(i), i);
 		}
-		datum.num_values = num_values;
 
 		return datum;
 	}
@@ -182,29 +176,29 @@ public class RecommenderClientTest extends JubatusClientTest {
 	private void assertDatum(Datum actual, Datum expected) {
 		List<String> expected_string_value_1 = new ArrayList<String>();
 		List<String> expected_string_value_2 = new ArrayList<String>();
-		for (TupleStringString string_value : expected.string_values) {
-			expected_string_value_1.add(string_value.first);
-			expected_string_value_2.add(string_value.second);
+		for (Datum.StringValue string_value : expected.getStringValues()) {
+			expected_string_value_1.add(string_value.key);
+			expected_string_value_2.add(string_value.value);
 		}
 
 		List<String> expected_num_value_1 = new ArrayList<String>();
 		List<Double> expected_num_value_2 = new ArrayList<Double>();
-		for (TupleStringDouble num_value : expected.num_values) {
-			expected_num_value_1.add(num_value.first);
-			expected_num_value_2.add(num_value.second);
+		for (Datum.NumValue num_value : expected.numValues) {
+			expected_num_value_1.add(num_value.key);
+			expected_num_value_2.add(num_value.value);
 		}
 
-		assertThat(actual.string_values.size(),
-				is(expected.string_values.size()));
-		for (TupleStringString string_value : actual.string_values) {
-			assertThat(string_value.first, isIn(expected_string_value_1));
-			assertThat(string_value.second, isIn(expected_string_value_2));
+		assertThat(actual.stringValues.size(),
+				is(expected.stringValues.size()));
+		for (Datum.StringValue string_value : actual.getStringValues()) {
+			assertThat(string_value.key, isIn(expected_string_value_1));
+			assertThat(string_value.value, isIn(expected_string_value_2));
 		}
 
-		assertThat(actual.num_values.size(), is(expected.num_values.size()));
-		for (TupleStringDouble num_value : actual.num_values) {
-			assertThat(num_value.first, isIn(expected_num_value_1));
-			assertThat(num_value.second, isIn(expected_num_value_2));
+		assertThat(actual.numValues.size(), is(expected.numValues.size()));
+		for (Datum.NumValue num_value : actual.getNumValues()) {
+			assertThat(num_value.key, isIn(expected_num_value_1));
+			assertThat(num_value.value, isIn(expected_num_value_2));
 		}
 	}
 }

@@ -6,16 +6,14 @@ import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
 import org.msgpack.rpc.Client;
 
+import us.jubat.common.Datum;
 import us.jubat.testutil.JubaServer;
 import us.jubat.testutil.JubatusClientTest;
 
@@ -50,7 +48,8 @@ public class AnomalyClientTest extends JubatusClientTest {
 		Datum d = generateDatum();
 		TupleStringFloat result = client.add(NAME, d);
 		assertThat(result.first, is("0"));
-		assertThat(result.second, is(Float.POSITIVE_INFINITY)); // Is it good to be INF ?
+		assertThat(result.second, is(Float.POSITIVE_INFINITY)); // Is it good to
+																// be INF ?
 	}
 
 	@Test
@@ -63,7 +62,6 @@ public class AnomalyClientTest extends JubatusClientTest {
 
 	@Test
 	public void testCalc_score() {
-		Datum d = generateDatum();
 		assertThat(client.calc_score(NAME, generateDatum()),
 				is(Float.POSITIVE_INFINITY)); // Is it good to be INF ?
 	}
@@ -121,23 +119,14 @@ public class AnomalyClientTest extends JubatusClientTest {
 	private Datum generateDatum() {
 		Datum datum = new Datum();
 
-		List<TupleStringString> string_values = new ArrayList<TupleStringString>();
 		for (int i = 1; i <= 10; i++) {
-			TupleStringString string_value = new TupleStringString();
-			string_value.first = "key/str" + Integer.toString(i);
-			string_value.second = "val/str" + Integer.toString(i);
-			string_values.add(string_value);
+			datum.addString("key/str" + Integer.toString(i), "val/str"
+					+ Integer.toString(i));
 		}
-		datum.string_values = string_values;
 
-		List<TupleStringDouble> num_values = new ArrayList<TupleStringDouble>();
 		for (int i = 1; i <= 10; i++) {
-			TupleStringDouble num_value = new TupleStringDouble();
-			num_value.first = "key/num" + Integer.toString(i);
-			num_value.second = i;
-			num_values.add(num_value);
+			datum.addNumber("key/num" + Integer.toString(i), i);
 		}
-		datum.num_values = num_values;
 
 		return datum;
 	}

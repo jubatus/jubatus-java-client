@@ -16,7 +16,6 @@ import java.util.Map;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
 import org.msgpack.rpc.Client;
 
 import us.jubat.testutil.JubaServer;
@@ -220,5 +219,37 @@ public class GraphClientTest extends JubatusClientTest {
 	public void testGet_client() {
 		assertThat(client.get_client(), is(instanceOf(Client.class)));
 		assertThat(client.get_client(), is(notNullValue()));
+	}
+
+	@Test
+	public void testToString() {
+		Node node = new Node();
+		node.property = new HashMap<String, String>();
+		node.in_edges = new ArrayList<Long>();
+		node.out_edges = new ArrayList<Long>();
+		assertThat(node.toString(),
+				is("node{property: {}, in_edges: [], out_edges: []}"));
+
+		PresetQuery query = new PresetQuery();
+		query.edge_query = new ArrayList<TupleStringString>();
+		query.node_query = new ArrayList<TupleStringString>();
+		assertThat(query.toString(),
+				is("preset_query{edge_query: [], node_query: []}"));
+
+		Edge edge = new Edge();
+		edge.property = new HashMap<String, String>();
+		edge.source = "src";
+		edge.target = "tgt";
+		assertThat(edge.toString(),
+				is("edge{property: {}, source: src, target: tgt}"));
+
+		ShortestPathQuery path = new ShortestPathQuery();
+		path.source = "src";
+		path.target = "tgt";
+		path.max_hop = 10;
+		path.query = query;
+		assertThat(
+				path.toString(),
+				is("shortest_path_query{source: src, target: tgt, max_hop: 10, query: preset_query{edge_query: [], node_query: []}}"));
 	}
 }

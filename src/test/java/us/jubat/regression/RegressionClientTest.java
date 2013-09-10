@@ -15,9 +15,9 @@ import java.util.Map;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
 import org.msgpack.rpc.Client;
 
+import us.jubat.common.Datum;
 import us.jubat.testutil.JubaServer;
 import us.jubat.testutil.JubatusClientTest;
 
@@ -51,23 +51,13 @@ public class RegressionClientTest extends JubatusClientTest {
 	public void testTrain_and_Estimate() {
 		Datum datum = new Datum();
 
-		List<TupleStringString> string_values = new ArrayList<TupleStringString>();
 		for (int i = 1; i <= 10; i++) {
-			TupleStringString string_value = new TupleStringString();
-			string_value.first = "key/str" + Integer.toString(i);
-			string_value.second = "val/str" + Integer.toString(i);
-			string_values.add(string_value);
+			datum.addString("key/str" + Integer.toString(i), "val/str" + Integer.toString(i));
 		}
-		datum.string_values = string_values;
 
-		List<TupleStringDouble> num_values = new ArrayList<TupleStringDouble>();
 		for (int i = 1; i <= 10; i++) {
-			TupleStringDouble num_value = new TupleStringDouble();
-			num_value.first = "key/num" + Integer.toString(i);
-			num_value.second = i;
-			num_values.add(num_value);
+			datum.addNumber("key/num" + Integer.toString(i), i);
 		}
-		datum.num_values = num_values;
 
 		TupleFloatDatum train_datum = new TupleFloatDatum();
 		train_datum.first = 1f;
@@ -106,20 +96,8 @@ public class RegressionClientTest extends JubatusClientTest {
 	@Test
 	public void testClear() {
 		Datum datum = new Datum();
-
-		List<TupleStringString> string_values = new ArrayList<TupleStringString>();
-		TupleStringString string_value = new TupleStringString();
-		string_value.first = "key/str";
-		string_value.second = "val/str";
-		string_values.add(string_value);
-		datum.string_values = string_values;
-
-		List<TupleStringDouble> num_values = new ArrayList<TupleStringDouble>();
-		TupleStringDouble num_value = new TupleStringDouble();
-		num_value.first = "key/str";
-		num_value.second = 1;
-		num_values.add(num_value);
-		datum.num_values = num_values;
+		datum.addString("key/str", "val/str");
+		datum.addNumber("key/str", 1);
 
 		TupleFloatDatum train_datum = new TupleFloatDatum();
 		train_datum.first = 1f;
