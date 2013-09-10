@@ -33,7 +33,7 @@ public enum JubaServer {
 		stdout_reader.setDaemon(true);
 		stdout_reader.start();
 
-		// sleep　1 second.
+		// sleep 1 second.
 		Thread.sleep(1000);
 	}
 
@@ -75,7 +75,7 @@ public enum JubaServer {
 		public void dump() {
 			synchronized (stdout) {
 				for (String line : stdout) {
-					System.out.println(line);
+					//System.out.println(line);
 				}
 			}
 		}
