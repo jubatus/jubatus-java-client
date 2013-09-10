@@ -12,7 +12,7 @@ public class Datum {
 	public static class NumValue {
 		public String key;
 		public double value;
-		
+
 		public NumValue() {
 		}
 
@@ -20,19 +20,28 @@ public class Datum {
 			this.key = key;
 			this.value = value;
 		}
+
+		public void check() {
+			TString.instance.check(this.key);
+		}
 	}
 
 	@Message
 	public static class StringValue {
 		public String key;
 		public String value;
-		
+
 		public StringValue() {
 		}
 
 		public StringValue(String key, String value) {
 			this.key = key;
 			this.value = value;
+		}
+
+		public void check() {
+			TString.instance.check(this.key);
+			TString.instance.check(this.value);
 		}
 	}
 
@@ -50,12 +59,21 @@ public class Datum {
 		this.stringValues.add(new StringValue(key, value));
 		return this;
 	}
-	
+
 	public Iterable<StringValue> getStringValues() {
 		return this.stringValues;
 	}
-	
-	public Iterable<NumValue> getNumValues()  {
+
+	public Iterable<NumValue> getNumValues() {
 		return this.numValues;
+	}
+
+	public void check() {
+		for (StringValue v : this.stringValues) {
+			v.check();
+		}
+		for (NumValue v : this.numValues) {
+			v.check();
+		}
 	}
 }
