@@ -1,4 +1,4 @@
-package us.jubat.common;
+package us.jubat.common.type;
 
 public abstract class TPrimitive<T> implements TType<T> {
 

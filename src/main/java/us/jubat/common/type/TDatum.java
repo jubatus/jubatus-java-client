@@ -1,4 +1,6 @@
-package us.jubat.common;
+package us.jubat.common.type;
+
+import us.jubat.common.Datum;
 
 public class TDatum implements TType<Datum> {
 	public static final TDatum instance = new TDatum();

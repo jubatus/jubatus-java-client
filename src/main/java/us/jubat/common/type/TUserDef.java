@@ -1,4 +1,6 @@
-package us.jubat.common;
+package us.jubat.common.type;
+
+import us.jubat.common.UserDefinedMessage;
 
 public class TUserDef<T extends UserDefinedMessage> implements TType<T> {
 	public void check(T value) {

@@ -1,4 +1,4 @@
-package us.jubat.common;
+package us.jubat.common.type;
 
 public interface TType<T> {
 	public void check(T value);

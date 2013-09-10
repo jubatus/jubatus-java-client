@@ -1,4 +1,4 @@
-package us.jubat.common;
+package us.jubat.common.type;
 
 import java.util.Map;
 
