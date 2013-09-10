@@ -31,8 +31,8 @@ public class RecommenderClientTest extends JubatusClientTest {
 	@Before
 	public void setUp() throws Exception {
 		server.start(server.getConfigPath());
-		client = new RecommenderClient(server.getHost(), server.getPort(), NAME,
-				TIMEOUT_SEC);
+		client = new RecommenderClient(server.getHost(), server.getPort(),
+				NAME, TIMEOUT_SEC);
 	}
 
 	@After
@@ -49,8 +49,7 @@ public class RecommenderClientTest extends JubatusClientTest {
 
 	@Test
 	public void testUpdate_row() {
-		assertThat(
-				client.update_row(Integer.toString(1), generateDatum()),
+		assertThat(client.update_row(Integer.toString(1), generateDatum()),
 				is(true));
 	}
 
@@ -121,8 +120,7 @@ public class RecommenderClientTest extends JubatusClientTest {
 
 	@Test
 	public void testCalc_Similarity() {
-		assertThat(
-				client.calc_similarity(generateDatum(), generateDatum()),
+		assertThat(client.calc_similarity(generateDatum(), generateDatum()),
 				is(1f));
 	}
 
@@ -188,8 +186,7 @@ public class RecommenderClientTest extends JubatusClientTest {
 			expected_num_value_2.add(num_value.value);
 		}
 
-		assertThat(actual.stringValues.size(),
-				is(expected.stringValues.size()));
+		assertThat(actual.stringValues.size(), is(expected.stringValues.size()));
 		for (Datum.StringValue string_value : actual.getStringValues()) {
 			assertThat(string_value.key, isIn(expected_string_value_1));
 			assertThat(string_value.value, isIn(expected_string_value_2));

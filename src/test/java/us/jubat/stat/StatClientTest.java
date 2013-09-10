@@ -29,7 +29,8 @@ public class StatClientTest extends JubatusClientTest {
 	@Before
 	public void setUp() throws Exception {
 		server.start(server.getConfigPath());
-		client = new StatClient(server.getHost(), server.getPort(), NAME, TIMEOUT_SEC);
+		client = new StatClient(server.getHost(), server.getPort(), NAME,
+				TIMEOUT_SEC);
 	}
 
 	@After

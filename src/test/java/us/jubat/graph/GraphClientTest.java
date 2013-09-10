@@ -8,7 +8,6 @@ import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -90,10 +89,7 @@ public class GraphClientTest extends JubatusClientTest {
 		}
 		client.update_node(src, property);
 		client.update_node(tgt, property);
-		Edge e = new Edge();
-		e.source = src;
-		e.target = tgt;
-		e.property = property;
+		Edge e = new Edge(property, src, tgt);
 		long eid = client.create_edge(src, e);
 		assertThat(Long.valueOf(eid), is(2L));
 
@@ -116,8 +112,6 @@ public class GraphClientTest extends JubatusClientTest {
 	@Test
 	public void testGet_centrality() {
 		PresetQuery q = new PresetQuery();
-		q.edge_query = new ArrayList<Query>();
-		q.node_query = new ArrayList<Query>();
 
 		client.add_centrality_query(q);
 		String nid = client.create_node();
@@ -128,30 +122,22 @@ public class GraphClientTest extends JubatusClientTest {
 
 	@Test
 	public void testAdd_centrality_query() {
-		Query s = new Query();
-		s.from_id = "";
-		s.to_id = "";
-		List<Query> query = new ArrayList<Query>();
-		query.add(s);
+		Query s = new Query("", "");
 		PresetQuery q = new PresetQuery();
-		q.node_query = query;
-		q.edge_query = query;
+		q.node_query.add(s);
+		q.edge_query.add(s);
 		assertThat(client.add_centrality_query(q), is(true));
 	}
 
 	@Test
 	public void testAdd_shortest_path_query() {
 		PresetQuery q = new PresetQuery();
-		q.node_query = new ArrayList<Query>();
-		q.edge_query = new ArrayList<Query>();
 		assertThat(client.add_shortest_path_query(q), is(true));
 	}
 
 	@Test
 	public void testRemove_centrality_query() {
 		PresetQuery q = new PresetQuery();
-		q.node_query = new ArrayList<Query>();
-		q.edge_query = new ArrayList<Query>();
 		assertThat(client.remove_centrality_query(q), is(true));
 	}
 
@@ -169,11 +155,7 @@ public class GraphClientTest extends JubatusClientTest {
 
 		String src = client.create_node();
 		String tgt = client.create_node();
-		ShortestPathQuery r = new ShortestPathQuery();
-		r.source = src;
-		r.target = tgt;
-		r.query = q;
-		r.max_hop = 0;
+		ShortestPathQuery r = new ShortestPathQuery(src, tgt, 0, q);
 
 		List<String> result = client.get_shortest_path(r);
 		assertThat(result, is(notNullValue()));
@@ -220,30 +202,20 @@ public class GraphClientTest extends JubatusClientTest {
 	@Test
 	public void testToString() {
 		Node node = new Node();
-		node.property = new HashMap<String, String>();
-		node.in_edges = new ArrayList<Long>();
-		node.out_edges = new ArrayList<Long>();
 		assertThat(node.toString(),
 				is("node{property: {}, in_edges: [], out_edges: []}"));
 
 		PresetQuery query = new PresetQuery();
-		query.edge_query = new ArrayList<Query>();
-		query.node_query = new ArrayList<Query>();
 		assertThat(query.toString(),
 				is("preset_query{edge_query: [], node_query: []}"));
 
 		Edge edge = new Edge();
-		edge.property = new HashMap<String, String>();
 		edge.source = "src";
 		edge.target = "tgt";
 		assertThat(edge.toString(),
 				is("edge{property: {}, source: src, target: tgt}"));
 
-		ShortestPathQuery path = new ShortestPathQuery();
-		path.source = "src";
-		path.target = "tgt";
-		path.max_hop = 10;
-		path.query = query;
+		ShortestPathQuery path = new ShortestPathQuery("src", "tgt", 10, query);
 		assertThat(
 				path.toString(),
 				is("shortest_path_query{source: src, target: tgt, max_hop: 10, query: preset_query{edge_query: [], node_query: []}}"));

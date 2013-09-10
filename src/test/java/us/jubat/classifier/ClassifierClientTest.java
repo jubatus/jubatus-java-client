@@ -61,9 +61,7 @@ public class ClassifierClientTest extends JubatusClientTest {
 			datum.addNumber("key/num" + Integer.toString(i), i);
 		}
 
-		LabeledDatum train_datum = new LabeledDatum();
-		train_datum.label = "label";
-		train_datum.data = datum;
+		LabeledDatum train_datum = new LabeledDatum("label", datum);
 
 		List<LabeledDatum> train_data = new ArrayList<LabeledDatum>();
 		train_data.add(train_datum);
@@ -105,9 +103,7 @@ public class ClassifierClientTest extends JubatusClientTest {
 		datum.addString("key/str", "val/str");
 		datum.addNumber("key/str", 1);
 
-		LabeledDatum train_datum = new LabeledDatum();
-		train_datum.label = "label";
-		train_datum.data = datum;
+		LabeledDatum train_datum = new LabeledDatum("label", datum);
 
 		List<LabeledDatum> train_data = new ArrayList<LabeledDatum>();
 		train_data.add(train_datum);
@@ -134,9 +130,7 @@ public class ClassifierClientTest extends JubatusClientTest {
 
 	@Test
 	public void testToString() {
-		EstimateResult res = new EstimateResult();
-		res.label = "label";
-		res.score = 1.0;
+		EstimateResult res = new EstimateResult("label", 1.0);
 		assertThat(res.toString(),
 				is("estimate_result{label: label, score: 1.0}"));
 	}

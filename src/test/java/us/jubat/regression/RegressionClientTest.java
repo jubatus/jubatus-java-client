@@ -52,16 +52,15 @@ public class RegressionClientTest extends JubatusClientTest {
 		Datum datum = new Datum();
 
 		for (int i = 1; i <= 10; i++) {
-			datum.addString("key/str" + Integer.toString(i), "val/str" + Integer.toString(i));
+			datum.addString("key/str" + Integer.toString(i), "val/str"
+					+ Integer.toString(i));
 		}
 
 		for (int i = 1; i <= 10; i++) {
 			datum.addNumber("key/num" + Integer.toString(i), i);
 		}
 
-		ScoredDatum train_datum = new ScoredDatum();
-		train_datum.score = 1f;
-		train_datum.data = datum;
+		ScoredDatum train_datum = new ScoredDatum(1f, datum);
 
 		List<ScoredDatum> train_data = new ArrayList<ScoredDatum>();
 		train_data.add(train_datum);
@@ -99,9 +98,7 @@ public class RegressionClientTest extends JubatusClientTest {
 		datum.addString("key/str", "val/str");
 		datum.addNumber("key/str", 1);
 
-		ScoredDatum train_datum = new ScoredDatum();
-		train_datum.score = 1f;
-		train_datum.data = datum;
+		ScoredDatum train_datum = new ScoredDatum(1f, datum);
 
 		List<ScoredDatum> train_data = new ArrayList<ScoredDatum>();
 		train_data.add(train_datum);
