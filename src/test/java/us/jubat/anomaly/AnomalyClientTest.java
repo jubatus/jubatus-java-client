@@ -27,7 +27,7 @@ public class AnomalyClientTest extends JubatusClientTest {
 	@Before
 	public void setUp() throws Exception {
 		server.start(server.getConfigPath());
-		client = new AnomalyClient(server.getHost(), server.getPort(),
+		client = new AnomalyClient(server.getHost(), server.getPort(), NAME,
 				TIMEOUT_SEC);
 	}
 
@@ -38,45 +38,45 @@ public class AnomalyClientTest extends JubatusClientTest {
 
 	@Test
 	public void testClear_row() {
-		String key = addTestDatum(1).first;
-		assertThat(client.clear_row(NAME, key), is(true));
-		assertThat(client.get_all_rows(NAME).size(), is(0));
+		String key = addTestDatum(1).id;
+		assertThat(client.clear_row(key), is(true));
+		assertThat(client.get_all_rows().size(), is(0));
 	}
 
 	@Test
 	public void testAdd() {
 		Datum d = generateDatum();
-		TupleStringFloat result = client.add(NAME, d);
-		assertThat(result.first, is("0"));
-		assertThat(result.second, is(Float.POSITIVE_INFINITY)); // Is it good to
+		IdWithScore result = client.add(d);
+		assertThat(result.id, is("0"));
+		assertThat(result.score, is(Float.POSITIVE_INFINITY)); // Is it good to
 																// be INF ?
 	}
 
 	@Test
 	public void testUpdate() {
 		Datum d = generateDatum();
-		TupleStringFloat added = client.add(NAME, d);
-		assertThat(client.update(NAME, added.first, generateDatum()),
+		IdWithScore added = client.add(d);
+		assertThat(client.update(added.id, generateDatum()),
 				is(Float.POSITIVE_INFINITY)); // Is it good to be INF ?
 	}
 
 	@Test
 	public void testCalc_score() {
-		assertThat(client.calc_score(NAME, generateDatum()),
+		assertThat(client.calc_score(generateDatum()),
 				is(Float.POSITIVE_INFINITY)); // Is it good to be INF ?
 	}
 
 	@Test
 	public void testClear_and_Get_all_rows() {
 		addTestDatum(3);
-		assertThat(client.get_all_rows(NAME).size(), is(3));
-		assertThat(client.clear(NAME), is(true));
-		assertThat(client.get_all_rows(NAME).size(), is(0));
+		assertThat(client.get_all_rows().size(), is(3));
+		assertThat(client.clear(), is(true));
+		assertThat(client.get_all_rows().size(), is(0));
 	}
 
 	@Test
 	public void testGet_config() throws IOException {
-		String config = client.get_config(NAME);
+		String config = client.get_config();
 		assertThat(formatAsJson(config),
 				is(formatAsJson(server.getConfigData())));
 	}
@@ -84,13 +84,13 @@ public class AnomalyClientTest extends JubatusClientTest {
 	@Test
 	public void testSave_and_Load() {
 		String id = "anomaly.test_java-client.model";
-		assertThat(client.save(NAME, id), is(true));
-		assertThat(client.load(NAME, id), is(true));
+		assertThat(client.save(id), is(true));
+		assertThat(client.load(id), is(true));
 	}
 
 	@Test
 	public void testGet_status() {
-		Map<String, Map<String, String>> status = client.get_status(NAME);
+		Map<String, Map<String, String>> status = client.get_status();
 		assertThat(status, is(notNullValue()));
 		assertThat(status.size(), is(1));
 	}
@@ -108,10 +108,10 @@ public class AnomalyClientTest extends JubatusClientTest {
 	 *            number of times to call "add", must be greater than 0
 	 * @return the last result of "add" RPC call
 	 */
-	private TupleStringFloat addTestDatum(int count) {
-		TupleStringFloat result = null;
+	private IdWithScore addTestDatum(int count) {
+		IdWithScore result = null;
 		for (int i = 1; i <= count; i++) {
-			result = client.add(NAME, generateDatum());
+			result = client.add(generateDatum());
 		}
 		return result;
 	}

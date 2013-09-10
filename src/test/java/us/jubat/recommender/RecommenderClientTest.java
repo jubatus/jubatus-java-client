@@ -31,7 +31,7 @@ public class RecommenderClientTest extends JubatusClientTest {
 	@Before
 	public void setUp() throws Exception {
 		server.start(server.getConfigPath());
-		client = new RecommenderClient(server.getHost(), server.getPort(),
+		client = new RecommenderClient(server.getHost(), server.getPort(), NAME,
 				TIMEOUT_SEC);
 	}
 
@@ -42,7 +42,7 @@ public class RecommenderClientTest extends JubatusClientTest {
 
 	@Test
 	public void testGet_config() throws IOException {
-		String config = client.get_config(NAME);
+		String config = client.get_config();
 		assertThat(formatAsJson(config),
 				is(formatAsJson(server.getConfigData())));
 	}
@@ -50,23 +50,23 @@ public class RecommenderClientTest extends JubatusClientTest {
 	@Test
 	public void testUpdate_row() {
 		assertThat(
-				client.update_row(NAME, Integer.toString(1), generateDatum()),
+				client.update_row(Integer.toString(1), generateDatum()),
 				is(true));
 	}
 
 	@Test
 	public void testDecode_row() {
 		update_row(1);
-		Datum datum = client.decode_row(NAME, Integer.toString(1));
+		Datum datum = client.decode_row(Integer.toString(1));
 		assertDatum(generateDatum(), datum);
 	}
 
 	@Test
 	public void testClear_row() {
 		update_row(1);
-		assertThat(client.clear_row(NAME, Integer.toString(1)), is(true));
+		assertThat(client.clear_row(Integer.toString(1)), is(true));
 
-		Datum datum = client.decode_row(NAME, Integer.toString(1));
+		Datum datum = client.decode_row(Integer.toString(1));
 		assertThat(datum.stringValues.size(), is(0));
 		assertThat(datum.numValues.size(), is(0));
 	}
@@ -74,74 +74,74 @@ public class RecommenderClientTest extends JubatusClientTest {
 	@Test
 	public void testClear_and_Get_all_rows() {
 		update_row(3);
-		assertThat(client.get_all_rows(NAME).size(), is(3));
-		assertThat(client.clear(NAME), is(true));
-		assertThat(client.get_all_rows(NAME).size(), is(0));
+		assertThat(client.get_all_rows().size(), is(3));
+		assertThat(client.clear(), is(true));
+		assertThat(client.get_all_rows().size(), is(0));
 	}
 
 	@Test
 	public void testComplete_row_from_id() {
 		update_row(1);
-		Datum result = client.complete_row_from_id(NAME, Integer.toString(1));
+		Datum result = client.complete_row_from_id(Integer.toString(1));
 
-		Datum row = client.decode_row(NAME, Integer.toString(1));
+		Datum row = client.decode_row(Integer.toString(1));
 		assertDatum(row, result);
 	}
 
 	@Test
 	public void testComplete_row_from_datum() {
 		update_row(1);
-		Datum result = client.complete_row_from_datum(NAME, generateDatum());
+		Datum result = client.complete_row_from_datum(generateDatum());
 
-		Datum row = client.decode_row(NAME, Integer.toString(1));
+		Datum row = client.decode_row(Integer.toString(1));
 		assertDatum(row, result);
 	}
 
 	@Test
 	public void testSimilar_row_from_id() {
 		update_row(1);
-		List<TupleStringFloat> result = client.similar_row_from_id(NAME,
+		List<IdWithScore> result = client.similar_row_from_id(
 				Integer.toString(1), 1);
 		assertThat(result, is(notNullValue()));
 		assertThat(result.size(), is(1));
-		assertThat(result.get(0).first, is("1"));
-		assertThat(result.get(0).second, is(1f));
+		assertThat(result.get(0).id, is("1"));
+		assertThat(result.get(0).score, is(1f));
 	}
 
 	@Test
 	public void testSimilar_row_from_datum() {
 		update_row(1);
-		List<TupleStringFloat> result = client.similar_row_from_datum(NAME,
+		List<IdWithScore> result = client.similar_row_from_datum(
 				generateDatum(), 1);
 		assertThat(result, is(notNullValue()));
 		assertThat(result.size(), is(1));
-		assertThat(result.get(0).first, is("1"));
-		assertThat(result.get(0).second, is(1f));
+		assertThat(result.get(0).id, is("1"));
+		assertThat(result.get(0).score, is(1f));
 	}
 
 	@Test
 	public void testCalc_Similarity() {
 		assertThat(
-				client.calc_similarity(NAME, generateDatum(), generateDatum()),
+				client.calc_similarity(generateDatum(), generateDatum()),
 				is(1f));
 	}
 
 	@Test
 	public void testCalc_L2norm() {
-		double norm = client.calc_l2norm(NAME, generateDatum());
+		double norm = client.calc_l2norm(generateDatum());
 		assertThat(norm, is(closeTo(19.874607, 0.00001)));
 	}
 
 	@Test
 	public void testSave_and_Load() {
 		String id = "recommender.test_java-client.model";
-		assertThat(client.save(NAME, id), is(true));
-		assertThat(client.load(NAME, id), is(true));
+		assertThat(client.save(id), is(true));
+		assertThat(client.load(id), is(true));
 	}
 
 	@Test
 	public void testGet_status() {
-		Map<String, Map<String, String>> status = client.get_status(NAME);
+		Map<String, Map<String, String>> status = client.get_status();
 		assertThat(status, is(notNullValue()));
 		assertThat(status.size(), is(1));
 	}
@@ -169,7 +169,7 @@ public class RecommenderClientTest extends JubatusClientTest {
 
 	private void update_row(int number) {
 		for (int i = 1; i <= number; i++) {
-			client.update_row(NAME, Integer.toString(i), generateDatum());
+			client.update_row(Integer.toString(i), generateDatum());
 		}
 	}
 

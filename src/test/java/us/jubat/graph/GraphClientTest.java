@@ -31,7 +31,7 @@ public class GraphClientTest extends JubatusClientTest {
 	@Before
 	public void setUp() throws Exception {
 		server.start(server.getConfigPath());
-		client = new GraphClient(server.getHost(), server.getPort(),
+		client = new GraphClient(server.getHost(), server.getPort(), NAME,
 				TIMEOUT_SEC);
 	}
 
@@ -42,7 +42,7 @@ public class GraphClientTest extends JubatusClientTest {
 
 	@Test
 	public void testGet_config() throws IOException {
-		String config = client.get_config(NAME);
+		String config = client.get_config();
 		assertThat(formatAsJson(config),
 				is(formatAsJson(server.getConfigData())));
 	}
@@ -50,7 +50,7 @@ public class GraphClientTest extends JubatusClientTest {
 	@Test
 	public void testNode() {
 		// create
-		String nid = client.create_node(NAME);
+		String nid = client.create_node();
 		assertThat(nid, is("0"));
 
 		// update
@@ -60,10 +60,10 @@ public class GraphClientTest extends JubatusClientTest {
 			String value = "value" + Integer.toString(i);
 			property.put(key, value);
 		}
-		assertThat(client.update_node(NAME, nid, property), is(true));
+		assertThat(client.update_node(nid, property), is(true));
 
 		// get
-		Node node = client.get_node(NAME, nid);
+		Node node = client.get_node(nid);
 		assertThat(node.in_edges, is(notNullValue()));
 		assertThat(node.in_edges.size(), is(0));
 		assertThat(node.out_edges, is(notNullValue()));
@@ -71,139 +71,135 @@ public class GraphClientTest extends JubatusClientTest {
 		assertThat(node.property, is(property));
 
 		// create here
-		assertThat(client.create_node_here(NAME, nid + 1), is(true));
+		assertThat(client.create_node_here(nid + 1), is(true));
 
 		// remove
-		assertThat(client.remove_node(NAME, nid), is(true));
+		assertThat(client.remove_node(nid), is(true));
 	}
 
 	@Test
 	public void testEdge() {
 		// create
-		String src = client.create_node(NAME);
-		String tgt = client.create_node(NAME);
+		String src = client.create_node();
+		String tgt = client.create_node();
 		Map<String, String> property = new HashMap<String, String>();
 		for (int i = 1; i <= 10; i++) {
 			String key = "key" + Integer.toString(i);
 			String value = "value" + Integer.toString(i);
 			property.put(key, value);
 		}
-		client.update_node(NAME, src, property);
-		client.update_node(NAME, tgt, property);
+		client.update_node(src, property);
+		client.update_node(tgt, property);
 		Edge e = new Edge();
 		e.source = src;
 		e.target = tgt;
 		e.property = property;
-		long eid = client.create_edge(NAME, src, e);
+		long eid = client.create_edge(src, e);
 		assertThat(Long.valueOf(eid), is(2L));
 
 		// update
-		assertThat(client.update_edge(NAME, src, eid, e), is(true));
+		assertThat(client.update_edge(src, eid, e), is(true));
 
 		// get
-		Edge edge = client.get_edge(NAME, tgt, eid);
+		Edge edge = client.get_edge(tgt, eid);
 		assertThat(edge.source, is(src));
 		assertThat(edge.target, is(tgt));
 		assertThat(edge.property, is(property));
 
 		// create here
-		assertThat(client.create_edge_here(NAME, eid + 1, e), is(true));
+		assertThat(client.create_edge_here(eid + 1, e), is(true));
 
 		// remove
-		assertThat(client.remove_edge(NAME, src, eid), is(true));
+		assertThat(client.remove_edge(src, eid), is(true));
 	}
 
 	@Test
 	public void testGet_centrality() {
 		PresetQuery q = new PresetQuery();
-		q.edge_query = new ArrayList<TupleStringString>();
-		q.node_query = new ArrayList<TupleStringString>();
+		q.edge_query = new ArrayList<Query>();
+		q.node_query = new ArrayList<Query>();
 
-		client.add_centrality_query(NAME, q);
-		String nid = client.create_node(NAME);
-		client.update_index(NAME);
+		client.add_centrality_query(q);
+		String nid = client.create_node();
+		client.update_index();
 
-		assertThat(client.get_centrality(NAME, nid, 0, q), is(1.0));
+		assertThat(client.get_centrality(nid, 0, q), is(1.0));
 	}
 
 	@Test
 	public void testAdd_centrality_query() {
-		TupleStringString s = new TupleStringString();
-		s.first = "";
-		s.second = "";
-		List<TupleStringString> query = new ArrayList<TupleStringString>();
+		Query s = new Query();
+		s.from_id = "";
+		s.to_id = "";
+		List<Query> query = new ArrayList<Query>();
 		query.add(s);
 		PresetQuery q = new PresetQuery();
 		q.node_query = query;
 		q.edge_query = query;
-		assertThat(client.add_centrality_query(NAME, q), is(true));
+		assertThat(client.add_centrality_query(q), is(true));
 	}
 
 	@Test
 	public void testAdd_shortest_path_query() {
 		PresetQuery q = new PresetQuery();
-		q.node_query = new ArrayList<TupleStringString>();
-		q.edge_query = new ArrayList<TupleStringString>();
-		assertThat(client.add_shortest_path_query(NAME, q), is(true));
+		q.node_query = new ArrayList<Query>();
+		q.edge_query = new ArrayList<Query>();
+		assertThat(client.add_shortest_path_query(q), is(true));
 	}
 
 	@Test
 	public void testRemove_centrality_query() {
 		PresetQuery q = new PresetQuery();
-		q.node_query = new ArrayList<TupleStringString>();
-		q.edge_query = new ArrayList<TupleStringString>();
-		assertThat(client.remove_centrality_query(NAME, q), is(true));
+		q.node_query = new ArrayList<Query>();
+		q.edge_query = new ArrayList<Query>();
+		assertThat(client.remove_centrality_query(q), is(true));
 	}
 
 	@Test
 	public void testRemove_shortest_path_query() {
 		PresetQuery q = new PresetQuery();
-		q.node_query = new ArrayList<TupleStringString>();
-		q.edge_query = new ArrayList<TupleStringString>();
-		assertThat(client.remove_shortest_path_query(NAME, q), is(true));
+		assertThat(client.remove_shortest_path_query(q), is(true));
 	}
 
 	@Test
 	public void testGet_shortest_path() {
 		PresetQuery q = new PresetQuery();
-		q.node_query = new ArrayList<TupleStringString>();
-		q.edge_query = new ArrayList<TupleStringString>();
 
-		client.add_shortest_path_query(NAME, q);
+		client.add_shortest_path_query(q);
 
-		String src = client.create_node(NAME);
-		String tgt = client.create_node(NAME);
+		String src = client.create_node();
+		String tgt = client.create_node();
 		ShortestPathQuery r = new ShortestPathQuery();
 		r.source = src;
 		r.target = tgt;
 		r.query = q;
 		r.max_hop = 0;
 
-		List<String> result = client.get_shortest_path(NAME, r);
+		List<String> result = client.get_shortest_path(r);
 		assertThat(result, is(notNullValue()));
 		assertThat(result.size(), is(0));
 	}
 
 	@Test
 	public void testUpdate_index() {
-		assertThat(client.update_index(NAME), is(true));
+		assertThat(client.update_index(), is(true));
 	}
 
 	@Test
 	public void testClear() {
-		assertThat(client.clear(NAME), is(true));
+		assertThat(client.clear(), is(true));
 	}
 
 	@Test
 	public void testSave_and_Load() {
 		String id = "graph.test_java-client.model";
-		assertThat(client.save(NAME, id), is(true));
-		assertThat(client.load(NAME, id), is(true));
+		assertThat(client.save(id), is(true));
+		assertThat(client.load(id), is(true));
 	}
 
 	@Test
 	public void testGet_status() {
-		Map<String, Map<String, String>> status = client.get_status(NAME);
+		Map<String, Map<String, String>> status = client.get_status();
 
 		assertThat(status, is(not(nullValue())));
 		assertThat(status.size(), is(1));
@@ -211,8 +207,8 @@ public class GraphClientTest extends JubatusClientTest {
 
 	@Test
 	public void testGlobal_node() {
-		String nid = client.create_node(NAME);
-		assertThat(client.remove_global_node(NAME, nid), is(true));
+		String nid = client.create_node();
+		assertThat(client.remove_global_node(nid), is(true));
 	}
 
 	@Test
@@ -231,8 +227,8 @@ public class GraphClientTest extends JubatusClientTest {
 				is("node{property: {}, in_edges: [], out_edges: []}"));
 
 		PresetQuery query = new PresetQuery();
-		query.edge_query = new ArrayList<TupleStringString>();
-		query.node_query = new ArrayList<TupleStringString>();
+		query.edge_query = new ArrayList<Query>();
+		query.node_query = new ArrayList<Query>();
 		assertThat(query.toString(),
 				is("preset_query{edge_query: [], node_query: []}"));
 

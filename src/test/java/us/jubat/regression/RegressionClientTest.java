@@ -31,7 +31,7 @@ public class RegressionClientTest extends JubatusClientTest {
 	@Before
 	public void setUp() throws Exception {
 		server.start(server.getConfigPath());
-		client = new RegressionClient(server.getHost(), server.getPort(),
+		client = new RegressionClient(server.getHost(), server.getPort(), NAME,
 				TIMEOUT_SEC);
 	}
 
@@ -42,7 +42,7 @@ public class RegressionClientTest extends JubatusClientTest {
 
 	@Test
 	public void testGet_config() throws IOException {
-		String config = client.get_config(NAME);
+		String config = client.get_config();
 		assertThat(formatAsJson(config),
 				is(formatAsJson(server.getConfigData())));
 	}
@@ -59,20 +59,20 @@ public class RegressionClientTest extends JubatusClientTest {
 			datum.addNumber("key/num" + Integer.toString(i), i);
 		}
 
-		TupleFloatDatum train_datum = new TupleFloatDatum();
-		train_datum.first = 1f;
-		train_datum.second = datum;
+		ScoredDatum train_datum = new ScoredDatum();
+		train_datum.score = 1f;
+		train_datum.data = datum;
 
-		List<TupleFloatDatum> train_data = new ArrayList<TupleFloatDatum>();
+		List<ScoredDatum> train_data = new ArrayList<ScoredDatum>();
 		train_data.add(train_datum);
 
 		for (int i = 1; i <= 100; i++) {
-			assertThat(client.train(NAME, train_data), is(1));
+			assertThat(client.train(train_data), is(1));
 		}
 
 		List<Datum> estimate_data = new ArrayList<Datum>();
 		estimate_data.add(datum);
-		List<Float> result = client.estimate(NAME, estimate_data);
+		List<Float> result = client.estimate(estimate_data);
 
 		assertThat(result, is(notNullValue()));
 		assertThat(result.size(), is(1));
@@ -82,13 +82,13 @@ public class RegressionClientTest extends JubatusClientTest {
 	@Test
 	public void testSave_and_Load() {
 		String id = "regression.test_java-client.model";
-		assertThat(client.save(NAME, id), is(true));
-		assertThat(client.load(NAME, id), is(true));
+		assertThat(client.save(id), is(true));
+		assertThat(client.load(id), is(true));
 	}
 
 	@Test
 	public void testGet_status() {
-		Map<String, Map<String, String>> status = client.get_status(NAME);
+		Map<String, Map<String, String>> status = client.get_status();
 		assertThat(status, is(notNullValue()));
 		assertThat(status.size(), is(1));
 	}
@@ -99,23 +99,23 @@ public class RegressionClientTest extends JubatusClientTest {
 		datum.addString("key/str", "val/str");
 		datum.addNumber("key/str", 1);
 
-		TupleFloatDatum train_datum = new TupleFloatDatum();
-		train_datum.first = 1f;
-		train_datum.second = datum;
+		ScoredDatum train_datum = new ScoredDatum();
+		train_datum.score = 1f;
+		train_datum.data = datum;
 
-		List<TupleFloatDatum> train_data = new ArrayList<TupleFloatDatum>();
+		List<ScoredDatum> train_data = new ArrayList<ScoredDatum>();
 		train_data.add(train_datum);
 
-		client.train(NAME, train_data);
+		client.train(train_data);
 
-		Map<String, Map<String, String>> before = client.get_status(NAME);
+		Map<String, Map<String, String>> before = client.get_status();
 		String node_name = (String) before.keySet().iterator().next();
 		assertThat(before.get(node_name).get("num_classes"), is(not("0")));
 		assertThat(before.get(node_name).get("num_features"), is(not("0")));
 
-		client.clear(NAME);
+		client.clear();
 
-		Map<String, Map<String, String>> after = client.get_status(NAME);
+		Map<String, Map<String, String>> after = client.get_status();
 		assertThat(after.get(node_name).get("num_classes"), is("0"));
 		assertThat(after.get(node_name).get("num_features"), is("0"));
 	}
