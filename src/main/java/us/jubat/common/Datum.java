@@ -6,6 +6,8 @@ import java.util.List;
 import org.msgpack.annotation.Message;
 import org.msgpack.annotation.NotNullable;
 
+import us.jubat.common.type.TString;
+
 @Message
 public class Datum {
 	@Message
