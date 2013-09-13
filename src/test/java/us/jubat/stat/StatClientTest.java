@@ -40,7 +40,7 @@ public class StatClientTest extends JubatusClientTest {
 
 	@Test
 	public void testGet_config() throws IOException {
-		String config = client.get_config();
+		String config = client.getConfig();
 		assertThat(formatAsJson(config),
 				is(formatAsJson(server.getConfigData())));
 	}
@@ -123,7 +123,7 @@ public class StatClientTest extends JubatusClientTest {
 
 	@Test
 	public void testGet_status() {
-		Map<String, Map<String, String>> status = client.get_status();
+		Map<String, Map<String, String>> status = client.getStatus();
 		assertThat(status, is(notNullValue()));
 		assertThat(status.size(), is(1));
 	}
@@ -142,7 +142,7 @@ public class StatClientTest extends JubatusClientTest {
 
 	@Test
 	public void testGet_client() {
-		assertThat(client.get_client(), is(instanceOf(Client.class)));
-		assertThat(client.get_client(), is(notNullValue()));
+		assertThat(client.getClient(), is(instanceOf(Client.class)));
+		assertThat(client.getClient(), is(notNullValue()));
 	}
 }

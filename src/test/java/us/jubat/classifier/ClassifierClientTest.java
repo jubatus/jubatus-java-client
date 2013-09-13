@@ -43,7 +43,7 @@ public class ClassifierClientTest extends JubatusClientTest {
 
 	@Test
 	public void testGet_config() throws IOException {
-		String config = client.get_config();
+		String config = client.getConfig();
 		assertThat(formatAsJson(config),
 				is(formatAsJson(server.getConfigData())));
 	}
@@ -91,7 +91,7 @@ public class ClassifierClientTest extends JubatusClientTest {
 
 	@Test
 	public void testGet_status() {
-		Map<String, Map<String, String>> status = client.get_status();
+		Map<String, Map<String, String>> status = client.getStatus();
 		assertThat(status, is(notNullValue()));
 		assertThat(status.size(), is(1));
 	}
@@ -110,22 +110,22 @@ public class ClassifierClientTest extends JubatusClientTest {
 
 		client.train(train_data);
 
-		Map<String, Map<String, String>> before = client.get_status();
+		Map<String, Map<String, String>> before = client.getStatus();
 		String node_name = (String) before.keySet().iterator().next();
 		assertThat(before.get(node_name).get("num_classes"), is(not("0")));
 		assertThat(before.get(node_name).get("num_features"), is(not("0")));
 
 		client.clear();
 
-		Map<String, Map<String, String>> after = client.get_status();
+		Map<String, Map<String, String>> after = client.getStatus();
 		assertThat(after.get(node_name).get("num_classes"), is("0"));
 		assertThat(after.get(node_name).get("num_features"), is("0"));
 	}
 
 	@Test
 	public void testGet_client() {
-		assertThat(client.get_client(), is(instanceOf(Client.class)));
-		assertThat(client.get_client(), is(notNullValue()));
+		assertThat(client.getClient(), is(instanceOf(Client.class)));
+		assertThat(client.getClient(), is(notNullValue()));
 	}
 
 	@Test

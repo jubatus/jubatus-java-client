@@ -39,8 +39,8 @@ public class AnomalyClientTest extends JubatusClientTest {
 	@Test
 	public void testClear_row() {
 		String key = addTestDatum(1).id;
-		assertThat(client.clear_row(key), is(true));
-		assertThat(client.get_all_rows().size(), is(0));
+		assertThat(client.clearRow(key), is(true));
+		assertThat(client.getAllRows().size(), is(0));
 	}
 
 	@Test
@@ -62,21 +62,21 @@ public class AnomalyClientTest extends JubatusClientTest {
 
 	@Test
 	public void testCalc_score() {
-		assertThat(client.calc_score(generateDatum()),
+		assertThat(client.calcScore(generateDatum()),
 				is(Float.POSITIVE_INFINITY)); // Is it good to be INF ?
 	}
 
 	@Test
 	public void testClear_and_Get_all_rows() {
 		addTestDatum(3);
-		assertThat(client.get_all_rows().size(), is(3));
+		assertThat(client.getAllRows().size(), is(3));
 		assertThat(client.clear(), is(true));
-		assertThat(client.get_all_rows().size(), is(0));
+		assertThat(client.getAllRows().size(), is(0));
 	}
 
 	@Test
 	public void testGet_config() throws IOException {
-		String config = client.get_config();
+		String config = client.getConfig();
 		assertThat(formatAsJson(config),
 				is(formatAsJson(server.getConfigData())));
 	}
@@ -90,15 +90,15 @@ public class AnomalyClientTest extends JubatusClientTest {
 
 	@Test
 	public void testGet_status() {
-		Map<String, Map<String, String>> status = client.get_status();
+		Map<String, Map<String, String>> status = client.getStatus();
 		assertThat(status, is(notNullValue()));
 		assertThat(status.size(), is(1));
 	}
 
 	@Test
 	public void testGet_client() {
-		assertThat(client.get_client(), is(instanceOf(Client.class)));
-		assertThat(client.get_client(), is(notNullValue()));
+		assertThat(client.getClient(), is(instanceOf(Client.class)));
+		assertThat(client.getClient(), is(notNullValue()));
 	}
 
 	/**

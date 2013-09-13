@@ -42,30 +42,30 @@ public class RecommenderClientTest extends JubatusClientTest {
 
 	@Test
 	public void testGet_config() throws IOException {
-		String config = client.get_config();
+		String config = client.getConfig();
 		assertThat(formatAsJson(config),
 				is(formatAsJson(server.getConfigData())));
 	}
 
 	@Test
 	public void testUpdate_row() {
-		assertThat(client.update_row(Integer.toString(1), generateDatum()),
+		assertThat(client.updateRow(Integer.toString(1), generateDatum()),
 				is(true));
 	}
 
 	@Test
 	public void testDecode_row() {
 		update_row(1);
-		Datum datum = client.decode_row(Integer.toString(1));
+		Datum datum = client.decodeRow(Integer.toString(1));
 		assertDatum(generateDatum(), datum);
 	}
 
 	@Test
 	public void testClear_row() {
 		update_row(1);
-		assertThat(client.clear_row(Integer.toString(1)), is(true));
+		assertThat(client.clearRow(Integer.toString(1)), is(true));
 
-		Datum datum = client.decode_row(Integer.toString(1));
+		Datum datum = client.decodeRow(Integer.toString(1));
 		assertThat(datum.stringValues.size(), is(0));
 		assertThat(datum.numValues.size(), is(0));
 	}
@@ -73,33 +73,33 @@ public class RecommenderClientTest extends JubatusClientTest {
 	@Test
 	public void testClear_and_Get_all_rows() {
 		update_row(3);
-		assertThat(client.get_all_rows().size(), is(3));
+		assertThat(client.getAllRows().size(), is(3));
 		assertThat(client.clear(), is(true));
-		assertThat(client.get_all_rows().size(), is(0));
+		assertThat(client.getAllRows().size(), is(0));
 	}
 
 	@Test
 	public void testComplete_row_from_id() {
 		update_row(1);
-		Datum result = client.complete_row_from_id(Integer.toString(1));
+		Datum result = client.completeRowFromId(Integer.toString(1));
 
-		Datum row = client.decode_row(Integer.toString(1));
+		Datum row = client.decodeRow(Integer.toString(1));
 		assertDatum(row, result);
 	}
 
 	@Test
 	public void testComplete_row_from_datum() {
 		update_row(1);
-		Datum result = client.complete_row_from_datum(generateDatum());
+		Datum result = client.completeRowFromDatum(generateDatum());
 
-		Datum row = client.decode_row(Integer.toString(1));
+		Datum row = client.decodeRow(Integer.toString(1));
 		assertDatum(row, result);
 	}
 
 	@Test
 	public void testSimilar_row_from_id() {
 		update_row(1);
-		List<IdWithScore> result = client.similar_row_from_id(
+		List<IdWithScore> result = client.similarRowFromId(
 				Integer.toString(1), 1);
 		assertThat(result, is(notNullValue()));
 		assertThat(result.size(), is(1));
@@ -110,7 +110,7 @@ public class RecommenderClientTest extends JubatusClientTest {
 	@Test
 	public void testSimilar_row_from_datum() {
 		update_row(1);
-		List<IdWithScore> result = client.similar_row_from_datum(
+		List<IdWithScore> result = client.similarRowFromDatum(
 				generateDatum(), 1);
 		assertThat(result, is(notNullValue()));
 		assertThat(result.size(), is(1));
@@ -120,13 +120,13 @@ public class RecommenderClientTest extends JubatusClientTest {
 
 	@Test
 	public void testCalc_Similarity() {
-		assertThat(client.calc_similarity(generateDatum(), generateDatum()),
+		assertThat(client.calcSimilarity(generateDatum(), generateDatum()),
 				is(1f));
 	}
 
 	@Test
 	public void testCalc_L2norm() {
-		double norm = client.calc_l2norm(generateDatum());
+		double norm = client.calcL2norm(generateDatum());
 		assertThat(norm, is(closeTo(19.874607, 0.00001)));
 	}
 
@@ -139,15 +139,15 @@ public class RecommenderClientTest extends JubatusClientTest {
 
 	@Test
 	public void testGet_status() {
-		Map<String, Map<String, String>> status = client.get_status();
+		Map<String, Map<String, String>> status = client.getStatus();
 		assertThat(status, is(notNullValue()));
 		assertThat(status.size(), is(1));
 	}
 
 	@Test
 	public void testGet_client() {
-		assertThat(client.get_client(), is(instanceOf(Client.class)));
-		assertThat(client.get_client(), is(notNullValue()));
+		assertThat(client.getClient(), is(instanceOf(Client.class)));
+		assertThat(client.getClient(), is(notNullValue()));
 	}
 
 	private Datum generateDatum() {
@@ -167,7 +167,7 @@ public class RecommenderClientTest extends JubatusClientTest {
 
 	private void update_row(int number) {
 		for (int i = 1; i <= number; i++) {
-			client.update_row(Integer.toString(i), generateDatum());
+			client.updateRow(Integer.toString(i), generateDatum());
 		}
 	}
 
