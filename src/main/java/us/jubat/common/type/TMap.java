@@ -13,7 +13,7 @@ public class TMap<K, V> implements TType<Map<K, V>> {
 
 	public void check(Map<K, V> value) {
 		if (value == null)
-			throw new RuntimeException();
+			throw new NullPointerException();
 		for (Map.Entry<K, V> e : value.entrySet()) {
 			keyType.check(e.getKey());
 			valueType.check(e.getValue());
