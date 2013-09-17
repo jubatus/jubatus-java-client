@@ -6,6 +6,7 @@ import java.util.List;
 import org.msgpack.annotation.Message;
 import org.msgpack.annotation.NotNullable;
 
+import us.jubat.common.type.TRaw;
 import us.jubat.common.type.TString;
 
 @Message
@@ -47,10 +48,31 @@ public class Datum {
 		}
 	}
 
+	@Message
+	public static class BinaryValue {
+		public String key;
+		public byte[] value;
+
+		public BinaryValue() {
+		}
+
+		public BinaryValue(String key, byte[] value) {
+			this.key = key;
+			this.value = value;
+		}
+
+		public void check() {
+			TString.instance.check(this.key);
+			TRaw.instance.check(this.value);
+		}
+	}
+
 	@NotNullable
 	public List<StringValue> stringValues = new ArrayList<StringValue>();
 	@NotNullable
 	public List<NumValue> numValues = new ArrayList<NumValue>();
+	@NotNullable
+	public List<BinaryValue> binaryValues = new ArrayList<BinaryValue>();
 
 	public Datum addNumber(String key, double value) {
 		this.numValues.add(new NumValue(key, value));
@@ -62,6 +84,11 @@ public class Datum {
 		return this;
 	}
 
+	public Datum addBinary(String key, byte[] value) {
+		this.binaryValues.add(new BinaryValue(key, value));
+		return this;
+	}
+
 	public Iterable<StringValue> getStringValues() {
 		return this.stringValues;
 	}
@@ -70,11 +97,18 @@ public class Datum {
 		return this.numValues;
 	}
 
+	public Iterable<BinaryValue> getBinaryValues() {
+		return this.binaryValues;
+	}
+
 	public void check() {
 		for (StringValue v : this.stringValues) {
 			v.check();
 		}
 		for (NumValue v : this.numValues) {
+			v.check();
+		}
+		for (BinaryValue v : this.binaryValues) {
 			v.check();
 		}
 	}
