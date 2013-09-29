@@ -4,6 +4,7 @@ import java.net.UnknownHostException;
 import java.util.Map;
 
 import org.msgpack.rpc.Client;
+import org.msgpack.rpc.error.RemoteError;
 import org.msgpack.rpc.loop.EventLoop;
 
 import us.jubat.common.ClientBase.RPCInterfaceBase;
@@ -32,7 +33,7 @@ public class ClientBase<I extends RPCInterfaceBase> {
 		this.iface = this.client.proxy(interfaceClass);
 		this.name = name;
 	}
-	
+
 	public String getConfig() {
 		return iface.get_config(this.name);
 	}
@@ -53,5 +54,17 @@ public class ClientBase<I extends RPCInterfaceBase> {
 
 	public Client getClient() {
 		return client;
+	}
+
+	protected RuntimeException translateError(RemoteError e) {
+		if (e.getData().isIntegerValue()) {
+			int value = e.getData().asIntegerValue().getInt();
+			if (value == 1) {
+				return new UnknownMethod();
+			} else if (value == 2) {
+				return new TypeMismatch();
+			}
+		}
+		return e;
 	}
 }
