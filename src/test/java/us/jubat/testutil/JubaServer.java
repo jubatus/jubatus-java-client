@@ -67,7 +67,7 @@ public enum JubaServer {
 					br.close();
 				}
 			} catch (IOException e) {
-				throw new RuntimeException(e);
+				// ignore io error
 			}
 		}
 
