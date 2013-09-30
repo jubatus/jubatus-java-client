@@ -42,7 +42,7 @@ public class ClientErrorTest extends JubatusClientTest {
 
 	@Test(expected = TypeMismatch.class)
 	public void testTypeMismatch() {
-		// Types of arguemnts of train are different in classifier and
+		// Types of arguments of train are different in classifier and
 		// regression
 		this.client.train(Arrays.asList(new ScoredDatum(1.0f, new Datum())));
 	}
