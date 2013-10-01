@@ -1,5 +1,5 @@
 package us.jubat.common;
 
-public class TypeMismatch extends RuntimeException {
+public class TypeMismatch extends InterfaceMismatch {
 
 }

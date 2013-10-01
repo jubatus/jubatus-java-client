@@ -1,5 +1,5 @@
 package us.jubat.common;
 
-public class UnknownMethod extends RuntimeException {
+public class UnknownMethod extends InterfaceMismatch {
 
 }
