@@ -4,7 +4,7 @@ import org.json.simple.JSONValue;
 
 public abstract class JubatusClientTest {
 	public final String NAME = "";
-	public final double TIMEOUT_SEC = 10;
+	public final int TIMEOUT_SEC = 10;
 
 	public final JubaServer server;
 
