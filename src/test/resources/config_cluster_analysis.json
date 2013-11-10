@@ -1,0 +1,7 @@
+ {
+   "name" : "clustering",
+   "host" : "127.0.0.1",
+   "port" : 21998,
+   "timeout_sec" : 10,
+   "num_snapshots" : 3
+}
