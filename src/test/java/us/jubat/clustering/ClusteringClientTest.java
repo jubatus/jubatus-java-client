@@ -46,7 +46,7 @@ public class ClusteringClientTest extends JubatusClientTest {
 	}
 
 	@Test
-	public void testSave_and_Load() {
+	public void testSave_and_load() {
 		String id = "clustering.test_java-client.model";
 		assertThat(client.save(id), is(true));
 		assertThat(client.load(id), is(true));
@@ -134,5 +134,4 @@ public class ClusteringClientTest extends JubatusClientTest {
 
 		return datum;
 	}
-
 }
