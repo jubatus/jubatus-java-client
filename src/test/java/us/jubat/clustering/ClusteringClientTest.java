@@ -6,6 +6,8 @@ import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.junit.After;
@@ -62,6 +64,61 @@ public class ClusteringClientTest extends JubatusClientTest {
 		assertThat(client.getClient(), is(instanceOf(Client.class)));
 		assertThat(client.getClient(), is(notNullValue()));
 	}
+
+  @Test
+  public void testPush() {
+    List<Datum> data_list = new ArrayList<Datum>();
+		data_list.add(generateDatum());
+    assertThat(client.push(data_list), is(true));
+  }
+
+  @Test
+  public void testGet_revision() {
+      assertThat(client.getRevision(), is(instanceOf(Integer.class)));
+  }
+
+  @Test
+  public void testGet_core_members() {
+    List<Datum> data_list = new ArrayList<Datum>();
+		data_list.add(generateDatum());
+    client.push(data_list);
+    List<List<WeightedDatum>> members = client.getCoreMembers();
+    assertThat(members.size(), is(10));
+    assertThat(members.get(0).size(), is(1));
+    assertThat(members.get(0).get(0), instanceOf(WeightedDatum.class));
+  }
+
+  @Test
+  public void testGet_k_center() {
+    for (int i = 0; i < 100; i++) {
+      List<Datum> data_list = new ArrayList<Datum>();
+      data_list.add(generateDatum());
+      client.push(data_list);
+    }
+    List<Datum> centers = client.getKCenter();
+    assertThat(centers.size(), is(10));
+    assertThat(centers.get(0), instanceOf(Datum.class));
+  }
+
+  @Test
+  public void testGet_nearest_center() {
+    for (int i = 0; i < 100; i++) {
+      List<Datum> data_list = new ArrayList<Datum>();
+      data_list.add(generateDatum());
+      client.push(data_list);
+    }
+    Datum center = client.getNearestCenter(generateDatum());
+    assertThat(center, instanceOf(Datum.class));
+  }
+
+  @Test
+  public void testGet_nearest_members() {
+    List<Datum> data_list = new ArrayList<Datum>();
+    data_list.add(generateDatum());
+    client.push(data_list);
+    List<WeightedDatum> members = client.getNearestMembers(generateDatum());
+    assertThat(members.get(0), instanceOf(WeightedDatum.class));
+  }
 
 	private Datum generateDatum() {
 		Datum datum = new Datum();
