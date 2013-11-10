@@ -9,7 +9,8 @@ import java.util.Collections;
 import java.util.List;
 
 public enum JubaServer {
-	classifier, recommender, regression, stat, graph, anomaly;
+    classifier, recommender, regression, stat, graph, anomaly,
+    clustering, cluster_analysis;
 
 	public static final int BASEPORT = Integer.parseInt(System
 			.getProperty("jubatus.baseport"));
