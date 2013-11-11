@@ -4,12 +4,13 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public enum JubaServer {
-	classifier, recommender, regression, stat, graph, anomaly;
+	classifier, recommender, regression, stat, graph, anomaly, nearest_neighbor;
 
 	public static final int BASEPORT = Integer.parseInt(System
 			.getProperty("jubatus.baseport"));
@@ -75,7 +76,7 @@ public enum JubaServer {
 		public void dump() {
 			synchronized (stdout) {
 				for (String line : stdout) {
-					//System.out.println(line);
+					// System.out.println(line);
 				}
 			}
 		}
@@ -98,7 +99,12 @@ public enum JubaServer {
 	}
 
 	public String getConfigPath() {
-		return getClass().getResource(getConfigFileName()).getPath();
+		String filename = getConfigFileName();
+		URL url = getClass().getResource(filename);
+		if (url == null) {
+			throw new RuntimeException("Config file is not found: " + filename);
+		}
+		return url.getPath();
 	}
 
 	public String getConfigData() throws IOException {
