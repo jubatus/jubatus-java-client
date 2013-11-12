@@ -1,6 +1,7 @@
 package us.jubat.testutil;
 
 import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -17,12 +18,13 @@ public enum JubaServer {
 
 	private Process process;
 	private StdoutReader stdout_reader;
+  private String used_config_path;
 
-	public void start(String config) throws IOException, InterruptedException {
+	public void start(String config_path) throws IOException, InterruptedException {
 		String[] command = new String[] { //
 		this.getCommandName(), //
 				"--rpc-port", String.valueOf(this.getPort()), //
-				"--configpath", config, //
+				"--configpath", config_path, //
 				"--thread", "100", //
 				"--datadir", "." //
 		};
@@ -34,6 +36,7 @@ public enum JubaServer {
 		stdout_reader.setDaemon(true);
 		stdout_reader.start();
 
+    used_config_path = config_path;
 		// sleep 1 second.
 		Thread.sleep(1000);
 	}
@@ -98,13 +101,20 @@ public enum JubaServer {
 		return "/config_" + this.name() + ".json";
 	}
 
+	private String getUsedConfigPath() {
+    if (used_config_path != null) {
+      return used_config_path;
+    } else {
+      return getConfigPath();
+    }
+	}
+
 	public String getConfigPath() {
 		return getClass().getResource(getConfigFileName()).getPath();
 	}
 
 	public String getConfigData() throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(getClass()
-				.getResourceAsStream(getConfigFileName())));
+    BufferedReader br = new BufferedReader(new FileReader(getUsedConfigPath()));
 		StringBuilder sb = new StringBuilder();
 
 		String line;
