@@ -46,6 +46,7 @@ sed -i "${VERSION_LINE} s#<version>\(.\+\)</version>#<version>\1-SNAPSHOT</versi
 ./generate.sh
 
 # temporary commit for release-plugin
+sed -i '/^src\/main\/java\/us\/jubat\/\*/D' .gitignore
 git add src/main/*
 git commit -a -m "generate code"
 
@@ -55,7 +56,16 @@ mvn release:prepare -DreleaseVersion="${VERSION}" -DscmCommentPrefix="" -DtagNam
 mvn release:perform
 
 # remove generated code
-git rm -r src/main/java/*
+# TODO(@rimms): more elegant
+echo "src/main/java/us/jubat/*" >> .gitignore
+git rm -r src/main/java/us/jubat/anomaly
+git rm -r src/main/java/us/jubat/classifier
+git rm -r src/main/java/us/jubat/clustering
+git rm -r src/main/java/us/jubat/graph
+git rm -r src/main/java/us/jubat/nearest_neighbor
+git rm -r src/main/java/us/jubat/recommender
+git rm -r src/main/java/us/jubat/regression
+git rm -r src/main/java/us/jubat/stat
 git commit -a -m "remove generated code"
 
 
