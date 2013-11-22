@@ -13,11 +13,17 @@ git checkout "${JUBATUS_BRANCH}"
 popd
 
 # Java
-rm -rf "${CLIENT_DIR}/src/main/java/"*
+for DIR in "${CLIENT_DIR}/src/main/java/us/jubat/"*; do
+  if [ "$(basename "${DIR}")" != "common" ]; then
+    rm -rf $DIR
+  fi
+done
 pushd "${JUBATUS_DIR}/jubatus/server/server"
 for IDL in *.idl; do
+  IDL_HASH=`git log -1 --format=%H -- ${IDL}`
+  IDL_VER=`git describe ${IDL_HASH}`
   NAMESPACE="us.jubat.$(basename "${IDL}" ".idl")"
-  jenerator -l java -n "${NAMESPACE}" -o "${CLIENT_DIR}/src/main/java" "${IDL}"
+  jenerator -l java -n "${NAMESPACE}" -o "${CLIENT_DIR}/src/main/java" "${IDL}" --idl-version ${IDL_VER}
 done
 popd
 

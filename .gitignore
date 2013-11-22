@@ -1,3 +1,5 @@
 *.class
 target/
-*model.js
+*model.jubatus
+!src/main/java/us/jubat/common/
+src/main/java/us/jubat/*

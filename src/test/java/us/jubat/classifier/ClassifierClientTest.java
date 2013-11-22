@@ -18,6 +18,7 @@ import org.junit.Test;
 
 import org.msgpack.rpc.Client;
 
+import us.jubat.common.Datum;
 import us.jubat.testutil.JubaServer;
 import us.jubat.testutil.JubatusClientTest;
 
@@ -31,7 +32,7 @@ public class ClassifierClientTest extends JubatusClientTest {
 	@Before
 	public void setUp() throws Exception {
 		server.start(server.getConfigPath());
-		client = new ClassifierClient(server.getHost(), server.getPort(),
+		client = new ClassifierClient(server.getHost(), server.getPort(), NAME,
 				TIMEOUT_SEC);
 	}
 
@@ -42,7 +43,7 @@ public class ClassifierClientTest extends JubatusClientTest {
 
 	@Test
 	public void testGet_config() throws IOException {
-		String config = client.get_config(NAME);
+		String config = client.getConfig();
 		assertThat(formatAsJson(config),
 				is(formatAsJson(server.getConfigData())));
 	}
@@ -51,38 +52,27 @@ public class ClassifierClientTest extends JubatusClientTest {
 	public void testTrain_and_Classify() {
 		Datum datum = new Datum();
 
-		List<TupleStringString> string_values = new ArrayList<TupleStringString>();
 		for (int i = 1; i <= 10; i++) {
-			TupleStringString string_value = new TupleStringString();
-			string_value.first = "key/str" + Integer.toString(i);
-			string_value.second = "val/str" + Integer.toString(i);
-			string_values.add(string_value);
+			datum.addString("key/str" + Integer.toString(i), "val/str"
+					+ Integer.toString(i));
 		}
-		datum.string_values = string_values;
 
-		List<TupleStringDouble> num_values = new ArrayList<TupleStringDouble>();
 		for (int i = 1; i <= 10; i++) {
-			TupleStringDouble num_value = new TupleStringDouble();
-			num_value.first = "key/num" + Integer.toString(i);
-			num_value.second = i;
-			num_values.add(num_value);
+			datum.addNumber("key/num" + Integer.toString(i), i);
 		}
-		datum.num_values = num_values;
 
-		TupleStringDatum train_datum = new TupleStringDatum();
-		train_datum.first = "label";
-		train_datum.second = datum;
+		LabeledDatum train_datum = new LabeledDatum("label", datum);
 
-		List<TupleStringDatum> train_data = new ArrayList<TupleStringDatum>();
+		List<LabeledDatum> train_data = new ArrayList<LabeledDatum>();
 		train_data.add(train_datum);
 
 		for (int i = 1; i <= 100; i++) {
-			assertThat(client.train(NAME, train_data), is(1));
+			assertThat(client.train(train_data), is(1));
 		}
 
 		List<Datum> test_data = new ArrayList<Datum>();
 		test_data.add(datum);
-		List<List<EstimateResult>> result = client.classify(NAME, test_data);
+		List<List<EstimateResult>> result = client.classify(test_data);
 
 		assertThat(result, is(notNullValue()));
 		assertThat(result.size(), is(1));
@@ -95,13 +85,13 @@ public class ClassifierClientTest extends JubatusClientTest {
 	@Test
 	public void testSave_and_Load() {
 		String id = "classifier.test_java-client.model";
-		assertThat(client.save(NAME, id), is(true));
-		assertThat(client.load(NAME, id), is(true));
+		assertThat(client.save(id), is(true));
+		assertThat(client.load(id), is(true));
 	}
 
 	@Test
 	public void testGet_status() {
-		Map<String, Map<String, String>> status = client.get_status(NAME);
+		Map<String, Map<String, String>> status = client.getStatus();
 		assertThat(status, is(notNullValue()));
 		assertThat(status.size(), is(1));
 	}
@@ -110,44 +100,38 @@ public class ClassifierClientTest extends JubatusClientTest {
 	public void testClear() {
 		Datum datum = new Datum();
 
-		List<TupleStringString> string_values = new ArrayList<TupleStringString>();
-		TupleStringString string_value = new TupleStringString();
-		string_value.first = "key/str";
-		string_value.second = "val/str";
-		string_values.add(string_value);
-		datum.string_values = string_values;
+		datum.addString("key/str", "val/str");
+		datum.addNumber("key/str", 1);
 
-		List<TupleStringDouble> num_values = new ArrayList<TupleStringDouble>();
-		TupleStringDouble num_value = new TupleStringDouble();
-		num_value.first = "key/str";
-		num_value.second = 1;
-		num_values.add(num_value);
-		datum.num_values = num_values;
+		LabeledDatum train_datum = new LabeledDatum("label", datum);
 
-		TupleStringDatum train_datum = new TupleStringDatum();
-		train_datum.first = "label";
-		train_datum.second = datum;
-
-		List<TupleStringDatum> train_data = new ArrayList<TupleStringDatum>();
+		List<LabeledDatum> train_data = new ArrayList<LabeledDatum>();
 		train_data.add(train_datum);
 
-		client.train(NAME, train_data);
+		client.train(train_data);
 
-		Map<String, Map<String, String>> before = client.get_status(NAME);
+		Map<String, Map<String, String>> before = client.getStatus();
 		String node_name = (String) before.keySet().iterator().next();
 		assertThat(before.get(node_name).get("num_classes"), is(not("0")));
 		assertThat(before.get(node_name).get("num_features"), is(not("0")));
 
-		client.clear(NAME);
+		client.clear();
 
-		Map<String, Map<String, String>> after = client.get_status(NAME);
+		Map<String, Map<String, String>> after = client.getStatus();
 		assertThat(after.get(node_name).get("num_classes"), is("0"));
 		assertThat(after.get(node_name).get("num_features"), is("0"));
 	}
 
 	@Test
 	public void testGet_client() {
-		assertThat(client.get_client(), is(instanceOf(Client.class)));
-		assertThat(client.get_client(), is(notNullValue()));
+		assertThat(client.getClient(), is(instanceOf(Client.class)));
+		assertThat(client.getClient(), is(notNullValue()));
+	}
+
+	@Test
+	public void testToString() {
+		EstimateResult res = new EstimateResult("label", 1.0);
+		assertThat(res.toString(),
+				is("estimate_result{label: label, score: 1.0}"));
 	}
 }
