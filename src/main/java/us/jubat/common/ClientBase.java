@@ -35,7 +35,7 @@ public class ClientBase {
 		Future<Value> future = this.client.callAsyncApply(method, arguments);
 		try {
 			future.join();
-			if (future.getError() != null) {
+			if (future.getError() != null && !future.getError().isNilValue()) {
 				throw translateError(future.getError());
 			} else {
 				Value result = future.get();
