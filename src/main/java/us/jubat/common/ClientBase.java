@@ -81,6 +81,6 @@ public class ClientBase {
 				return new TypeMismatch();
 			}
 		}
-		return null;
+		return new RemoteError(error);
 	}
 }
