@@ -25,7 +25,7 @@ public abstract class TUserDef<T extends UserDefinedMessage> implements
 	public T revert(Value value) {
 		if (value.isArrayValue()) {
 			ArrayValue array = value.asArrayValue();
-			if (array.size() != this.numMember) {
+			if (array.size() == this.numMember) {
 				return this.create(array);
 			} else {
 				throw new TypeMismatch();
