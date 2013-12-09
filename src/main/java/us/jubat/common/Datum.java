@@ -35,7 +35,7 @@ public class Datum implements UserDefinedMessage {
 			public static Type instance = new Type();
 
 			public Type() {
-				super(3);
+				super(2);
 			}
 
 			@Override
@@ -69,7 +69,7 @@ public class Datum implements UserDefinedMessage {
 			public static Type instance = new Type();
 
 			public Type() {
-				super(3);
+				super(2);
 			}
 
 			@Override
@@ -103,7 +103,7 @@ public class Datum implements UserDefinedMessage {
 			public static Type instance = new Type();
 
 			public Type() {
-				super(3);
+				super(2);
 			}
 
 			@Override
