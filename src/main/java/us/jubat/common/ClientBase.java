@@ -68,6 +68,13 @@ public class ClientBase {
 						TMap.create(TString.instance, TString.instance)));
 	}
 
+	public Map<String, Map<String, String>> getProxyStatus() {
+		return this.call(
+				"get_proxy_status",
+				TMap.create(TString.instance,
+						TMap.create(TString.instance, TString.instance)));
+	}
+
 	public Client getClient() {
 		return client;
 	}
