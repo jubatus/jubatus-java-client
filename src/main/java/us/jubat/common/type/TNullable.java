@@ -1,5 +1,7 @@
 package us.jubat.common.type;
 
+import org.msgpack.type.Value;
+
 public class TNullable<T> implements TType<T> {
 	private TType<T> type;
 
@@ -13,4 +15,11 @@ public class TNullable<T> implements TType<T> {
 		}
 	}
 
+	public T revert(Value value) {
+		if (value.isNilValue()) {
+			return null;
+		} else {
+			return this.type.revert(value);
+		}
+	}
 }
