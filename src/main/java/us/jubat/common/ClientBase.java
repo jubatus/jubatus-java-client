@@ -78,6 +78,11 @@ public class ClientBase {
 	public Client getClient() {
 		return client;
 	}
+	
+	public void close() {
+        client.getEventLoop().shutdown();
+        client.close();
+	}
 
 	private RuntimeException translateError(Value error) {
 		if (error.isIntegerValue()) {
