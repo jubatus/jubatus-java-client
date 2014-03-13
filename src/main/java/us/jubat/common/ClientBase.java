@@ -68,6 +68,10 @@ public class ClientBase {
 						TMap.create(TString.instance, TString.instance)));
 	}
 
+	public boolean load() {
+		return this.call("do_mix", TBool.instance);
+	}
+
 	public Map<String, Map<String, String>> getProxyStatus() {
 		return this.call(
 				"get_proxy_status",
