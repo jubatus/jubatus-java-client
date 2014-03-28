@@ -68,7 +68,7 @@ public class ClientBase {
 						TMap.create(TString.instance, TString.instance)));
 	}
 
-	public boolean do_mix() {
+	public boolean doMix() {
 		return this.call("do_mix", TBool.instance);
 	}
 
