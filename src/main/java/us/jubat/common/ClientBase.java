@@ -79,6 +79,14 @@ public class ClientBase {
 		return client;
 	}
 
+	public String getClusterName() {
+		return name;
+	}
+
+	public void setClusterName(String name) {
+		this.name = name;
+	}
+
 	private RuntimeException translateError(Value error) {
 		if (error.isIntegerValue()) {
 			int value = error.asIntegerValue().getInt();
