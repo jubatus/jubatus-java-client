@@ -79,11 +79,11 @@ public class ClientBase {
 		return client;
 	}
 
-	public String getClusterName() {
+	public String getName() {
 		return name;
 	}
 
-	public void setClusterName(String name) {
+	public void setName(String name) {
 		this.name = name;
 	}
 
