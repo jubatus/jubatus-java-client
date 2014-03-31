@@ -68,6 +68,10 @@ public class ClientBase {
 						TMap.create(TString.instance, TString.instance)));
 	}
 
+	public boolean doMix() {
+		return this.call("do_mix", TBool.instance);
+	}
+
 	public Map<String, Map<String, String>> getProxyStatus() {
 		return this.call(
 				"get_proxy_status",
@@ -77,6 +81,14 @@ public class ClientBase {
 
 	public Client getClient() {
 		return client;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	private RuntimeException translateError(Value error) {
