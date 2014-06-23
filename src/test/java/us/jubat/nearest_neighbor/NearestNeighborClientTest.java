@@ -51,7 +51,7 @@ public class NearestNeighborClientTest extends JubatusClientTest {
 				.addNumber("nkey2", 2.0);
 		client.setRow("neighbor_row", d);
 		client.neighborRowFromId("neighbor_row", 10);
-		client.neighborRowFromData(d, 10);
+		client.neighborRowFromDatum(d, 10);
 	}
 
 	@Test
@@ -62,7 +62,7 @@ public class NearestNeighborClientTest extends JubatusClientTest {
 				.addNumber("nkey2", 2.0);
 		client.setRow("similar_row", d);
 		client.similarRowFromId("similar_row", 10);
-		client.similarRowFromData(d, 10);
+		client.similarRowFromDatum(d, 10);
 	}
 
 	@Test
