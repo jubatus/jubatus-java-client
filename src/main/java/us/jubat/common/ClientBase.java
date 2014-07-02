@@ -82,6 +82,11 @@ public class ClientBase {
 	public Client getClient() {
 		return client;
 	}
+	
+	public void close() {
+        client.getEventLoop().shutdown();
+        client.close();
+	}
 
 	public String getName() {
 		return name;
