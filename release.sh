@@ -59,6 +59,7 @@ mvn release:perform
 # TODO(@rimms): more elegant
 echo "src/main/java/us/jubat/*" >> .gitignore
 git rm -r src/main/java/us/jubat/anomaly
+git rm -r src/main/java/us/jubat/burst
 git rm -r src/main/java/us/jubat/classifier
 git rm -r src/main/java/us/jubat/clustering
 git rm -r src/main/java/us/jubat/graph
