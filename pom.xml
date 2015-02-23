@@ -7,11 +7,11 @@
   <description>Jubatus is a distributed processing framework and streaming machine learning library. This is the Jubatus client in Java.</description>
   <url>http://jubat.us</url>
   <packaging>jar</packaging>
-  <version>0.6.1</version>
+  <version>0.7.0</version>
 
   <developers>
     <developer>
-      <name>PFI &amp; NTT</name>
+      <name>PFN &amp; NTT</name>
       <email>jubatus@googlegroups.com</email>
     </developer>
   </developers>
