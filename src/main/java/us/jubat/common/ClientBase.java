@@ -51,9 +51,12 @@ public class ClientBase {
 		return this.call("get_config", TString.instance);
 	}
 
-	public boolean save(String id) {
+	public Map<String, String> save(String id) {
 		TString.instance.check(id);
-		return this.call("save", TBool.instance, id);
+		return this.call(
+				"save",
+				TMap.create(TString.instance, TString.instance),
+				id);
 	}
 
 	public boolean load(String id) {
