@@ -84,7 +84,9 @@ public class AnomalyClientTest extends JubatusClientTest {
 	@Test
 	public void testSave_and_Load() {
 		String id = "anomaly.test_java-client.model";
-		assertThat(client.save(id), is(true));
+		Map<String, String> saveResult = client.save(id);
+		assertThat(saveResult, is(notNullValue()));
+		assertThat(saveResult.size(), is(1));
 		assertThat(client.load(id), is(true));
 	}
 
