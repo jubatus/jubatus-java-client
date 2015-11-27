@@ -81,12 +81,13 @@ public class ClusteringClientTest extends JubatusClientTest {
 
 	@Test
 	public void testGet_core_members() {
-		List<Datum> data_list = new ArrayList<Datum>();
-		data_list.add(generateDatum());
-		client.push(data_list);
+		for (int i = 0; i < 100; i++) {
+			List<Datum> data_list = new ArrayList<Datum>();
+			data_list.add(generateDatum());
+			client.push(data_list);
+		}
 		List<List<WeightedDatum>> members = client.getCoreMembers();
 		assertThat(members.size(), is(10));
-		assertThat(members.get(0).size(), is(1));
 		assertThat(members.get(0).get(0), instanceOf(WeightedDatum.class));
 	}
 
