@@ -92,6 +92,19 @@ public class ClassifierClientTest extends JubatusClientTest {
 	}
 
 	@Test
+	public void testLabels() {
+		assertThat(client.setLabel("label"), is(true));
+		Map<String, Integer> labels = client.getLabels();
+		assertThat(labels, is(notNullValue()));
+		assertThat(labels.size(), is(1));
+		assertThat(labels.get("label"), is(0));
+		assertThat(client.deleteLabel("label"), is(true));
+		labels = client.getLabels();
+		assertThat(labels, is(notNullValue()));
+		assertThat(labels.size(), is(0));
+	}
+
+	@Test
 	public void testGet_status() {
 		Map<String, Map<String, String>> status = client.getStatus();
 		assertThat(status, is(notNullValue()));
