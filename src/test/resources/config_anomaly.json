@@ -19,8 +19,7 @@
      "table_num": 4,
      "probe_num": 64,
      "bin_width": 100,
-     "seed": 1091,
-     "retain_projection": false
+     "seed": 1091
    }
  }
 }
