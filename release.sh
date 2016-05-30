@@ -68,6 +68,7 @@ git rm -r src/main/java/us/jubat/nearest_neighbor
 git rm -r src/main/java/us/jubat/recommender
 git rm -r src/main/java/us/jubat/regression
 git rm -r src/main/java/us/jubat/stat
+git rm -r src/main/java/us/jubat/weight
 git commit -a -m "remove generated code"
 
 
