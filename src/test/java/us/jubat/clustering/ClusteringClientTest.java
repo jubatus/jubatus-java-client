@@ -137,6 +137,17 @@ public class ClusteringClientTest extends JubatusClientTest {
 		assertThat(members.get(0), instanceOf(WeightedDatum.class));
 	}
 
+	@Test
+	public void testGet_nearest_members_light() {
+		for (int i = 0; i < 100; i++) {
+			List<IndexedPoint> data_list = new ArrayList<IndexedPoint>();
+			data_list.add(new IndexedPoint(String.valueOf(i), generateDatum()));
+			client.push(data_list);
+		}
+		List<WeightedIndex> members = client.getNearestMembersLight(generateDatum());
+		assertThat(members.get(0), instanceOf(WeightedIndex.class));
+	}
+
 	private Datum generateDatum() {
 		Datum datum = new Datum();
 
