@@ -110,13 +110,11 @@ public class RegressionClientTest extends JubatusClientTest {
 		Map<String, Map<String, String>> before = client.getStatus();
 		String node_name = (String) before.keySet().iterator().next();
 		assertThat(before.get(node_name).get("num_classes"), is(not("0")));
-		assertThat(before.get(node_name).get("num_features"), is(not("0")));
-
+		assertThat(before.get(node_name).get("diff_size"), is(not("0")));
 		client.clear();
-
 		Map<String, Map<String, String>> after = client.getStatus();
 		assertThat(after.get(node_name).get("num_classes"), is("0"));
-		assertThat(after.get(node_name).get("num_features"), is("0"));
+		assertThat(after.get(node_name).get("diff_size"), is("0"));
 	}
 
 	@Test
