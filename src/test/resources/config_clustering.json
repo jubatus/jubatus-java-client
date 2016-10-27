@@ -11,14 +11,11 @@
     "num_rules" : [{ "key" : "*", "type" : "num" }]
   },
   "parameter" : {
-  "k" : 10,
+    "k" : 10,
+    "seed": 0
+  },
   "compressor_method" : "simple",
-  "bucket_size" : 3,
-  "compressed_bucket_size" : 2,
-  "bicriteria_base_size" : 1,
-  "bucket_length" : 2,
-  "forgetting_factor" : 0,
-  "forgetting_threshold" : 0.5,
-  "seed": 0
-  } 
+  "compressor_parameter" : {
+    "bucket_size" : 3
+  }
 }
