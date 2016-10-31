@@ -69,8 +69,8 @@ public class ClusteringClientTest extends JubatusClientTest {
 
 	@Test
 	public void testPush() {
-		List<Datum> data_list = new ArrayList<Datum>();
-		data_list.add(generateDatum());
+		List<IndexedPoint> data_list = new ArrayList<IndexedPoint>();
+		data_list.add(new IndexedPoint("test", generateDatum()));
 		assertThat(client.push(data_list), is(true));
 	}
 
@@ -82,8 +82,8 @@ public class ClusteringClientTest extends JubatusClientTest {
 	@Test
 	public void testGet_core_members() {
 		for (int i = 0; i < 100; i++) {
-			List<Datum> data_list = new ArrayList<Datum>();
-			data_list.add(generateDatum());
+			List<IndexedPoint> data_list = new ArrayList<IndexedPoint>();
+			data_list.add(new IndexedPoint(String.valueOf(i), generateDatum()));
 			client.push(data_list);
 		}
 		List<List<WeightedDatum>> members = client.getCoreMembers();
@@ -92,10 +92,22 @@ public class ClusteringClientTest extends JubatusClientTest {
 	}
 
 	@Test
+	public void testGet_core_members_light() {
+		for (int i = 0; i < 100; i++) {
+			List<IndexedPoint> data_list = new ArrayList<IndexedPoint>();
+			data_list.add(new IndexedPoint(String.valueOf(i), generateDatum()));
+			client.push(data_list);
+		}
+		List<List<WeightedIndex>> members = client.getCoreMembersLight();
+		assertThat(members.size(), is(10));
+		assertThat(members.get(0).get(0), instanceOf(WeightedIndex.class));
+	}
+
+	@Test
 	public void testGet_k_center() {
 		for (int i = 0; i < 100; i++) {
-			List<Datum> data_list = new ArrayList<Datum>();
-			data_list.add(generateDatum());
+			List<IndexedPoint> data_list = new ArrayList<IndexedPoint>();
+			data_list.add(new IndexedPoint(String.valueOf(i), generateDatum()));
 			client.push(data_list);
 		}
 		List<Datum> centers = client.getKCenter();
@@ -106,8 +118,8 @@ public class ClusteringClientTest extends JubatusClientTest {
 	@Test
 	public void testGet_nearest_center() {
 		for (int i = 0; i < 100; i++) {
-			List<Datum> data_list = new ArrayList<Datum>();
-			data_list.add(generateDatum());
+			List<IndexedPoint> data_list = new ArrayList<IndexedPoint>();
+			data_list.add(new IndexedPoint(String.valueOf(i), generateDatum()));
 			client.push(data_list);
 		}
 		Datum center = client.getNearestCenter(generateDatum());
@@ -117,12 +129,23 @@ public class ClusteringClientTest extends JubatusClientTest {
 	@Test
 	public void testGet_nearest_members() {
 		for (int i = 0; i < 100; i++) {
-			List<Datum> data_list = new ArrayList<Datum>();
-			data_list.add(generateDatum());
+			List<IndexedPoint> data_list = new ArrayList<IndexedPoint>();
+			data_list.add(new IndexedPoint(String.valueOf(i), generateDatum()));
 			client.push(data_list);
 		}
 		List<WeightedDatum> members = client.getNearestMembers(generateDatum());
 		assertThat(members.get(0), instanceOf(WeightedDatum.class));
+	}
+
+	@Test
+	public void testGet_nearest_members_light() {
+		for (int i = 0; i < 100; i++) {
+			List<IndexedPoint> data_list = new ArrayList<IndexedPoint>();
+			data_list.add(new IndexedPoint(String.valueOf(i), generateDatum()));
+			client.push(data_list);
+		}
+		List<WeightedIndex> members = client.getNearestMembersLight(generateDatum());
+		assertThat(members.get(0), instanceOf(WeightedIndex.class));
 	}
 
 	private Datum generateDatum() {
