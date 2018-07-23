@@ -71,7 +71,7 @@ public class RegressionClientTest extends JubatusClientTest {
 
 		List<Datum> estimate_data = new ArrayList<Datum>();
 		estimate_data.add(datum);
-		List<Float> result = client.estimate(estimate_data);
+		List<Double> result = client.estimate(estimate_data);
 
 		assertThat(result, is(notNullValue()));
 		assertThat(result.size(), is(1));
