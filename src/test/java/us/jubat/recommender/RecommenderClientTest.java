@@ -104,7 +104,7 @@ public class RecommenderClientTest extends JubatusClientTest {
 		assertThat(result, is(notNullValue()));
 		assertThat(result.size(), is(1));
 		assertThat(result.get(0).id, is("1"));
-		assertThat(result.get(0).score, is(1f));
+		assertThat(result.get(0).score, is(1.0));
 	}
 
 	@Test
@@ -115,13 +115,13 @@ public class RecommenderClientTest extends JubatusClientTest {
 		assertThat(result, is(notNullValue()));
 		assertThat(result.size(), is(1));
 		assertThat(result.get(0).id, is("1"));
-		assertThat(result.get(0).score, is(1f));
+		assertThat(result.get(0).score, is(1.0));
 	}
 
 	@Test
 	public void testCalc_Similarity() {
 		assertThat(client.calcSimilarity(generateDatum(), generateDatum()),
-				is(1f));
+				is(1.0));
 	}
 
 	@Test

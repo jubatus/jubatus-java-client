@@ -48,7 +48,7 @@ public class AnomalyClientTest extends JubatusClientTest {
 		Datum d = generateDatum();
 		IdWithScore result = client.add(d);
 		assertThat(result.id, is("0"));
-		assertThat(result.score, is(Float.POSITIVE_INFINITY)); // Is it good to
+		assertThat(result.score, is(Double.POSITIVE_INFINITY)); // Is it good to
 																// be INF ?
 	}
 
@@ -57,13 +57,13 @@ public class AnomalyClientTest extends JubatusClientTest {
 		Datum d = generateDatum();
 		IdWithScore added = client.add(d);
 		assertThat(client.update(added.id, generateDatum()),
-				is(Float.POSITIVE_INFINITY)); // Is it good to be INF ?
+				is(Double.POSITIVE_INFINITY)); // Is it good to be INF ?
 	}
 
 	@Test
 	public void testCalc_score() {
 		assertThat(client.calcScore(generateDatum()),
-				is(Float.POSITIVE_INFINITY)); // Is it good to be INF ?
+				is(Double.POSITIVE_INFINITY)); // Is it good to be INF ?
 	}
 
 	@Test

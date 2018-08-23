@@ -70,7 +70,8 @@ public class ClusteringClientTest extends JubatusClientTest {
 	@Test
 	public void testPush() {
 		List<IndexedPoint> data_list = new ArrayList<IndexedPoint>();
-		data_list.add(new IndexedPoint("test", generateDatum()));
+		Datum datum = new Datum();
+		data_list.add(new IndexedPoint("test", datum));
 		assertThat(client.push(data_list), is(true));
 	}
 
@@ -83,7 +84,7 @@ public class ClusteringClientTest extends JubatusClientTest {
 	public void testGet_core_members() {
 		for (int i = 0; i < 100; i++) {
 			List<IndexedPoint> data_list = new ArrayList<IndexedPoint>();
-			data_list.add(new IndexedPoint(String.valueOf(i), generateDatum()));
+			data_list.add(new IndexedPoint(String.valueOf(i), generateDatum(i)));
 			client.push(data_list);
 		}
 		List<List<WeightedDatum>> members = client.getCoreMembers();
@@ -95,7 +96,7 @@ public class ClusteringClientTest extends JubatusClientTest {
 	public void testGet_core_members_light() {
 		for (int i = 0; i < 100; i++) {
 			List<IndexedPoint> data_list = new ArrayList<IndexedPoint>();
-			data_list.add(new IndexedPoint(String.valueOf(i), generateDatum()));
+			data_list.add(new IndexedPoint(String.valueOf(i), generateDatum(i)));
 			client.push(data_list);
 		}
 		List<List<WeightedIndex>> members = client.getCoreMembersLight();
@@ -107,7 +108,7 @@ public class ClusteringClientTest extends JubatusClientTest {
 	public void testGet_k_center() {
 		for (int i = 0; i < 100; i++) {
 			List<IndexedPoint> data_list = new ArrayList<IndexedPoint>();
-			data_list.add(new IndexedPoint(String.valueOf(i), generateDatum()));
+			data_list.add(new IndexedPoint(String.valueOf(i), generateDatum(i)));
 			client.push(data_list);
 		}
 		List<Datum> centers = client.getKCenter();
@@ -119,10 +120,15 @@ public class ClusteringClientTest extends JubatusClientTest {
 	public void testGet_nearest_center() {
 		for (int i = 0; i < 100; i++) {
 			List<IndexedPoint> data_list = new ArrayList<IndexedPoint>();
-			data_list.add(new IndexedPoint(String.valueOf(i), generateDatum()));
+			data_list.add(new IndexedPoint(String.valueOf(i), generateDatum(i)));
 			client.push(data_list);
 		}
-		Datum center = client.getNearestCenter(generateDatum());
+
+		Datum datum = new Datum();
+		datum.addNumber("nkey1", 2.0);
+		datum.addNumber("nkey2", 1.0);
+
+		Datum center = client.getNearestCenter(datum);
 		assertThat(center, instanceOf(Datum.class));
 	}
 
@@ -130,10 +136,15 @@ public class ClusteringClientTest extends JubatusClientTest {
 	public void testGet_nearest_members() {
 		for (int i = 0; i < 100; i++) {
 			List<IndexedPoint> data_list = new ArrayList<IndexedPoint>();
-			data_list.add(new IndexedPoint(String.valueOf(i), generateDatum()));
+			data_list.add(new IndexedPoint(String.valueOf(i), generateDatum(i)));
 			client.push(data_list);
 		}
-		List<WeightedDatum> members = client.getNearestMembers(generateDatum());
+
+		Datum datum = new Datum();
+		datum.addNumber("nkey1", 2.0);
+		datum.addNumber("nkey2", 1.0);
+
+		List<WeightedDatum> members = client.getNearestMembers(datum);
 		assertThat(members.get(0), instanceOf(WeightedDatum.class));
 	}
 
@@ -141,24 +152,23 @@ public class ClusteringClientTest extends JubatusClientTest {
 	public void testGet_nearest_members_light() {
 		for (int i = 0; i < 100; i++) {
 			List<IndexedPoint> data_list = new ArrayList<IndexedPoint>();
-			data_list.add(new IndexedPoint(String.valueOf(i), generateDatum()));
+			data_list.add(new IndexedPoint(String.valueOf(i), generateDatum(i)));
 			client.push(data_list);
 		}
-		List<WeightedIndex> members = client.getNearestMembersLight(generateDatum());
+
+		Datum datum = new Datum();
+		datum.addNumber("nkey1", 2.0);
+		datum.addNumber("nkey2", 1.0);
+
+		List<WeightedIndex> members = client.getNearestMembersLight(datum);
 		assertThat(members.get(0), instanceOf(WeightedIndex.class));
 	}
 
-	private Datum generateDatum() {
+	private Datum generateDatum(int i) {
 		Datum datum = new Datum();
 
-		for (int i = 1; i <= 10; i++) {
-			datum.addString("key/str" + Integer.toString(i), "val/str"
-					+ Integer.toString(i));
-		}
-
-		for (int i = 1; i <= 10; i++) {
-			datum.addNumber("key/num" + Integer.toString(i), i);
-		}
+		datum.addNumber("nkey1", i);
+		datum.addNumber("nkey2", -1.0 * i);
 
 		return datum;
 	}
